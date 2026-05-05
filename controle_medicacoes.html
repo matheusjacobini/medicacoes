@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0f172a">
+<title>Medicações</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:        #0f172a;
+    --surface:   #1e293b;
+    --surface2:  #273549;
+    --border:    #334155;
+    --border2:   #475569;
+    --accent:    #38bdf8;
+    --accent-dim:#0ea5e9;
+    --success:   #34d399;
+    --muted:     #64748b;
+    --text:      #f1f5f9;
+    --text2:     #94a3b8;
+    --day1:      #1e3a5f;
+    --day1-brd:  #38bdf8;
+    --inactive:  #1e293b;
+    --r:         12px;
+    --r-sm:      8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px 10px;
+  }
+  .app-header h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .app-header p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── TABS DE CICLO ── */
+  .cycle-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--bg);
+    position: sticky;
+    top: 61px;
+    z-index: 99;
+    border-bottom: 1px solid var(--border);
+  }
+  .cycle-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0f172a;
+    font-weight: 600;
+  }
+  .tab-btn.done {
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  /* ── PROGRESSO DO CICLO ── */
+  .cycle-header {
+    padding: 14px 16px 10px;
+  }
+  .cycle-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: 'DM Mono', monospace;
+  }
+  .cycle-dates {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .progress-bar {
+    margin-top: 10px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── LEGENDA ── */
+  .legend {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 10px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    color: var(--text2);
+  }
+  .legend-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── TABELA DE DIAS ── */
+  .days-table {
+    padding: 0 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .col-headers {
+    display: grid;
+    grid-template-columns: 90px repeat(4, 1fr);
+    gap: 3px;
+    padding: 0 0 2px;
+    position: sticky;
+    top: 111px;
+    z-index: 98;
+    background: var(--bg);
+  }
+  .col-hdr {
+    background: var(--surface2);
+    border-radius: var(--r-sm);
+    padding: 6px 4px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text2);
+    line-height: 1.3;
+  }
+  .col-hdr span {
+    display: block;
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .col-hdr.date-hdr {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 500;
+  }
+
+  .day-row {
+    display: grid;
+    grid-template-columns: 90px repeat(4, 1fr);
+    gap: 3px;
+    align-items: center;
+  }
+  .day-row.first-day {
+    border-radius: var(--r-sm);
+    outline: 1.5px solid var(--day1-brd);
+  }
+  .day-row.first-day .date-cell {
+    background: var(--day1);
+    border-radius: var(--r-sm) 0 0 var(--r-sm);
+  }
+
+  .date-cell {
+    background: var(--surface);
+    border-radius: var(--r-sm);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .date-main {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+  }
+  .date-sub {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    gap: 5px;
+  }
+  .first-day .date-main { color: var(--accent); }
+  .first-day .date-sub  { color: var(--accent-dim); }
+
+  .med-cell {
+    background: var(--surface);
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    position: relative;
+    user-select: none;
+  }
+  .med-cell:active { transform: scale(0.93); }
+  .med-cell.inactive {
+    background: var(--inactive);
+    cursor: default;
+  }
+  .med-cell.checked {
+    background: #0c2e1a;
+  }
+
+  /* Checkbox visual */
+  .check-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: transparent;
+  }
+  .med-cell.checked .check-box {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  .check-icon {
+    display: none;
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .med-cell.checked .check-icon { display: block; }
+
+  .dash-icon {
+    width: 14px; height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── RESET BUTTON ── */
+  .reset-area {
+    padding: 0 16px 32px;
+    text-align: center;
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:active { background: var(--surface); }
+
+  /* Ocultar ciclos não selecionados */
+  .cycle-panel { display: none; }
+  .cycle-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>Controle de Medicações</h1>
+  <p>6 ciclos · 04/05/2026 – 06/09/2026 · 08h</p>
+</div>
+
+<div class="cycle-tabs" id="cycleTabs"></div>
+
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = [
+  { ciclo:1, dia:1, dt:"2026-05-04", data:"04 mai", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:1, dia:2, dt:"2026-05-05", data:"05 mai", dsem:"Ter", meds:['PRE','VAL','MYR'] },
+  { ciclo:1, dia:3, dt:"2026-05-06", data:"06 mai", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:1, dia:4, dt:"2026-05-07", data:"07 mai", dsem:"Qui", meds:['PRE','VAL','MYR'] },
+  { ciclo:1, dia:5, dt:"2026-05-08", data:"08 mai", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:1, dia:6, dt:"2026-05-09", data:"09 mai", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:1, dia:7, dt:"2026-05-10", data:"10 mai", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:1, dia:8, dt:"2026-05-11", data:"11 mai", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:9, dt:"2026-05-12", data:"12 mai", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:1, dia:10, dt:"2026-05-13", data:"13 mai", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:11, dt:"2026-05-14", data:"14 mai", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:1, dia:12, dt:"2026-05-15", data:"15 mai", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:13, dt:"2026-05-16", data:"16 mai", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:1, dia:14, dt:"2026-05-17", data:"17 mai", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:1, dia:15, dt:"2026-05-18", data:"18 mai", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:16, dt:"2026-05-19", data:"19 mai", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:1, dia:17, dt:"2026-05-20", data:"20 mai", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:18, dt:"2026-05-21", data:"21 mai", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:1, dia:19, dt:"2026-05-22", data:"22 mai", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:1, dia:20, dt:"2026-05-23", data:"23 mai", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:1, dia:21, dt:"2026-05-24", data:"24 mai", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:2, dia:1, dt:"2026-05-25", data:"25 mai", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:2, dia:2, dt:"2026-05-26", data:"26 mai", dsem:"Ter", meds:['PRE','VAL','MYR'] },
+  { ciclo:2, dia:3, dt:"2026-05-27", data:"27 mai", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:2, dia:4, dt:"2026-05-28", data:"28 mai", dsem:"Qui", meds:['PRE','VAL','MYR'] },
+  { ciclo:2, dia:5, dt:"2026-05-29", data:"29 mai", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:2, dia:6, dt:"2026-05-30", data:"30 mai", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:2, dia:7, dt:"2026-05-31", data:"31 mai", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:2, dia:8, dt:"2026-06-01", data:"01 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:9, dt:"2026-06-02", data:"02 jun", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:2, dia:10, dt:"2026-06-03", data:"03 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:11, dt:"2026-06-04", data:"04 jun", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:2, dia:12, dt:"2026-06-05", data:"05 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:13, dt:"2026-06-06", data:"06 jun", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:2, dia:14, dt:"2026-06-07", data:"07 jun", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:2, dia:15, dt:"2026-06-08", data:"08 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:16, dt:"2026-06-09", data:"09 jun", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:2, dia:17, dt:"2026-06-10", data:"10 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:18, dt:"2026-06-11", data:"11 jun", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:2, dia:19, dt:"2026-06-12", data:"12 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:2, dia:20, dt:"2026-06-13", data:"13 jun", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:2, dia:21, dt:"2026-06-14", data:"14 jun", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:3, dia:1, dt:"2026-06-15", data:"15 jun", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:3, dia:2, dt:"2026-06-16", data:"16 jun", dsem:"Ter", meds:['PRE','VAL','MYR'] },
+  { ciclo:3, dia:3, dt:"2026-06-17", data:"17 jun", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:3, dia:4, dt:"2026-06-18", data:"18 jun", dsem:"Qui", meds:['PRE','VAL','MYR'] },
+  { ciclo:3, dia:5, dt:"2026-06-19", data:"19 jun", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:3, dia:6, dt:"2026-06-20", data:"20 jun", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:3, dia:7, dt:"2026-06-21", data:"21 jun", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:3, dia:8, dt:"2026-06-22", data:"22 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:9, dt:"2026-06-23", data:"23 jun", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:3, dia:10, dt:"2026-06-24", data:"24 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:11, dt:"2026-06-25", data:"25 jun", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:3, dia:12, dt:"2026-06-26", data:"26 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:13, dt:"2026-06-27", data:"27 jun", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:3, dia:14, dt:"2026-06-28", data:"28 jun", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:3, dia:15, dt:"2026-06-29", data:"29 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:16, dt:"2026-06-30", data:"30 jun", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:3, dia:17, dt:"2026-07-01", data:"01 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:18, dt:"2026-07-02", data:"02 jul", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:3, dia:19, dt:"2026-07-03", data:"03 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:3, dia:20, dt:"2026-07-04", data:"04 jul", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:3, dia:21, dt:"2026-07-05", data:"05 jul", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:4, dia:1, dt:"2026-07-06", data:"06 jul", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:4, dia:2, dt:"2026-07-07", data:"07 jul", dsem:"Ter", meds:['PRE','VAL','MYR'] },
+  { ciclo:4, dia:3, dt:"2026-07-08", data:"08 jul", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:4, dia:4, dt:"2026-07-09", data:"09 jul", dsem:"Qui", meds:['PRE','VAL','MYR'] },
+  { ciclo:4, dia:5, dt:"2026-07-10", data:"10 jul", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
+  { ciclo:4, dia:6, dt:"2026-07-11", data:"11 jul", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:4, dia:7, dt:"2026-07-12", data:"12 jul", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:4, dia:8, dt:"2026-07-13", data:"13 jul", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:9, dt:"2026-07-14", data:"14 jul", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:4, dia:10, dt:"2026-07-15", data:"15 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:11, dt:"2026-07-16", data:"16 jul", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:4, dia:12, dt:"2026-07-17", data:"17 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:13, dt:"2026-07-18", data:"18 jul", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:4, dia:14, dt:"2026-07-19", data:"19 jul", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:4, dia:15, dt:"2026-07-20", data:"20 jul", dsem:"Seg", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:16, dt:"2026-07-21", data:"21 jul", dsem:"Ter", meds:['VAL','MYR'] },
+  { ciclo:4, dia:17, dt:"2026-07-22", data:"22 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:18, dt:"2026-07-23", data:"23 jul", dsem:"Qui", meds:['VAL','MYR'] },
+  { ciclo:4, dia:19, dt:"2026-07-24", data:"24 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
+  { ciclo:4, dia:20, dt:"2026-07-25", data:"25 jul", dsem:"Sáb", meds:['VAL','MYR'] },
+  { ciclo:4, dia:21, dt:"2026-07-26", data:"26 jul", dsem:"Dom", meds:['VAL','MYR'] },
+  { ciclo:5, dia:1, dt:"2026-07-27", data:"27 jul", dsem:"Seg", meds:['PRE','VAL','BAC'] },
+  { ciclo:5, dia:2, dt:"2026-07-28", data:"28 jul", dsem:"Ter", meds:['PRE','VAL'] },
+  { ciclo:5, dia:3, dt:"2026-07-29", data:"29 jul", dsem:"Qua", meds:['PRE','VAL','BAC'] },
+  { ciclo:5, dia:4, dt:"2026-07-30", data:"30 jul", dsem:"Qui", meds:['PRE','VAL'] },
+  { ciclo:5, dia:5, dt:"2026-07-31", data:"31 jul", dsem:"Sex", meds:['PRE','VAL','BAC'] },
+  { ciclo:5, dia:6, dt:"2026-08-01", data:"01 ago", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:5, dia:7, dt:"2026-08-02", data:"02 ago", dsem:"Dom", meds:['VAL'] },
+  { ciclo:5, dia:8, dt:"2026-08-03", data:"03 ago", dsem:"Seg", meds:['VAL','BAC'] },
+  { ciclo:5, dia:9, dt:"2026-08-04", data:"04 ago", dsem:"Ter", meds:['VAL'] },
+  { ciclo:5, dia:10, dt:"2026-08-05", data:"05 ago", dsem:"Qua", meds:['VAL','BAC'] },
+  { ciclo:5, dia:11, dt:"2026-08-06", data:"06 ago", dsem:"Qui", meds:['VAL'] },
+  { ciclo:5, dia:12, dt:"2026-08-07", data:"07 ago", dsem:"Sex", meds:['VAL','BAC'] },
+  { ciclo:5, dia:13, dt:"2026-08-08", data:"08 ago", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:5, dia:14, dt:"2026-08-09", data:"09 ago", dsem:"Dom", meds:['VAL'] },
+  { ciclo:5, dia:15, dt:"2026-08-10", data:"10 ago", dsem:"Seg", meds:['VAL','BAC'] },
+  { ciclo:5, dia:16, dt:"2026-08-11", data:"11 ago", dsem:"Ter", meds:['VAL'] },
+  { ciclo:5, dia:17, dt:"2026-08-12", data:"12 ago", dsem:"Qua", meds:['VAL','BAC'] },
+  { ciclo:5, dia:18, dt:"2026-08-13", data:"13 ago", dsem:"Qui", meds:['VAL'] },
+  { ciclo:5, dia:19, dt:"2026-08-14", data:"14 ago", dsem:"Sex", meds:['VAL','BAC'] },
+  { ciclo:5, dia:20, dt:"2026-08-15", data:"15 ago", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:5, dia:21, dt:"2026-08-16", data:"16 ago", dsem:"Dom", meds:['VAL'] },
+  { ciclo:6, dia:1, dt:"2026-08-17", data:"17 ago", dsem:"Seg", meds:['PRE','VAL','BAC'] },
+  { ciclo:6, dia:2, dt:"2026-08-18", data:"18 ago", dsem:"Ter", meds:['PRE','VAL'] },
+  { ciclo:6, dia:3, dt:"2026-08-19", data:"19 ago", dsem:"Qua", meds:['PRE','VAL','BAC'] },
+  { ciclo:6, dia:4, dt:"2026-08-20", data:"20 ago", dsem:"Qui", meds:['PRE','VAL'] },
+  { ciclo:6, dia:5, dt:"2026-08-21", data:"21 ago", dsem:"Sex", meds:['PRE','VAL','BAC'] },
+  { ciclo:6, dia:6, dt:"2026-08-22", data:"22 ago", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:6, dia:7, dt:"2026-08-23", data:"23 ago", dsem:"Dom", meds:['VAL'] },
+  { ciclo:6, dia:8, dt:"2026-08-24", data:"24 ago", dsem:"Seg", meds:['VAL','BAC'] },
+  { ciclo:6, dia:9, dt:"2026-08-25", data:"25 ago", dsem:"Ter", meds:['VAL'] },
+  { ciclo:6, dia:10, dt:"2026-08-26", data:"26 ago", dsem:"Qua", meds:['VAL','BAC'] },
+  { ciclo:6, dia:11, dt:"2026-08-27", data:"27 ago", dsem:"Qui", meds:['VAL'] },
+  { ciclo:6, dia:12, dt:"2026-08-28", data:"28 ago", dsem:"Sex", meds:['VAL','BAC'] },
+  { ciclo:6, dia:13, dt:"2026-08-29", data:"29 ago", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:6, dia:14, dt:"2026-08-30", data:"30 ago", dsem:"Dom", meds:['VAL'] },
+  { ciclo:6, dia:15, dt:"2026-08-31", data:"31 ago", dsem:"Seg", meds:['VAL','BAC'] },
+  { ciclo:6, dia:16, dt:"2026-09-01", data:"01 set", dsem:"Ter", meds:['VAL'] },
+  { ciclo:6, dia:17, dt:"2026-09-02", data:"02 set", dsem:"Qua", meds:['VAL','BAC'] },
+  { ciclo:6, dia:18, dt:"2026-09-03", data:"03 set", dsem:"Qui", meds:['VAL'] },
+  { ciclo:6, dia:19, dt:"2026-09-04", data:"04 set", dsem:"Sex", meds:['VAL','BAC'] },
+  { ciclo:6, dia:20, dt:"2026-09-05", data:"05 set", dsem:"Sáb", meds:['VAL'] },
+  { ciclo:6, dia:21, dt:"2026-09-06", data:"06 set", dsem:"Dom", meds:['VAL'] }
+];
+
+const MEDS_INFO = [
+  { code:"PRE", nome:"Prednisona", sub:"5 primeiros dias" },
+  { code:"VAL", nome:"Valtrex",    sub:"todo o ciclo" },
+  { code:"BAC", nome:"Bactrim",    sub:"2ª · 4ª · 6ª" },
+  { code:"MYR", nome:"Myrbetric", sub:"ciclos 1–4" },
+];
+
+// ── Storage ──────────────────────────────────────────────
+function storageKey(ciclo, dia, med) {
+  return `med_${ciclo}_${dia}_${med}`;
+}
+function isChecked(ciclo, dia, med) {
+  return localStorage.getItem(storageKey(ciclo, dia, med)) === "1";
+}
+function toggleCheck(ciclo, dia, med) {
+  const k = storageKey(ciclo, dia, med);
+  const val = localStorage.getItem(k) === "1" ? "0" : "1";
+  localStorage.setItem(k, val);
+  return val === "1";
+}
+
+// ── Progress ─────────────────────────────────────────────
+function cycleProgress(ciclo) {
+  const dias = DATA.filter(d => d.ciclo === ciclo);
+  let total = 0, done = 0;
+  dias.forEach(d => {
+    d.meds.forEach(med => {
+      total++;
+      if (isChecked(ciclo, d.dia, med)) done++;
+    });
+  });
+  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+}
+
+// ── Toast ────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ── Render tabs ──────────────────────────────────────────
+function renderTabs(activeCiclo) {
+  const tabs = document.getElementById('cycleTabs');
+  tabs.innerHTML = '';
+  for (let ci = 1; ci <= 6; ci++) {
+    const p = cycleProgress(ci);
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (ci === activeCiclo ? ' active' : '') + (p.pct === 100 ? ' done' : '');
+    const diasCiclo = DATA.filter(d => d.ciclo === ci);
+    const d0 = diasCiclo[0].data;
+    btn.textContent = `Ciclo ${ci}  ${p.pct}%`;
+    btn.onclick = () => renderApp(ci);
+    tabs.appendChild(btn);
+  }
+}
+
+// ── Render ciclo ─────────────────────────────────────────
+function renderApp(activeCiclo) {
+  renderTabs(activeCiclo);
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const dias = DATA.filter(d => d.ciclo === activeCiclo);
+  const d0 = dias[0], dN = dias[dias.length-1];
+  const prog = cycleProgress(activeCiclo);
+
+  // Header do ciclo
+  const header = document.createElement('div');
+  header.className = 'cycle-header';
+  header.innerHTML = `
+    <div class="cycle-title">Ciclo ${activeCiclo} de 6</div>
+    <div class="cycle-dates">${d0.data} – ${dN.data}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${prog.pct}%"></div></div>
+    <div class="progress-label">${prog.done} de ${prog.total} doses marcadas · ${prog.pct}%</div>
+  `;
+  app.appendChild(header);
+
+  // Tabela
+  const wrap = document.createElement('div');
+  wrap.className = 'days-table';
+
+  // Cabeçalho das colunas
+  const colHeaders = document.createElement('div');
+  colHeaders.className = 'col-headers';
+  colHeaders.innerHTML = `<div class="col-hdr date-hdr">Data</div>` +
+    MEDS_INFO.map(m => `<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
+  wrap.appendChild(colHeaders);
+
+  // Dias
+  dias.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'day-row' + (d.dia === 1 ? ' first-day' : '');
+
+    // Célula de data
+    const dateCell = document.createElement('div');
+    dateCell.className = 'date-cell';
+    dateCell.innerHTML = `
+      <div class="date-main">${d.data}</div>
+      <div class="date-sub"><span>${d.dsem}</span><span>D${String(d.dia).padStart(2,'0')}</span></div>
+    `;
+    row.appendChild(dateCell);
+
+    // Células de medicação
+    MEDS_INFO.forEach(m => {
+      const cell = document.createElement('div');
+      const ativo = d.meds.includes(m.code);
+      const checked = ativo && isChecked(activeCiclo, d.dia, m.code);
+
+      cell.className = 'med-cell' + (!ativo ? ' inactive' : checked ? ' checked' : '');
+
+      if (!ativo) {
+        cell.innerHTML = `<div class="dash-icon"></div>`;
+      } else {
+        cell.innerHTML = `<div class="check-box"><span class="check-icon">✓</span></div>`;
+        cell.onclick = () => {
+          const now = toggleCheck(activeCiclo, d.dia, m.code);
+          cell.classList.toggle('checked', now);
+          const msg = now
+            ? `✓ ${m.nome} · ${d.data}`
+            : `${m.nome} · ${d.data} desmarcado`;
+          showToast(msg);
+          // Atualiza progresso sem re-renderizar tudo
+          const p2 = cycleProgress(activeCiclo);
+          document.querySelector('.progress-fill').style.width = p2.pct + '%';
+          document.querySelector('.progress-label').textContent =
+            `${p2.done} de ${p2.total} doses marcadas · ${p2.pct}%`;
+          renderTabs(activeCiclo);
+        };
+      }
+      row.appendChild(cell);
+    });
+
+    wrap.appendChild(row);
+  });
+
+  app.appendChild(wrap);
+
+  // Reset
+  const resetArea = document.createElement('div');
+  resetArea.className = 'reset-area';
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'reset-btn';
+  resetBtn.textContent = 'Resetar ciclo ' + activeCiclo;
+  resetBtn.onclick = () => {
+    if (!confirm(`Apagar todas as marcações do Ciclo ${activeCiclo}?`)) return;
+    dias.forEach(d => d.meds.forEach(med => localStorage.removeItem(storageKey(activeCiclo, d.dia, med))));
+    renderApp(activeCiclo);
+    showToast('Ciclo ' + activeCiclo + ' resetado');
+  };
+  resetArea.appendChild(resetBtn);
+  app.appendChild(resetArea);
+}
+
+// ── Init: abre no ciclo atual ou no 1 ─────────────────────
+function detectCicloAtual() {
+  const hoje = new Date().toISOString().slice(0,10);
+  const found = DATA.find(d => d.dt === hoje);
+  return found ? found.ciclo : 1;
+}
+
+renderApp(detectCicloAtual());
+</script>
+</body>
+</html>
