@@ -131,7 +131,7 @@
     display: grid;
     grid-template-columns: 90px repeat(4, 1fr);
     gap: 3px; padding: 0 0 2px;
-    position: sticky; top: 136px; z-index: 98;
+    position: sticky; top: 88px; z-index: 98;
     background: var(--bg);
   }
   .day-row-med {
@@ -175,7 +175,7 @@
   .pink-day .date-sub  { color: #f9a8d499 !important; }
 
   .day-row-med.today,
-  .day-row-sint.today { border-radius: var(--r-sm); outline: 2px solid var(--success); }
+  .day-row-sint.today { border-radius: var(--r-sm); outline: 2px solid var(--success); outline-offset: 1px; }
   .day-row-med.today .date-cell,
   .day-row-sint.today .date-cell { background: #0c2e1a; border-radius: var(--r-sm) 0 0 var(--r-sm); }
   .today .date-main { color: var(--success) !important; }
@@ -305,7 +305,7 @@
   <div class="app-header-top">
     <div>
       <h1>Controle de Medicações</h1>
-      <p>6 ciclos · 04/05/2026 – 09/11/2026 · 08h</p>
+      <p>6 ciclos · 04/05/2026 – 06/09/2026</p>
     </div>
   </div>
   <div class="screen-tabs">
@@ -473,7 +473,7 @@ const MEDS_INFO = [
 // type: 'bin' = binário, 'scale' = escala ciclável
 // levels: array de [bg, textColor, icon, label]
 const SINT_COLS = [
-  { code:"NAU", nome:"Náusea/Vômito", type:"bin",
+  { code:"NAU", nome:"Náusea / Vômito", type:"bin",
     on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🤢", label:"sim" },
     off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
   { code:"DIA", nome:"Diarreia", type:"bin",
@@ -518,7 +518,8 @@ const SINT_COLS = [
   { code:"APE", nome:"Apetite", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"★", label:"bom" },
+      { bg:"#14532d",        tc:"#86efac",      icon:"★", label:"alto" },
+      { bg:"#1e3a5f",        tc:"#7dd3fc",      icon:"◉", label:"norm." },
       { bg:"#78350f",        tc:"#fcd34d",      icon:"◑", label:"red." },
       { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"✕", label:"não" },
     ]},
@@ -526,6 +527,7 @@ const SINT_COLS = [
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
       { bg:"#14532d",        tc:"#86efac",      icon:"✦", label:"ótimo" },
+      { bg:"#1e3a5f",        tc:"#7dd3fc",      icon:"✧", label:"bom" },
       { bg:"#78350f",        tc:"#fcd34d",      icon:"◑", label:"ruim" },
       { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"✕", label:"pés." },
     ]},
@@ -686,11 +688,16 @@ function renderMed(activeCiclo) {
   app.appendChild(buildCycleHeader(activeCiclo, dias, prog, 'Medicação'));
 
   const wrap = document.createElement('div');
-  wrap.className = 'days-table';
+  wrap.className = 'days-table'; wrap.style.padding = '0 18px 24px';
 
   // Cabeçalho colunas
   const ch = document.createElement('div');
   ch.className = 'col-headers-med';
+  requestAnimationFrame(() => {
+    const appHdr = document.querySelector('.app-header');
+    const cyTabs = document.getElementById('cycleTabs');
+    if (appHdr && cyTabs) ch.style.top = (appHdr.offsetHeight + cyTabs.offsetHeight) + 'px';
+  });
   ch.innerHTML = `<div class="col-hdr date-hdr">Data</div>` +
     MEDS_INFO.map(m=>`<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
   wrap.appendChild(ch);
@@ -769,10 +776,19 @@ function renderSint(activeCiclo) {
 
   // Div do cabeçalho — overflow hidden, sincronizado com scroll do conteúdo
   const headerScrollWrap = document.createElement('div');
-  headerScrollWrap.style.cssText = 'overflow: hidden; position: sticky; top: 88px; z-index: 98; background: var(--bg); padding-bottom: 2px;';
+  headerScrollWrap.style.cssText = 'overflow: hidden; position: sticky; top: 88px; z-index: 98; background: var(--bg); padding-bottom: 3px; box-shadow: 0 2px 0 var(--bg);';
+  // Ajustar top dinamicamente após render
+  requestAnimationFrame(() => {
+    const appHdr = document.querySelector('.app-header');
+    const cycleTabs = document.getElementById('cycleTabs');
+    if (appHdr && cycleTabs) {
+      const t = appHdr.offsetHeight + cycleTabs.offsetHeight;
+      headerScrollWrap.style.top = t + 'px';
+    }
+  });
 
   const tableWrap = document.createElement('div');
-  tableWrap.style.cssText = 'overflow-x: auto; padding-bottom: 24px; -webkit-overflow-scrolling: touch;';
+  tableWrap.style.cssText = 'overflow-x: auto; padding: 0 2px 24px; -webkit-overflow-scrolling: touch;';
   tableWrap.addEventListener('scroll', () => {
     headerScrollWrap.scrollLeft = tableWrap.scrollLeft;
   });
