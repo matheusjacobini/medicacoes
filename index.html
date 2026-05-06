@@ -15,22 +15,13 @@
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
 
   :root {
-    --bg:       #0f172a;
-    --surface:  #1e293b;
-    --surface2: #273549;
-    --border:   #334155;
-    --border2:  #475569;
-    --accent:   #38bdf8;
-    --accent-d: #0ea5e9;
-    --success:  #34d399;
-    --muted:    #64748b;
-    --text:     #f1f5f9;
-    --text2:    #94a3b8;
-    --day1:     #1e3a5f;
-    --pink-bg:  #3b1a2e;
-    --pink-txt: #f9a8d4;
-    --inactive: #1e293b;
-    --r-sm:     8px;
+    --bg:#0f172a; --surface:#1e293b; --surface2:#273549;
+    --border:#334155; --border2:#475569;
+    --accent:#38bdf8; --accent-d:#0ea5e9;
+    --success:#34d399; --danger:#f87171;
+    --muted:#64748b; --text:#f1f5f9; --text2:#94a3b8;
+    --day1:#1e3a5f; --pink-bg:#3b1a2e; --pink-txt:#f9a8d4;
+    --inactive:#1e293b; --r-sm:8px;
   }
 
   * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
@@ -38,17 +29,14 @@
   body {
     font-family:'DM Sans',sans-serif;
     background:var(--bg); color:var(--text);
-    min-height:100dvh;
-    padding-bottom:env(safe-area-inset-bottom);
-    /* FIX #11: suporte a swipe */
-    overflow-x: hidden;
+    min-height:100dvh; padding-bottom:env(safe-area-inset-bottom);
+    overflow-x:hidden;
   }
 
   /* ── HEADER ── */
   .app-header {
     position:sticky; top:0; z-index:100;
-    background:var(--bg);
-    border-bottom:1px solid var(--border);
+    background:var(--bg); border-bottom:1px solid var(--border);
     padding:14px 16px 0;
   }
   .app-header h1 { font-size:15px; font-weight:600; letter-spacing:-0.3px; }
@@ -69,8 +57,7 @@
   .cycle-tabs {
     display:flex; gap:6px; padding:10px 16px;
     overflow-x:auto; scrollbar-width:none;
-    background:var(--bg);
-    position:sticky; top:88px; z-index:99;
+    background:var(--bg); position:sticky; top:88px; z-index:99;
     border-bottom:1px solid var(--border);
   }
   .cycle-tabs::-webkit-scrollbar { display:none; }
@@ -91,30 +78,20 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent-d),var(--accent)); border-radius:2px; transition:width 0.4s ease; }
   .progress-label { font-size:11px; color:var(--muted); margin-top:5px; font-family:'DM Mono',monospace; }
 
-  /* ── SAVE INDICATOR ── FIX #14 */
+  /* ── SAVE INDICATOR ── */
   .save-indicator {
     font-size:10px; color:var(--success); font-family:'DM Mono',monospace;
-    text-align:right; padding:0 16px 4px;
-    opacity:0; transition:opacity 0.4s;
+    text-align:right; padding:0 16px 4px; opacity:0; transition:opacity 0.4s;
   }
   .save-indicator.show { opacity:1; }
 
-  /* ── TABELA MEDICAÇÃO ── */
+  /* ── TABELA ── */
   .days-table { display:flex; flex-direction:column; gap:3px; }
   .col-headers-med {
-    display:grid;
-    grid-template-columns:90px repeat(4,1fr);
-    gap:3px; padding:0 0 2px;
-    position:sticky; z-index:98;
-    background:var(--bg);
-  }
-  .day-row-med {
-    display:grid;
-    grid-template-columns:90px repeat(4,1fr);
-    gap:3px; align-items:center;
+    display:grid; grid-template-columns:90px repeat(4,1fr);
+    gap:3px; padding:0 0 2px; position:sticky; z-index:98; background:var(--bg);
   }
 
-  /* ── COL HEADER ── */
   .col-hdr {
     background:var(--surface2); border-radius:var(--r-sm);
     padding:5px 2px; text-align:center;
@@ -123,16 +100,13 @@
   .col-hdr span  { display:block; font-size:8px; font-weight:400; color:var(--muted); margin-top:1px; }
   .col-hdr.date-hdr { color:var(--muted); font-size:9px; font-weight:500; }
 
-  /* ── DESTAQUES DE LINHA ── */
+  /* ── DESTAQUES ── */
   .first-day .date-cell { background:var(--day1) !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
   .first-day .date-main { color:var(--accent) !important; }
   .first-day .date-sub  { color:#38bdf899 !important; }
-
   .pink-day .date-cell  { background:var(--pink-bg) !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
   .pink-day .date-main  { color:var(--pink-txt) !important; }
   .pink-day .date-sub   { color:#f9a8d499 !important; }
-
-  /* FIX #borda cortada: margin lateral para outline não ser clipado */
   .today { border-radius:var(--r-sm); outline:2px solid var(--success); outline-offset:1px; }
   .today .date-cell  { background:#0c2e1a !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
   .today .date-main  { color:var(--success) !important; }
@@ -140,38 +114,29 @@
 
   /* ── DATE CELL ── */
   .date-cell {
-    background:var(--surface); border-radius:var(--r-sm);
+    position:relative; background:var(--surface); border-radius:var(--r-sm);
     padding:6px 8px; display:flex; flex-direction:column; gap:1px;
-    cursor:pointer; transition:background 0.15s;
-    min-height:40px; justify-content:center;
+    cursor:pointer; transition:background 0.15s; min-height:40px; justify-content:center;
   }
   .date-cell:active { background:var(--surface2); }
+  .date-cell::after { content:'✎'; font-size:7px; color:var(--border2); position:absolute; bottom:3px; right:4px; }
   .date-main { font-size:11.5px; font-weight:500; color:var(--text); font-family:'DM Mono',monospace; }
   .date-sub  { font-size:9.5px; color:var(--muted); font-family:'DM Mono',monospace; display:flex; gap:4px; }
   .today-badge { font-size:8px; font-weight:700; color:var(--success); text-transform:uppercase; letter-spacing:0.5px; margin-top:1px; }
   .note-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--accent); margin-left:3px; vertical-align:middle; }
-  /* FIX #13: hint visível de que a data abre nota */
-  .date-cell::after {
-    content:'✎';
-    font-size:7px; color:var(--border2);
-    position:absolute; bottom:3px; right:4px;
-  }
-  .date-cell { position:relative; }
 
   /* ── MED CELL ── */
   .med-cell {
     background:var(--surface); border-radius:var(--r-sm);
     display:flex; align-items:center; justify-content:center;
-    height:40px; cursor:pointer;
-    transition:background 0.15s, transform 0.1s; user-select:none;
+    height:40px; cursor:pointer; user-select:none;
+    transition:background 0.15s, transform 0.1s;
   }
-  /* FIX #12: ripple feedback */
   .med-cell:active, .sint-cell:active { transform:scale(0.88); transition:transform 0.08s; }
   .med-cell.inactive { background:var(--inactive); cursor:default; }
   .med-cell.checked  { background:#0c2e1a; }
   .check-box {
-    width:22px; height:22px; border-radius:6px;
-    border:2px solid var(--border2);
+    width:22px; height:22px; border-radius:6px; border:2px solid var(--border2);
     display:flex; align-items:center; justify-content:center;
     transition:all 0.15s; background:transparent;
   }
@@ -184,12 +149,57 @@
   .sint-cell {
     background:var(--surface); border-radius:var(--r-sm);
     display:flex; align-items:center; justify-content:center;
-    height:40px; cursor:pointer;
-    transition:background 0.15s, transform 0.1s; user-select:none;
+    height:40px; cursor:pointer; user-select:none;
+    transition:background 0.15s, transform 0.1s;
     flex-direction:column; gap:1px;
   }
   .sint-icon  { font-size:14px; line-height:1; }
-  .sint-label { font-size:7px; color:var(--muted); font-family:'DM Mono',monospace; letter-spacing:0.2px; }
+  .sint-label { font-size:7px; color:var(--muted); font-family:'DM Mono',monospace; }
+
+  /* ── CONFIGS ── */
+  .config-section {
+    padding:16px; display:flex; flex-direction:column; gap:12px;
+  }
+  .config-card {
+    background:var(--surface); border-radius:12px; padding:16px;
+    border:1px solid var(--border);
+  }
+  .config-card h3 {
+    font-size:13px; font-weight:600; color:var(--text);
+    margin-bottom:4px;
+  }
+  .config-card p {
+    font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.5;
+  }
+  .config-btn {
+    width:100%; padding:12px; border-radius:var(--r-sm);
+    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; border:none; transition:opacity 0.15s; margin-bottom:8px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .config-btn:last-child { margin-bottom:0; }
+  .config-btn:active { opacity:0.75; }
+  .config-btn.primary { background:var(--accent); color:#0f172a; }
+  .config-btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+  .config-btn.danger    { background:#7f1d1d; color:#fca5a5; border:1px solid #991b1b; }
+
+  .excecoes-table {
+    width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;
+  }
+  .excecoes-table th {
+    text-align:left; padding:4px 6px; color:var(--muted);
+    border-bottom:1px solid var(--border); font-weight:600;
+    font-family:'DM Mono',monospace; font-size:10px;
+  }
+  .excecoes-table td {
+    padding:5px 6px; color:var(--text2); border-bottom:1px solid var(--border);
+    font-family:'DM Mono',monospace;
+  }
+  .excecoes-table tr:last-child td { border-bottom:none; }
+  .excecoes-empty {
+    font-size:11px; color:var(--muted); font-family:'DM Mono',monospace;
+    padding:8px 0; text-align:center;
+  }
 
   /* ── MODAL ── */
   .modal-overlay {
@@ -200,10 +210,8 @@
   }
   .modal-overlay.open { opacity:1; pointer-events:all; }
   .modal-sheet {
-    width:100%; background:var(--surface);
-    border-radius:16px 16px 0 0; padding:20px 16px 24px;
-    transform:translateY(100%);
-    transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1);
+    width:100%; background:var(--surface); border-radius:16px 16px 0 0; padding:20px 16px 24px;
+    transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1);
   }
   .modal-overlay.open .modal-sheet { transform:translateY(0); }
   .modal-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 16px; }
@@ -237,25 +245,29 @@
   }
   .toast.show { transform:translateX(-50%) translateY(0); }
 
-  /* ── RESET ── */
+  /* ── RESET / ACTIONS ── */
   .reset-area { padding:0 16px 12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
   .reset-btn {
-    background:transparent; border:1px solid var(--border);
-    color:var(--muted); font-family:'DM Sans',sans-serif;
-    font-size:12px; padding:8px 20px; border-radius:20px; cursor:pointer;
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+    font-family:'DM Sans',sans-serif; font-size:12px; padding:8px 20px;
+    border-radius:20px; cursor:pointer;
   }
   .reset-btn:active { background:var(--surface); }
   .reset-btn.danger { border-color:#7f1d1d; color:#fca5a5; }
+
+  /* ── INPUT FILE OCULTO ── */
+  #importInput { display:none; }
 </style>
 </head>
 <body>
 
 <div class="app-header">
   <h1>Controle de Medicações</h1>
-  <p>6 ciclos · 04/05/2026 – 06/09/2026</p>
+  <p id="headerSub">6 ciclos · 04/05/2026 – 06/09/2026</p>
   <div class="screen-tabs">
     <button class="screen-tab active" id="tabMed"  onclick="switchScreen('med')">💊 Medicação</button>
     <button class="screen-tab"        id="tabSint" onclick="switchScreen('sint')">📋 Sintomas</button>
+    <button class="screen-tab"        id="tabCfg"  onclick="switchScreen('cfg')">⚙️ Config</button>
   </div>
 </div>
 
@@ -275,145 +287,126 @@
   </div>
 </div>
 
+<input type="file" id="importInput" accept=".json">
 <div class="toast" id="toast"></div>
 
 <script>
-const DATA = [
-  { ciclo:1, dia:1, dt:"2026-05-04", data:"04 mai", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:1, dia:2, dt:"2026-05-05", data:"05 mai", dsem:"Ter", meds:['PRE','VAL','MYR'] },
-  { ciclo:1, dia:3, dt:"2026-05-06", data:"06 mai", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:1, dia:4, dt:"2026-05-07", data:"07 mai", dsem:"Qui", meds:['PRE','VAL','MYR'] },
-  { ciclo:1, dia:5, dt:"2026-05-08", data:"08 mai", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:1, dia:6, dt:"2026-05-09", data:"09 mai", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:1, dia:7, dt:"2026-05-10", data:"10 mai", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:1, dia:8, dt:"2026-05-11", data:"11 mai", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:9, dt:"2026-05-12", data:"12 mai", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:1, dia:10, dt:"2026-05-13", data:"13 mai", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:11, dt:"2026-05-14", data:"14 mai", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:1, dia:12, dt:"2026-05-15", data:"15 mai", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:13, dt:"2026-05-16", data:"16 mai", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:1, dia:14, dt:"2026-05-17", data:"17 mai", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:1, dia:15, dt:"2026-05-18", data:"18 mai", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:16, dt:"2026-05-19", data:"19 mai", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:1, dia:17, dt:"2026-05-20", data:"20 mai", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:18, dt:"2026-05-21", data:"21 mai", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:1, dia:19, dt:"2026-05-22", data:"22 mai", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:1, dia:20, dt:"2026-05-23", data:"23 mai", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:1, dia:21, dt:"2026-05-24", data:"24 mai", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:2, dia:1, dt:"2026-05-25", data:"25 mai", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:2, dia:2, dt:"2026-05-26", data:"26 mai", dsem:"Ter", meds:['PRE','VAL','MYR'] },
-  { ciclo:2, dia:3, dt:"2026-05-27", data:"27 mai", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:2, dia:4, dt:"2026-05-28", data:"28 mai", dsem:"Qui", meds:['PRE','VAL','MYR'] },
-  { ciclo:2, dia:5, dt:"2026-05-29", data:"29 mai", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:2, dia:6, dt:"2026-05-30", data:"30 mai", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:2, dia:7, dt:"2026-05-31", data:"31 mai", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:2, dia:8, dt:"2026-06-01", data:"01 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:9, dt:"2026-06-02", data:"02 jun", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:2, dia:10, dt:"2026-06-03", data:"03 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:11, dt:"2026-06-04", data:"04 jun", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:2, dia:12, dt:"2026-06-05", data:"05 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:13, dt:"2026-06-06", data:"06 jun", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:2, dia:14, dt:"2026-06-07", data:"07 jun", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:2, dia:15, dt:"2026-06-08", data:"08 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:16, dt:"2026-06-09", data:"09 jun", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:2, dia:17, dt:"2026-06-10", data:"10 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:18, dt:"2026-06-11", data:"11 jun", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:2, dia:19, dt:"2026-06-12", data:"12 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:2, dia:20, dt:"2026-06-13", data:"13 jun", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:2, dia:21, dt:"2026-06-14", data:"14 jun", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:3, dia:1, dt:"2026-06-15", data:"15 jun", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:3, dia:2, dt:"2026-06-16", data:"16 jun", dsem:"Ter", meds:['PRE','VAL','MYR'] },
-  { ciclo:3, dia:3, dt:"2026-06-17", data:"17 jun", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:3, dia:4, dt:"2026-06-18", data:"18 jun", dsem:"Qui", meds:['PRE','VAL','MYR'] },
-  { ciclo:3, dia:5, dt:"2026-06-19", data:"19 jun", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:3, dia:6, dt:"2026-06-20", data:"20 jun", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:3, dia:7, dt:"2026-06-21", data:"21 jun", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:3, dia:8, dt:"2026-06-22", data:"22 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:9, dt:"2026-06-23", data:"23 jun", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:3, dia:10, dt:"2026-06-24", data:"24 jun", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:11, dt:"2026-06-25", data:"25 jun", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:3, dia:12, dt:"2026-06-26", data:"26 jun", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:13, dt:"2026-06-27", data:"27 jun", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:3, dia:14, dt:"2026-06-28", data:"28 jun", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:3, dia:15, dt:"2026-06-29", data:"29 jun", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:16, dt:"2026-06-30", data:"30 jun", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:3, dia:17, dt:"2026-07-01", data:"01 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:18, dt:"2026-07-02", data:"02 jul", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:3, dia:19, dt:"2026-07-03", data:"03 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:3, dia:20, dt:"2026-07-04", data:"04 jul", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:3, dia:21, dt:"2026-07-05", data:"05 jul", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:4, dia:1, dt:"2026-07-06", data:"06 jul", dsem:"Seg", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:4, dia:2, dt:"2026-07-07", data:"07 jul", dsem:"Ter", meds:['PRE','VAL','MYR'] },
-  { ciclo:4, dia:3, dt:"2026-07-08", data:"08 jul", dsem:"Qua", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:4, dia:4, dt:"2026-07-09", data:"09 jul", dsem:"Qui", meds:['PRE','VAL','MYR'] },
-  { ciclo:4, dia:5, dt:"2026-07-10", data:"10 jul", dsem:"Sex", meds:['PRE','VAL','BAC','MYR'] },
-  { ciclo:4, dia:6, dt:"2026-07-11", data:"11 jul", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:4, dia:7, dt:"2026-07-12", data:"12 jul", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:4, dia:8, dt:"2026-07-13", data:"13 jul", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:9, dt:"2026-07-14", data:"14 jul", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:4, dia:10, dt:"2026-07-15", data:"15 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:11, dt:"2026-07-16", data:"16 jul", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:4, dia:12, dt:"2026-07-17", data:"17 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:13, dt:"2026-07-18", data:"18 jul", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:4, dia:14, dt:"2026-07-19", data:"19 jul", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:4, dia:15, dt:"2026-07-20", data:"20 jul", dsem:"Seg", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:16, dt:"2026-07-21", data:"21 jul", dsem:"Ter", meds:['VAL','MYR'] },
-  { ciclo:4, dia:17, dt:"2026-07-22", data:"22 jul", dsem:"Qua", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:18, dt:"2026-07-23", data:"23 jul", dsem:"Qui", meds:['VAL','MYR'] },
-  { ciclo:4, dia:19, dt:"2026-07-24", data:"24 jul", dsem:"Sex", meds:['VAL','BAC','MYR'] },
-  { ciclo:4, dia:20, dt:"2026-07-25", data:"25 jul", dsem:"Sáb", meds:['VAL','MYR'] },
-  { ciclo:4, dia:21, dt:"2026-07-26", data:"26 jul", dsem:"Dom", meds:['VAL','MYR'] },
-  { ciclo:5, dia:1, dt:"2026-07-27", data:"27 jul", dsem:"Seg", meds:['PRE','VAL','BAC'] },
-  { ciclo:5, dia:2, dt:"2026-07-28", data:"28 jul", dsem:"Ter", meds:['PRE','VAL'] },
-  { ciclo:5, dia:3, dt:"2026-07-29", data:"29 jul", dsem:"Qua", meds:['PRE','VAL','BAC'] },
-  { ciclo:5, dia:4, dt:"2026-07-30", data:"30 jul", dsem:"Qui", meds:['PRE','VAL'] },
-  { ciclo:5, dia:5, dt:"2026-07-31", data:"31 jul", dsem:"Sex", meds:['PRE','VAL','BAC'] },
-  { ciclo:5, dia:6, dt:"2026-08-01", data:"01 ago", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:5, dia:7, dt:"2026-08-02", data:"02 ago", dsem:"Dom", meds:['VAL'] },
-  { ciclo:5, dia:8, dt:"2026-08-03", data:"03 ago", dsem:"Seg", meds:['VAL','BAC'] },
-  { ciclo:5, dia:9, dt:"2026-08-04", data:"04 ago", dsem:"Ter", meds:['VAL'] },
-  { ciclo:5, dia:10, dt:"2026-08-05", data:"05 ago", dsem:"Qua", meds:['VAL','BAC'] },
-  { ciclo:5, dia:11, dt:"2026-08-06", data:"06 ago", dsem:"Qui", meds:['VAL'] },
-  { ciclo:5, dia:12, dt:"2026-08-07", data:"07 ago", dsem:"Sex", meds:['VAL','BAC'] },
-  { ciclo:5, dia:13, dt:"2026-08-08", data:"08 ago", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:5, dia:14, dt:"2026-08-09", data:"09 ago", dsem:"Dom", meds:['VAL'] },
-  { ciclo:5, dia:15, dt:"2026-08-10", data:"10 ago", dsem:"Seg", meds:['VAL','BAC'] },
-  { ciclo:5, dia:16, dt:"2026-08-11", data:"11 ago", dsem:"Ter", meds:['VAL'] },
-  { ciclo:5, dia:17, dt:"2026-08-12", data:"12 ago", dsem:"Qua", meds:['VAL','BAC'] },
-  { ciclo:5, dia:18, dt:"2026-08-13", data:"13 ago", dsem:"Qui", meds:['VAL'] },
-  { ciclo:5, dia:19, dt:"2026-08-14", data:"14 ago", dsem:"Sex", meds:['VAL','BAC'] },
-  { ciclo:5, dia:20, dt:"2026-08-15", data:"15 ago", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:5, dia:21, dt:"2026-08-16", data:"16 ago", dsem:"Dom", meds:['VAL'] },
-  { ciclo:6, dia:1, dt:"2026-08-17", data:"17 ago", dsem:"Seg", meds:['PRE','VAL','BAC'] },
-  { ciclo:6, dia:2, dt:"2026-08-18", data:"18 ago", dsem:"Ter", meds:['PRE','VAL'] },
-  { ciclo:6, dia:3, dt:"2026-08-19", data:"19 ago", dsem:"Qua", meds:['PRE','VAL','BAC'] },
-  { ciclo:6, dia:4, dt:"2026-08-20", data:"20 ago", dsem:"Qui", meds:['PRE','VAL'] },
-  { ciclo:6, dia:5, dt:"2026-08-21", data:"21 ago", dsem:"Sex", meds:['PRE','VAL','BAC'] },
-  { ciclo:6, dia:6, dt:"2026-08-22", data:"22 ago", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:6, dia:7, dt:"2026-08-23", data:"23 ago", dsem:"Dom", meds:['VAL'] },
-  { ciclo:6, dia:8, dt:"2026-08-24", data:"24 ago", dsem:"Seg", meds:['VAL','BAC'] },
-  { ciclo:6, dia:9, dt:"2026-08-25", data:"25 ago", dsem:"Ter", meds:['VAL'] },
-  { ciclo:6, dia:10, dt:"2026-08-26", data:"26 ago", dsem:"Qua", meds:['VAL','BAC'] },
-  { ciclo:6, dia:11, dt:"2026-08-27", data:"27 ago", dsem:"Qui", meds:['VAL'] },
-  { ciclo:6, dia:12, dt:"2026-08-28", data:"28 ago", dsem:"Sex", meds:['VAL','BAC'] },
-  { ciclo:6, dia:13, dt:"2026-08-29", data:"29 ago", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:6, dia:14, dt:"2026-08-30", data:"30 ago", dsem:"Dom", meds:['VAL'] },
-  { ciclo:6, dia:15, dt:"2026-08-31", data:"31 ago", dsem:"Seg", meds:['VAL','BAC'] },
-  { ciclo:6, dia:16, dt:"2026-09-01", data:"01 set", dsem:"Ter", meds:['VAL'] },
-  { ciclo:6, dia:17, dt:"2026-09-02", data:"02 set", dsem:"Qua", meds:['VAL','BAC'] },
-  { ciclo:6, dia:18, dt:"2026-09-03", data:"03 set", dsem:"Qui", meds:['VAL'] },
-  { ciclo:6, dia:19, dt:"2026-09-04", data:"04 set", dsem:"Sex", meds:['VAL','BAC'] },
-  { ciclo:6, dia:20, dt:"2026-09-05", data:"05 set", dsem:"Sáb", meds:['VAL'] },
-  { ciclo:6, dia:21, dt:"2026-09-06", data:"06 set", dsem:"Dom", meds:['VAL'] }
-];
+// ════════════════════════════════════════════════════════
+// ── CONFIGURAÇÃO — edite aqui se as medicações mudarem ──
+// ════════════════════════════════════════════════════════
+const CONFIG = {
+  inicio: "2026-05-04",   // data do primeiro dia do ciclo 1
+  totalCiclos: 6,
+  diasPorCiclo: 21,
 
-const MEDS_INFO = [
-  { code:"PRE", nome:"Prednisona", sub:"5 primeiros dias" },
-  { code:"VAL", nome:"Valtrex",    sub:"todo o ciclo" },
-  { code:"BAC", nome:"Bactrim",    sub:"2ª · 4ª · 6ª" },
-  { code:"MYR", nome:"Myrbetric", sub:"ciclos 1–4" },
-];
+  // Medicações e suas regras padrão
+  medicacoes: [
+    { code:"PRE", nome:"Prednisona", sub:"5 primeiros dias", regra:"dias_1_5" },
+    { code:"VAL", nome:"Valtrex",    sub:"todo o ciclo",     regra:"sempre"   },
+    { code:"BAC", nome:"Bactrim",    sub:"2ª · 4ª · 6ª",    regra:"seg_qua_sex" },
+    { code:"MYR", nome:"Myrbetric", sub:"ciclos 1–4",       regra:"ciclos_1_4"  },
+  ],
 
+  // Exceções por ciclo — adicione aqui se algo mudar no futuro
+  // Exemplos:
+  //   { ciclo:4, code:"BAC", regra:"sempre" }      → Bactrim diário a partir do ciclo 4
+  //   { ciclo:5, code:"MYR", regra:"inativo" }     → Myrbetric suspensa no ciclo 5
+  //   { ciclo:3, code:"PRE", regra:"dias_1_7" }    → Prednisona por 7 dias no ciclo 3
+  excecoes: []
+};
+
+// ════════════════════════════════════════════════════════
+// ── GERAÇÃO DINÂMICA DOS DIAS ────────────────────────────
+// ════════════════════════════════════════════════════════
+const MESES_PT = {1:"jan",2:"fev",3:"mar",4:"abr",5:"mai",6:"jun",
+                   7:"jul",8:"ago",9:"set",10:"out",11:"nov",12:"dez"};
+const DSEM_PT  = {0:"Seg",1:"Ter",2:"Qua",3:"Qui",4:"Sex",5:"Sáb",6:"Dom"};
+
+function addDays(dateStr, n) {
+  const d = new Date(dateStr + 'T12:00:00');
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0,10);
+}
+
+function dateLabel(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return `${String(d.getDate()).padStart(2,'0')} ${MESES_PT[d.getMonth()+1]}`;
+}
+
+function dsem(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return DSEM_PT[d.getDay() === 0 ? 6 : d.getDay() - 1];
+}
+
+function isSeg(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  // 0=Dom,1=Seg,2=Ter,3=Qua,4=Qui,5=Sex,6=Sáb
+  return [1,3,5].includes(d.getDay()); // Seg, Qua, Sex
+}
+
+function regraAtiva(regra, diaCiclo, cicloNum, dateStr) {
+  switch(regra) {
+    case "sempre":      return true;
+    case "inativo":     return false;
+    case "dias_1_5":    return diaCiclo <= 5;
+    case "dias_1_7":    return diaCiclo <= 7;
+    case "seg_qua_sex": return isSeg(dateStr);
+    case "ciclos_1_4":  return cicloNum <= 4;
+    case "ciclos_1_2":  return cicloNum <= 2;
+    default:
+      // Suporte a "dias_1_N"
+      const m = regra.match(/^dias_1_(\d+)$/);
+      if (m) return diaCiclo <= parseInt(m[1]);
+      // Suporte a "ciclos_1_N"
+      const mc = regra.match(/^ciclos_1_(\d+)$/);
+      if (mc) return cicloNum <= parseInt(mc[1]);
+      return false;
+  }
+}
+
+function getRegraMed(medCode, cicloNum) {
+  // Verifica se há exceção para este ciclo
+  const exc = CONFIG.excecoes.find(e => e.ciclo === cicloNum && e.code === medCode);
+  if (exc) return exc.regra;
+  // Usa a regra padrão
+  return CONFIG.medicacoes.find(m => m.code === medCode)?.regra || "inativo";
+}
+
+// Gera o DATA[] dinamicamente
+function gerarData() {
+  const data = [];
+  for (let ci = 0; ci < CONFIG.totalCiclos; ci++) {
+    for (let di = 0; di < CONFIG.diasPorCiclo; di++) {
+      const offset = ci * CONFIG.diasPorCiclo + di;
+      const dt     = addDays(CONFIG.inicio, offset);
+      const diaN   = di + 1;
+      const cicloN = ci + 1;
+      const meds   = CONFIG.medicacoes
+        .filter(m => regraAtiva(getRegraMed(m.code, cicloN), diaN, cicloN, dt))
+        .map(m => m.code);
+      data.push({
+        ciclo: cicloN,
+        dia:   diaN,
+        dt,
+        data:  dateLabel(dt),
+        dsem:  dsem(dt),
+        meds
+      });
+    }
+  }
+  return data;
+}
+
+const DATA = gerarData();
+
+// Atualizar subtítulo do header com datas reais
+const d0 = DATA[0], dN = DATA[DATA.length-1];
+document.getElementById('headerSub').textContent =
+  `${CONFIG.totalCiclos} ciclos · ${d0.data} – ${dN.data}`;
+
+// ════════════════════════════════════════════════════════
+// ── DEFINIÇÃO DE SINTOMAS ────────────────────────────────
+// ════════════════════════════════════════════════════════
 const SINT_COLS = [
   { code:"NAU", nome:"Náusea / Vômito", type:"bin",
     on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🤢", label:"sim" },
@@ -436,85 +429,87 @@ const SINT_COLS = [
   { code:"FAD", nome:"Fadiga", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"◐", label:"leve" },
-      { bg:"#78350f",        tc:"#fcd34d",      icon:"◕", label:"mod." },
-      { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"●", label:"alta" },
+      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
+      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
+      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
     ]},
   { code:"DOR", nome:"Dor", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"◐", label:"leve" },
-      { bg:"#78350f",        tc:"#fcd34d",      icon:"◕", label:"mod." },
-      { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"●", label:"alta" },
+      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
+      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
+      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
     ]},
   { code:"CAB", nome:"Cabeça", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"◐", label:"leve" },
-      { bg:"#78350f",        tc:"#fcd34d",      icon:"◕", label:"mod." },
-      { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"●", label:"alta" },
+      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
+      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
+      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
     ]},
   { code:"APE", nome:"Apetite", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"★", label:"alto" },
-      { bg:"#1e3a5f",        tc:"#7dd3fc",      icon:"◉", label:"norm." },
-      { bg:"#78350f",        tc:"#fcd34d",      icon:"◑", label:"red." },
-      { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"✕", label:"não" },
+      { bg:"#14532d", tc:"#86efac", icon:"★", label:"alto" },
+      { bg:"#1e3a5f", tc:"#7dd3fc", icon:"◉", label:"norm." },
+      { bg:"#78350f", tc:"#fcd34d", icon:"◑", label:"red." },
+      { bg:"#7f1d1d", tc:"#fca5a5", icon:"✕", label:"não" },
     ]},
   { code:"SON", nome:"Sono", type:"scale",
     levels:[
       { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d",        tc:"#86efac",      icon:"✦", label:"ótimo" },
-      { bg:"#1e3a5f",        tc:"#7dd3fc",      icon:"✧", label:"bom" },
-      { bg:"#78350f",        tc:"#fcd34d",      icon:"◑", label:"ruim" },
-      { bg:"#7f1d1d",        tc:"#fca5a5",      icon:"✕", label:"pés." },
+      { bg:"#14532d", tc:"#86efac", icon:"✦", label:"ótimo" },
+      { bg:"#1e3a5f", tc:"#7dd3fc", icon:"✧", label:"bom" },
+      { bg:"#78350f", tc:"#fcd34d", icon:"◑", label:"ruim" },
+      { bg:"#7f1d1d", tc:"#fca5a5", icon:"✕", label:"pés." },
     ]},
 ];
 
 const SINT_ORDERED = ['NAU','DIA','CON','FEB','BOC','BCS','FAD','DOR','CAB','APE','SON']
   .map(c => SINT_COLS.find(s => s.code === c)).filter(Boolean);
 
-// ── FIX #4: data local (não UTC) ─────────────────────────
+// ════════════════════════════════════════════════════════
+// ── STATE & UTILS ────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+let currentScreen = 'med';
+let currentCiclo  = 1;
+
 function hojeLocal() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// ── STATE ────────────────────────────────────────────────
-let currentScreen = 'med';
-let currentCiclo  = 1;
-
-// ── FIX #11: swipe horizontal ────────────────────────────
-let swipeStartX = 0;
-document.addEventListener('touchstart', e => { swipeStartX = e.touches[0].clientX; }, {passive:true});
+// Swipe
+let swipeX = 0;
+document.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, {passive:true});
 document.addEventListener('touchend',   e => {
-  const dx = e.changedTouches[0].clientX - swipeStartX;
+  const dx = e.changedTouches[0].clientX - swipeX;
   if (Math.abs(dx) < 60) return;
-  if (dx < 0 && currentScreen === 'med')  switchScreen('sint');
-  if (dx > 0 && currentScreen === 'sint') switchScreen('med');
+  const screens = ['med','sint','cfg'];
+  const idx = screens.indexOf(currentScreen);
+  if (dx < 0 && idx < screens.length-1) switchScreen(screens[idx+1]);
+  if (dx > 0 && idx > 0)                switchScreen(screens[idx-1]);
 }, {passive:true});
 
-// ── STORAGE ──────────────────────────────────────────────
+// Storage
 const medKey  = (c,d,m) => `med_${c}_${d}_${m}`;
 const sintKey = (c,d,s) => `sint_${c}_${d}_${s}`;
 const noteKey = (c,d)   => `note_${c}_${d}`;
 
-const isChecked    = (c,d,m) => localStorage.getItem(medKey(c,d,m)) === "1";
-const getSintVal   = (c,d,s) => parseInt(localStorage.getItem(sintKey(c,d,s)) || "0");
-const setSintVal   = (c,d,s,v) => { localStorage.setItem(sintKey(c,d,s), String(v)); flashSave(); };
-const getNote      = (c,d)   => localStorage.getItem(noteKey(c,d)) || "";
-const setNote      = (c,d,t) => { localStorage.setItem(noteKey(c,d), t); flashSave(); };
+const isChecked  = (c,d,m)   => localStorage.getItem(medKey(c,d,m)) === "1";
+const getSintVal = (c,d,s)   => parseInt(localStorage.getItem(sintKey(c,d,s)) || "0");
+const setSintVal = (c,d,s,v) => { localStorage.setItem(sintKey(c,d,s), String(v)); flashSave(); };
+const getNote    = (c,d)     => localStorage.getItem(noteKey(c,d)) || "";
+const setNote    = (c,d,t)   => { localStorage.setItem(noteKey(c,d), t); flashSave(); };
 
 function toggleCheck(c,d,m) {
   const k = medKey(c,d,m);
   const v = localStorage.getItem(k) === "1" ? "0" : "1";
-  localStorage.setItem(k,v);
-  flashSave();
+  localStorage.setItem(k, v); flashSave();
   return v === "1";
 }
 
-// ── FIX #14: indicador de salvo ──────────────────────────
+// Save indicator
 let saveTimer;
 function flashSave() {
   const el = document.getElementById('saveIndicator');
@@ -523,37 +518,49 @@ function flashSave() {
   saveTimer = setTimeout(() => el.classList.remove('show'), 1500);
 }
 
-// ── FIX #8/#9: progress separado por tela ────────────────
-function cycleProgressMed(ciclo) {
-  const dias = DATA.filter(d => d.ciclo === ciclo);
-  let total=0, done=0;
-  dias.forEach(d => d.meds.forEach(m => {
-    total++;
-    if(isChecked(ciclo,d.dia,m)) done++;
-  }));
-  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
-}
-
-function cycleProgressSint(ciclo) {
-  const dias = DATA.filter(d => d.ciclo === ciclo);
-  // Conta sintomas registrados (qualquer valor > 0)
-  let total=0, done=0;
-  dias.forEach(d => {
-    SINT_ORDERED.forEach(s => {
-      total++;
-      if(getSintVal(ciclo,d.dia,s.code) > 0) done++;
-    });
-  });
-  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
-}
-
-// ── TOAST ────────────────────────────────────────────────
+// Toast
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// Progress
+function cycleProgressMed(ciclo) {
+  const dias = DATA.filter(d => d.ciclo === ciclo);
+  let total=0, done=0;
+  dias.forEach(d => d.meds.forEach(m => {
+    total++;
+    if (isChecked(ciclo, d.dia, m)) done++;
+  }));
+  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+}
+function cycleProgressSint(ciclo) {
+  const dias = DATA.filter(d => d.ciclo === ciclo);
+  let total=0, done=0;
+  dias.forEach(d => SINT_ORDERED.forEach(s => {
+    total++;
+    if (getSintVal(ciclo, d.dia, s.code) > 0) done++;
+  }));
+  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+}
+
+// Header top
+function getHeaderTop() {
+  const a = document.querySelector('.app-header');
+  const c = document.getElementById('cycleTabs');
+  return a && c ? a.offsetHeight + c.offsetHeight : 88;
+}
+
+// Row classes
+function rowClasses(d, hoje) {
+  const base = ['day-row'];
+  if (d.dia === 1)                      base.push('first-day');
+  if (d.dia >= 5 && d.dia <= 10)        base.push('pink-day');
+  if (d.dt === hoje)                    base.push('today');
+  return base.join(' ');
 }
 
 // ── MODAL ────────────────────────────────────────────────
@@ -574,49 +581,7 @@ document.getElementById('noteModal').addEventListener('click', e => {
   if (e.target === document.getElementById('noteModal')) closeNoteModal(false);
 });
 
-// ── TABS DE CICLO ─────────────────────────────────────────
-function renderTabs(activeCiclo) {
-  const tabs = document.getElementById('cycleTabs');
-  tabs.innerHTML = '';
-  const progressFn = currentScreen === 'med' ? cycleProgressMed : cycleProgressSint;
-  for (let ci=1; ci<=6; ci++) {
-    const p = progressFn(ci);
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (ci===activeCiclo?' active':'') + (p.pct===100?' done':'');
-    btn.textContent = `Ciclo ${ci}  ${p.pct}%`;
-    btn.onclick = () => { currentCiclo=ci; switchScreen(currentScreen); };
-    tabs.appendChild(btn);
-  }
-}
-
-// ── SWITCH SCREEN ─────────────────────────────────────────
-function switchScreen(screen) {
-  currentScreen = screen;
-  document.getElementById('tabMed').classList.toggle('active',  screen==='med');
-  document.getElementById('tabSint').classList.toggle('active', screen==='sint');
-  if (screen === 'med') renderMed(currentCiclo);
-  else                  renderSint(currentCiclo);
-}
-
-// ── HELPERS de layout ────────────────────────────────────
-function getHeaderTop() {
-  const a = document.querySelector('.app-header');
-  const c = document.getElementById('cycleTabs');
-  return a && c ? a.offsetHeight + c.offsetHeight : 88;
-}
-
-function rowClasses(d, hoje) {
-  const isPink  = d.dia >= 5 && d.dia <= 10;
-  const isFirst = d.dia === 1;
-  const isToday = d.dt === hoje;
-  const base = ['day-row'];
-  if (isFirst) base.push('first-day');
-  if (isPink)  base.push('pink-day');
-  if (isToday) base.push('today');
-  return base.join(' ');
-}
-
-// ── DATE CELL (compartilhada) ────────────────────────────
+// ── DATE CELL ────────────────────────────────────────────
 function buildDateCell(d, hoje, ciclo) {
   const isToday = d.dt === hoje;
   const hasNote = getNote(ciclo, d.dia).length > 0;
@@ -628,15 +593,12 @@ function buildDateCell(d, hoje, ciclo) {
     ${isToday ? '<div class="today-badge">● hoje</div>' : ''}
   `;
   cell.onclick = () => {
-    const cur = getNote(ciclo, d.dia);
-    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`, cur, txt => {
+    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`, getNote(ciclo, d.dia), txt => {
       setNote(ciclo, d.dia, txt);
       const main = cell.querySelector('.date-main');
       const dot  = cell.querySelector('.note-dot');
       if (txt.length > 0 && !dot) {
-        const sp = document.createElement('span');
-        sp.className = 'note-dot';
-        main.appendChild(sp);
+        const sp = document.createElement('span'); sp.className='note-dot'; main.appendChild(sp);
       } else if (txt.length === 0 && dot) dot.remove();
       if (txt.length > 0) showToast('📝 Nota salva');
     });
@@ -645,19 +607,47 @@ function buildDateCell(d, hoje, ciclo) {
 }
 
 // ── CYCLE HEADER ─────────────────────────────────────────
-function buildCycleHeader(activeCiclo, dias, prog, labelText, labelSuffix) {
+function buildCycleHeader(activeCiclo, dias, prog, label, suffix) {
+  const pid = 'pl_' + Date.now();
   const h = document.createElement('div');
   h.className = 'cycle-header';
-  // FIX #2: id único por render via timestamp
-  const pid = 'pl_' + Date.now();
   h.innerHTML = `
-    <div class="cycle-title">Ciclo ${activeCiclo} de 6 · ${labelText}</div>
+    <div class="cycle-title">Ciclo ${activeCiclo} de ${CONFIG.totalCiclos} · ${label}</div>
     <div class="cycle-dates">${dias[0].data} – ${dias[dias.length-1].data}</div>
     <div class="progress-bar"><div class="progress-fill" id="${pid}" style="width:${prog.pct}%"></div></div>
-    <div class="progress-label" id="${pid}_lbl">${prog.done} de ${prog.total} ${labelSuffix} · ${prog.pct}%</div>
+    <div class="progress-label" id="${pid}_lbl">${prog.done} de ${prog.total} ${suffix} · ${prog.pct}%</div>
   `;
   h._pid = pid;
   return h;
+}
+
+// ── TABS ─────────────────────────────────────────────────
+function renderTabs(activeCiclo) {
+  const tabs = document.getElementById('cycleTabs');
+  tabs.innerHTML = '';
+  const fn = currentScreen === 'sint' ? cycleProgressSint : cycleProgressMed;
+  for (let ci=1; ci<=CONFIG.totalCiclos; ci++) {
+    const p = fn(ci);
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (ci===activeCiclo?' active':'') + (p.pct===100?' done':'');
+    btn.textContent = `Ciclo ${ci}  ${p.pct}%`;
+    btn.onclick = () => { currentCiclo=ci; switchScreen(currentScreen); };
+    tabs.appendChild(btn);
+  }
+}
+
+function switchScreen(screen) {
+  currentScreen = screen;
+  ['med','sint','cfg'].forEach(s => {
+    document.getElementById('tab'+s.charAt(0).toUpperCase()+s.slice(1))
+      .classList.toggle('active', s===screen);
+  });
+  // Cycle tabs: só nas abas med e sint
+  document.getElementById('cycleTabs').style.display = screen === 'cfg' ? 'none' : 'flex';
+  document.getElementById('saveIndicator').style.display = screen === 'cfg' ? 'none' : 'block';
+  if      (screen==='med')  renderMed(currentCiclo);
+  else if (screen==='sint') renderSint(currentCiclo);
+  else                      renderCfg();
 }
 
 // ════════════════════════════════════════════════════════
@@ -666,51 +656,44 @@ function buildCycleHeader(activeCiclo, dias, prog, labelText, labelSuffix) {
 function renderMed(activeCiclo) {
   currentCiclo = activeCiclo;
   renderTabs(activeCiclo);
-  const app = document.getElementById('app');
+  const app  = document.getElementById('app');
   app.innerHTML = '';
   const hoje = hojeLocal();
-  const dias  = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog  = cycleProgressMed(activeCiclo);
-
-  const hdr = buildCycleHeader(activeCiclo, dias, prog, 'Medicação', 'doses marcadas');
+  const dias = DATA.filter(d => d.ciclo === activeCiclo);
+  const prog = cycleProgressMed(activeCiclo);
+  const hdr  = buildCycleHeader(activeCiclo, dias, prog, 'Medicação', 'doses marcadas');
   app.appendChild(hdr);
   const pid = hdr._pid;
 
   const wrap = document.createElement('div');
   wrap.className = 'days-table';
-  wrap.style.cssText = 'padding: 0 16px 8px;';
+  wrap.style.cssText = 'padding:0 16px 8px;';
 
-  // Cabeçalho colunas — FIX: top calculado após render
   const ch = document.createElement('div');
   ch.className = 'col-headers-med';
   ch.innerHTML = `<div class="col-hdr date-hdr">Data</div>` +
-    MEDS_INFO.map(m => `<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
+    CONFIG.medicacoes.map(m => `<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
   wrap.appendChild(ch);
   requestAnimationFrame(() => { ch.style.top = getHeaderTop() + 'px'; });
 
-  // FIX #7: indicador quando hoje não está neste ciclo
-  const hasTodayInCiclo = dias.some(d => d.dt === hoje);
-  if (!hasTodayInCiclo) {
+  if (!dias.some(d => d.dt === hoje)) {
     const info = document.createElement('div');
-    info.style.cssText = 'font-size:11px; color:var(--muted); padding:4px 0 6px; font-family:DM Mono,monospace; text-align:center;';
+    info.style.cssText = 'font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
     info.textContent = 'hoje não pertence a este ciclo';
     wrap.appendChild(info);
   }
 
   dias.forEach(d => {
-    const isToday = d.dt === hoje;
     const row = document.createElement('div');
     row.className = rowClasses(d, hoje);
-    row.style.cssText = 'display:grid; grid-template-columns:90px repeat(4,1fr); gap:3px; align-items:center;';
-    if (isToday) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
-
+    row.style.cssText = 'display:grid;grid-template-columns:90px repeat(4,1fr);gap:3px;align-items:center;';
+    if (d.dt === hoje) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
     row.appendChild(buildDateCell(d, hoje, activeCiclo));
-
-    MEDS_INFO.forEach(m => {
-      const cell = document.createElement('div');
+    CONFIG.medicacoes.forEach(m => {
+      const cell    = document.createElement('div');
       const ativo   = d.meds.includes(m.code);
       const checked = ativo && isChecked(activeCiclo, d.dia, m.code);
-      cell.className = 'med-cell' + (!ativo ? ' inactive' : checked ? ' checked' : '');
+      cell.className = 'med-cell' + (!ativo?' inactive': checked?' checked':'');
       if (!ativo) {
         cell.innerHTML = `<div class="dash-icon"></div>`;
       } else {
@@ -718,7 +701,6 @@ function renderMed(activeCiclo) {
         cell.onclick = () => {
           const now = toggleCheck(activeCiclo, d.dia, m.code);
           cell.classList.toggle('checked', now);
-          // FIX #12: vibração tátil
           if (navigator.vibrate) navigator.vibrate(30);
           showToast(now ? `✓ ${m.nome} · ${d.data}` : `${m.nome} · ${d.data} desmarcado`);
           const p2 = cycleProgressMed(activeCiclo);
@@ -733,20 +715,17 @@ function renderMed(activeCiclo) {
     });
     wrap.appendChild(row);
   });
-
   app.appendChild(wrap);
 
-  // Reset
-  const ra = document.createElement('div'); ra.className = 'reset-area';
-  const rb = document.createElement('button'); rb.className = 'reset-btn';
+  const ra = document.createElement('div'); ra.className='reset-area';
+  const rb = document.createElement('button'); rb.className='reset-btn';
   rb.textContent = 'Resetar medicações — ciclo ' + activeCiclo;
   rb.onclick = () => {
-    if (!confirm(`Apagar todas as marcações de medicação do Ciclo ${activeCiclo}?`)) return;
+    if (!confirm(`Apagar marcações de medicação do Ciclo ${activeCiclo}?`)) return;
     dias.forEach(d => d.meds.forEach(m => localStorage.removeItem(medKey(activeCiclo,d.dia,m))));
     renderMed(activeCiclo); showToast('Ciclo ' + activeCiclo + ' resetado');
   };
-  ra.appendChild(rb);
-  app.appendChild(ra);
+  ra.appendChild(rb); app.appendChild(ra);
 }
 
 // ════════════════════════════════════════════════════════
@@ -755,100 +734,69 @@ function renderMed(activeCiclo) {
 function renderSint(activeCiclo) {
   currentCiclo = activeCiclo;
   renderTabs(activeCiclo);
-  const app = document.getElementById('app');
+  const app  = document.getElementById('app');
   app.innerHTML = '';
   const hoje = hojeLocal();
-  const dias  = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog  = cycleProgressSint(activeCiclo);
+  const dias = DATA.filter(d => d.ciclo === activeCiclo);
+  const prog = cycleProgressSint(activeCiclo);
+  app.appendChild(buildCycleHeader(activeCiclo, dias, prog, 'Sintomas', 'dias registrados'));
 
-  const hdr = buildCycleHeader(activeCiclo, dias, prog, 'Sintomas', 'dias registrados');
-  app.appendChild(hdr);
+  const N=SINT_ORDERED.length, DATE_W=82, COL_W=46, GAP=3;
+  const totalW = DATE_W + N*COL_W + N*GAP;
 
-  // FIX #7: indicador quando hoje não está neste ciclo
-  const hasTodayInCiclo = dias.some(d => d.dt === hoje);
-
-  // Layout da grade
-  const N      = SINT_ORDERED.length;
-  const DATE_W = 82;
-  const COL_W  = 46;
-  const GAP    = 3;
-  const totalW = DATE_W + N * COL_W + N * GAP;
-
-  // Wrapper externo
   const outerWrap = document.createElement('div');
-  outerWrap.style.cssText = 'padding: 0 16px;';
+  outerWrap.style.cssText = 'padding:0 16px;';
 
-  // FIX #3: cabeçalho fixo com min-width igual ao inner
   const hdrWrap = document.createElement('div');
-  hdrWrap.style.cssText = `overflow:hidden; position:sticky; top:88px; z-index:98; background:var(--bg); padding-bottom:3px; box-shadow:0 2px 0 var(--bg);`;
-  requestAnimationFrame(() => { hdrWrap.style.top = getHeaderTop() + 'px'; });
+  hdrWrap.style.cssText = `overflow:hidden;position:sticky;top:88px;z-index:98;background:var(--bg);padding-bottom:3px;box-shadow:0 2px 0 var(--bg);`;
+  requestAnimationFrame(() => { hdrWrap.style.top = getHeaderTop()+'px'; });
 
   const chGrid = document.createElement('div');
-  chGrid.style.cssText = `display:grid; grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px); gap:${GAP}px; min-width:${totalW}px;`;
+  chGrid.style.cssText = `display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;min-width:${totalW}px;`;
   chGrid.innerHTML = `<div class="col-hdr date-hdr" style="font-size:8px">Data</div>` +
-    SINT_ORDERED.map(s => `<div class="col-hdr" style="font-size:7.5px; padding:4px 1px">${s.nome}</div>`).join('');
+    SINT_ORDERED.map(s=>`<div class="col-hdr" style="font-size:7.5px;padding:4px 1px">${s.nome}</div>`).join('');
   hdrWrap.appendChild(chGrid);
 
-  // Tabela scrollável
   const tableWrap = document.createElement('div');
-  tableWrap.style.cssText = `overflow-x:auto; padding:0 2px 8px; -webkit-overflow-scrolling:touch;`;
-  // FIX #3: sincronizar scroll do cabeçalho com o conteúdo
+  tableWrap.style.cssText = 'overflow-x:auto;padding:0 2px 8px;-webkit-overflow-scrolling:touch;';
   tableWrap.addEventListener('scroll', () => { hdrWrap.scrollLeft = tableWrap.scrollLeft; });
 
   const inner = document.createElement('div');
-  inner.style.cssText = `min-width:${totalW}px; display:flex; flex-direction:column; gap:3px;`;
+  inner.style.cssText = `min-width:${totalW}px;display:flex;flex-direction:column;gap:3px;`;
 
-  if (!hasTodayInCiclo) {
+  if (!dias.some(d => d.dt === hoje)) {
     const info = document.createElement('div');
-    info.style.cssText = 'font-size:11px; color:var(--muted); padding:4px 0 6px; font-family:DM Mono,monospace; text-align:center;';
+    info.style.cssText = 'font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
     info.textContent = 'hoje não pertence a este ciclo';
     inner.appendChild(info);
   }
 
   dias.forEach(d => {
-    const isToday = d.dt === hoje;
     const row = document.createElement('div');
     row.className = rowClasses(d, hoje);
-    row.style.cssText = `display:grid; grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px); gap:${GAP}px; align-items:center;`;
-    if (isToday) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
-
+    row.style.cssText = `display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;align-items:center;`;
+    if (d.dt === hoje) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
     row.appendChild(buildDateCell(d, hoje, activeCiclo));
-
     SINT_ORDERED.forEach(s => {
       const cell = document.createElement('div');
-      cell.className = 'sint-cell';
-      cell.style.height = '40px';
-
+      cell.className = 'sint-cell'; cell.style.height='40px';
       const updateCell = () => {
         const v = getSintVal(activeCiclo, d.dia, s.code);
-        let bg, tc, icon, label;
-        if (s.type === 'bin') {
-          const st = v === 1 ? s.on : s.off;
-          bg=st.bg; tc=st.tc; icon=st.icon; label=st.label;
-        } else {
-          // FIX #1: usar levels.length-1 como maxVal
-          const lvl = s.levels[v] || s.levels[0];
-          bg=lvl.bg; tc=lvl.tc; icon=lvl.icon; label=lvl.label;
-        }
-        cell.style.background = bg;
-        cell.innerHTML = `<span class="sint-icon" style="color:${tc}">${icon}</span><span class="sint-label" style="color:${tc}">${label}</span>`;
+        const state = s.type==='bin' ? (v===1?s.on:s.off) : (s.levels[v]||s.levels[0]);
+        cell.style.background = state.bg;
+        cell.innerHTML = `<span class="sint-icon" style="color:${state.tc}">${state.icon}</span><span class="sint-label" style="color:${state.tc}">${state.label}</span>`;
       };
-
       updateCell();
-
       cell.onclick = () => {
         const cur    = getSintVal(activeCiclo, d.dia, s.code);
-        // FIX #1: maxVal correto por tipo
-        const maxVal = s.type === 'bin' ? 1 : s.levels.length - 1;
-        const next   = cur >= maxVal ? 0 : cur + 1;
+        const maxVal = s.type==='bin' ? 1 : s.levels.length-1;
+        const next   = cur >= maxVal ? 0 : cur+1;
         setSintVal(activeCiclo, d.dia, s.code, next);
         updateCell();
-        // FIX #12: vibração tátil
         if (navigator.vibrate) navigator.vibrate(20);
         const labels = s.type==='bin' ? ['não','sim'] : s.levels.map(l=>l.label);
         showToast(`${s.nome} · ${labels[next]}`);
       };
-
       row.appendChild(cell);
     });
     inner.appendChild(row);
@@ -859,30 +807,199 @@ function renderSint(activeCiclo) {
   outerWrap.appendChild(tableWrap);
   app.appendChild(outerWrap);
 
-  // FIX #6: reset separado para sintomas e para notas
-  const ra = document.createElement('div'); ra.className = 'reset-area';
-
-  const rbSint = document.createElement('button');
-  rbSint.className = 'reset-btn';
-  rbSint.textContent = 'Resetar sintomas — ciclo ' + activeCiclo;
-  rbSint.onclick = () => {
-    if (!confirm(`Apagar sintomas do Ciclo ${activeCiclo}? As notas serão mantidas.`)) return;
-    dias.forEach(d => SINT_ORDERED.forEach(s => localStorage.removeItem(sintKey(activeCiclo,d.dia,s.code))));
+  const ra = document.createElement('div'); ra.className='reset-area';
+  const rbS = document.createElement('button'); rbS.className='reset-btn';
+  rbS.textContent='Resetar sintomas — ciclo '+activeCiclo;
+  rbS.onclick=()=>{
+    if(!confirm(`Apagar sintomas do Ciclo ${activeCiclo}? As notas serão mantidas.`)) return;
+    dias.forEach(d=>SINT_ORDERED.forEach(s=>localStorage.removeItem(sintKey(activeCiclo,d.dia,s.code))));
     renderSint(activeCiclo); showToast('Sintomas resetados');
   };
-
-  const rbNotes = document.createElement('button');
-  rbNotes.className = 'reset-btn danger';
-  rbNotes.textContent = 'Apagar notas — ciclo ' + activeCiclo;
-  rbNotes.onclick = () => {
-    if (!confirm(`Apagar TODAS as notas do Ciclo ${activeCiclo}? Esta ação não pode ser desfeita.`)) return;
-    dias.forEach(d => localStorage.removeItem(noteKey(activeCiclo,d.dia)));
+  const rbN = document.createElement('button'); rbN.className='reset-btn danger';
+  rbN.textContent='Apagar notas — ciclo '+activeCiclo;
+  rbN.onclick=()=>{
+    if(!confirm(`Apagar TODAS as notas do Ciclo ${activeCiclo}?`)) return;
+    dias.forEach(d=>localStorage.removeItem(noteKey(activeCiclo,d.dia)));
     renderSint(activeCiclo); showToast('Notas apagadas');
   };
+  ra.appendChild(rbS); ra.appendChild(rbN); app.appendChild(ra);
+}
 
-  ra.appendChild(rbSint);
-  ra.appendChild(rbNotes);
-  app.appendChild(ra);
+// ════════════════════════════════════════════════════════
+// ── BACKUP & RESTORE ────────────────────────────────════
+// ════════════════════════════════════════════════════════
+function exportarBackup() {
+  const dados = {};
+  for (let i=0; i<localStorage.length; i++) {
+    const k = localStorage.key(i);
+    dados[k] = localStorage.getItem(k);
+  }
+  const agora = new Date();
+  const ts = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
+  const payload = {
+    versao: "1.0",
+    app: "controle-medicacoes",
+    exportado_em: agora.toISOString(),
+    total_registros: Object.keys(dados).length,
+    dados
+  };
+  const json = JSON.stringify(payload, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `backup_medicacoes_${ts}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`✅ Backup exportado (${Object.keys(dados).length} registros)`);
+}
+
+function importarBackup(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const payload = JSON.parse(e.target.result);
+      // Validação básica
+      if (!payload.dados || typeof payload.dados !== 'object') {
+        showToast('❌ Arquivo inválido'); return;
+      }
+      if (!confirm(`Restaurar backup de ${payload.exportado_em?.slice(0,10) || '?'} com ${Object.keys(payload.dados).length} registros?\n\nOs dados atuais serão substituídos.`)) return;
+
+      // Limpar apenas as chaves do app (med_, sint_, note_)
+      const keysToRemove = [];
+      for (let i=0; i<localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+
+      // Restaurar
+      let count = 0;
+      Object.entries(payload.dados).forEach(([k,v]) => {
+        if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) {
+          localStorage.setItem(k, v); count++;
+        }
+      });
+      showToast(`✅ ${count} registros restaurados`);
+      // Re-renderizar tela atual
+      switchScreen(currentScreen === 'cfg' ? 'med' : currentScreen);
+    } catch(err) {
+      showToast('❌ Erro ao ler o arquivo');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Conectar input de arquivo
+document.getElementById('importInput').addEventListener('change', e => {
+  importarBackup(e.target.files[0]);
+  e.target.value = ''; // reset para permitir importar o mesmo arquivo
+});
+
+// ════════════════════════════════════════════════════════
+// ── RENDER CONFIG ────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+function renderCfg() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  const sec = document.createElement('div');
+  sec.className = 'config-section';
+
+  // ── Card: Backup ──
+  const cardBkp = document.createElement('div');
+  cardBkp.className = 'config-card';
+  cardBkp.innerHTML = `
+    <h3>💾 Backup de dados</h3>
+    <p>Exporte todos os seus registros para um arquivo JSON. Salve em <strong>Arquivos</strong> ou <strong>iCloud Drive</strong> para não perder os dados se remover o app da tela inicial.</p>
+  `;
+  const btnExp = document.createElement('button');
+  btnExp.className = 'config-btn primary';
+  btnExp.innerHTML = '⬆️ Exportar backup';
+  btnExp.onclick = exportarBackup;
+
+  const btnImp = document.createElement('button');
+  btnImp.className = 'config-btn secondary';
+  btnImp.innerHTML = '⬇️ Importar backup';
+  btnImp.onclick = () => document.getElementById('importInput').click();
+
+  cardBkp.appendChild(btnExp);
+  cardBkp.appendChild(btnImp);
+  sec.appendChild(cardBkp);
+
+  // ── Card: Medicações ativas ──
+  const cardMeds = document.createElement('div');
+  cardMeds.className = 'config-card';
+  cardMeds.innerHTML = `<h3>💊 Medicações configuradas</h3><p>Configuração atual do tratamento. Para alterar medicações ou frequências em ciclos futuros, edite o array <code>CONFIG.excecoes</code> no código-fonte.</p>`;
+
+  const tbl = document.createElement('table');
+  tbl.className = 'excecoes-table';
+  tbl.innerHTML = `
+    <thead><tr><th>Medicação</th><th>Regra padrão</th><th>Exceções</th></tr></thead>
+  `;
+  const tb = document.createElement('tbody');
+  CONFIG.medicacoes.forEach(m => {
+    const excs = CONFIG.excecoes.filter(e => e.code === m.code);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${m.nome}</td>
+      <td>${m.regra}</td>
+      <td>${excs.length > 0 ? excs.map(e=>`C${e.ciclo}:${e.regra}`).join(', ') : '—'}</td>
+    `;
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb);
+  cardMeds.appendChild(tbl);
+  sec.appendChild(cardMeds);
+
+  // ── Card: Estatísticas ──
+  const cardStats = document.createElement('div');
+  cardStats.className = 'config-card';
+  let totalMed=0, doneMed=0, totalSint=0, doneSint=0, totalNotas=0;
+  for (let ci=1; ci<=CONFIG.totalCiclos; ci++) {
+    const pm = cycleProgressMed(ci);
+    const ps = cycleProgressSint(ci);
+    totalMed  += pm.total; doneMed  += pm.done;
+    totalSint += ps.total; doneSint += ps.done;
+    DATA.filter(d=>d.ciclo===ci).forEach(d=>{ if(getNote(ci,d.dia).length>0) totalNotas++; });
+  }
+  const cicloAtual = DATA.find(d=>d.dt===hojeLocal())?.ciclo || '—';
+  cardStats.innerHTML = `
+    <h3>📊 Estatísticas gerais</h3>
+    <p style="margin-bottom:0">
+      Ciclo atual: <strong>${cicloAtual}</strong><br>
+      Medicações: <strong>${doneMed}/${totalMed}</strong> doses marcadas (${totalMed?Math.round(doneMed/totalMed*100):0}%)<br>
+      Sintomas: <strong>${doneSint}/${totalSint}</strong> dias registrados (${totalSint?Math.round(doneSint/totalSint*100):0}%)<br>
+      Notas: <strong>${totalNotas}</strong> dias com anotação
+    </p>
+  `;
+  sec.appendChild(cardStats);
+
+  // ── Card: Reset total ──
+  const cardReset = document.createElement('div');
+  cardReset.className = 'config-card';
+  cardReset.innerHTML = `<h3>🗑️ Apagar tudo</h3><p>Remove todos os registros de medicação, sintomas e notas. Faça um backup antes!</p>`;
+  const btnReset = document.createElement('button');
+  btnReset.className = 'config-btn danger';
+  btnReset.innerHTML = '⚠️ Apagar todos os dados';
+  btnReset.onclick = () => {
+    if (!confirm('Apagar TODOS os dados? Esta ação não pode ser desfeita.\n\nFaça um backup antes!')) return;
+    const keysToRemove = [];
+    for (let i=0; i<localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) keysToRemove.push(k);
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+    showToast('Todos os dados apagados');
+    renderCfg();
+  };
+  cardReset.appendChild(btnReset);
+  sec.appendChild(cardReset);
+
+  app.appendChild(sec);
 }
 
 // ── INIT ─────────────────────────────────────────────────
