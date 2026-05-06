@@ -162,6 +162,22 @@
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--surface2); color:var(--text); padding:10px 20px; border-radius:20px; font-size:13px; border:1px solid var(--border); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index:999; white-space:nowrap; pointer-events:none; }
   .toast.show { transform:translateX(-50%) translateY(0); }
   .reset-area { padding:0 16px 12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+
+  /* ── LEGENDA SINTOMAS ── */
+  .sint-legenda {
+    padding:4px 16px 8px;
+    display:grid; grid-template-columns:1fr 1fr; gap:4px 12px;
+  }
+  .sint-legenda-item {
+    display:flex; align-items:center; gap:6px;
+    font-size:11px; color:var(--text2);
+  }
+  .sint-legenda-item .leg-emoji { font-size:16px; line-height:1; width:20px; text-align:center; flex-shrink:0; }
+  .sint-legenda-title {
+    padding:12px 16px 4px;
+    font-size:10px; font-weight:600; color:var(--muted);
+    font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.5px;
+  }
   .reset-btn { background:transparent; border:1px solid var(--border); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:12px; padding:8px 20px; border-radius:20px; cursor:pointer; }
   .reset-btn:active { background:var(--surface); }
   .reset-btn.danger { border-color:#7f1d1d; color:#fca5a5; }
@@ -494,17 +510,17 @@ refreshData();
 // ── SINTOMAS ─────────────────────────────────────────────
 // ════════════════════════════════════════════════════════
 const SINT_COLS=[
-  {code:"NAU",nome:"Náusea / Vômito",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🤢",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"DIA",nome:"Diarreia",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"CON",nome:"Constip.",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"FEB",nome:"Febre",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🌡",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"BOC",nome:"Feridas boca",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"💊",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"BCS",nome:"Boca seca",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"💧",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
-  {code:"FAD",nome:"Fadiga",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
-  {code:"DOR",nome:"Dor",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
-  {code:"CAB",nome:"Cabeça",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
-  {code:"APE",nome:"Apetite",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"★",label:"alto"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"◉",label:"norm."},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"red."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"não"}]},
-  {code:"SON",nome:"Sono",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"✦",label:"ótimo"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"✧",label:"bom"},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"ruim"},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"pés."}]},
+  {code:"NAU",nome:"Náusea / Vômito",col:"🤢",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🤢",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"DIA",nome:"Diarreia",col:"🚽",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"CON",nome:"Constipação",col:"🔒",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"FEB",nome:"Febre",col:"🌡️",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🌡",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"BOC",nome:"Feridas na boca",col:"👄",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"💊",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"BCS",nome:"Boca seca",col:"💧",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"💧",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"FAD",nome:"Fadiga",col:"🔋",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"DOR",nome:"Dor geral",col:"⚡",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"CAB",nome:"Dor de cabeça",col:"🧠",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"APE",nome:"Apetite",col:"🍽️",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"★",label:"alto"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"◉",label:"norm."},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"red."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"não"}]},
+  {code:"SON",nome:"Sono",col:"🌙",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"✦",label:"ótimo"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"✧",label:"bom"},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"ruim"},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"pés."}]},
 ];
 const SINT_ORDERED=['NAU','DIA','CON','FEB','BOC','BCS','FAD','DOR','CAB','APE','SON']
   .map(c=>SINT_COLS.find(s=>s.code===c)).filter(Boolean);
@@ -519,15 +535,7 @@ function hojeLocal() {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-let swipeX=0;
-document.addEventListener('touchstart',e=>{swipeX=e.touches[0].clientX;},{passive:true});
-document.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-swipeX;
-  if(Math.abs(dx)<60) return;
-  const screens=['med','sint','cfg'],idx=screens.indexOf(currentScreen);
-  if(dx<0&&idx<screens.length-1) switchScreen(screens[idx+1]);
-  if(dx>0&&idx>0)                  switchScreen(screens[idx-1]);
-},{passive:true});
+// Navegação por toque removida — usar as tabs no topo
 
 const medKey =(c,d,m)=>`med_${c}_${d}_${m}`;
 const sintKey=(c,d,s)=>`sint_${c}_${d}_${s}`;
@@ -607,20 +615,7 @@ function closeNoteModal(save) {
 let _medEditCode=null;
 let _mfIntervalos=[];
 
-function renderIntervalosList(listId, intervalos, onDelete) {
-  const list=document.getElementById(listId);
-  list.innerHTML='';
-  if(intervalos.length===0) {
-    list.innerHTML='<div style="font-size:11px;color:var(--muted);font-family:DM Mono,monospace;">Nenhuma janela adicionada</div>';
-    return;
-  }
-  intervalos.forEach((iv,idx)=>{
-    const row=document.createElement('div'); row.className='intervalo-row';
-    row.innerHTML=`<span>Dias ${iv.diaIni} a ${iv.diaFim}</span>
-      <button class="intervalo-del" onclick="(${onDelete})(${idx})">✕</button>`;
-    list.appendChild(row);
-  });
-}
+
 
 function adicionarIntervalo() {
   const ini=parseInt(document.getElementById('mfAddIni').value)||1;
@@ -631,9 +626,6 @@ function adicionarIntervalo() {
   if(overlap){showToast('❌ Janela sobreposta com outra existente');return;}
   _mfIntervalos.push({diaIni:ini,diaFim:fim});
   _mfIntervalos.sort((a,b)=>a.diaIni-b.diaIni);
-  renderIntervalosList('mfIntervalosList',_mfIntervalos,
-    'function(i){_mfIntervalos.splice(i,1);renderIntervalosList("mfIntervalosList",_mfIntervalos,arguments.callee);}');
-  // Re-render simples
   renderMfIntervalos();
 }
 function renderMfIntervalos() {
@@ -931,7 +923,7 @@ function renderSint(activeCiclo) {
   const chGrid=document.createElement('div');
   chGrid.style.cssText=`display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;min-width:${totalW}px;`;
   chGrid.innerHTML=`<div class="col-hdr date-hdr" style="font-size:8px">Data</div>`+
-    SINT_ORDERED.map(s=>`<div class="col-hdr" style="font-size:7.5px;padding:4px 1px">${s.nome}</div>`).join('');
+    SINT_ORDERED.map(s=>`<div class="col-hdr" style="font-size:18px;padding:6px 1px;line-height:1" title="${s.nome}">${s.col}</div>`).join('');
   hdrWrap.appendChild(chGrid);
   const tableWrap=document.createElement('div');
   tableWrap.style.cssText='overflow-x:auto;padding:0 2px 8px;-webkit-overflow-scrolling:touch;';
@@ -971,6 +963,17 @@ function renderSint(activeCiclo) {
     inner.appendChild(row);
   });
   tableWrap.appendChild(inner);outerWrap.appendChild(hdrWrap);outerWrap.appendChild(tableWrap);app.appendChild(outerWrap);
+  // Legenda de emojis
+  const legTitle=document.createElement('div'); legTitle.className='sint-legenda-title';
+  legTitle.textContent='Legenda'; app.appendChild(legTitle);
+  const leg=document.createElement('div'); leg.className='sint-legenda';
+  SINT_ORDERED.forEach(s=>{
+    const item=document.createElement('div'); item.className='sint-legenda-item';
+    item.innerHTML='<span class="leg-emoji">'+s.col+'</span><span>'+s.nome+'</span>';
+    leg.appendChild(item);
+  });
+  app.appendChild(leg);
+
   const ra=document.createElement('div');ra.className='reset-area';
   const rbS=document.createElement('button');rbS.className='reset-btn';rbS.textContent='Resetar sintomas — ciclo '+activeCiclo;
   rbS.onclick=()=>{
