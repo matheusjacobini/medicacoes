@@ -15,309 +15,254 @@
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
 
   :root {
-    --bg:        #0f172a;
-    --surface:   #1e293b;
-    --surface2:  #273549;
-    --border:    #334155;
-    --border2:   #475569;
-    --accent:    #38bdf8;
-    --accent-dim:#0ea5e9;
-    --success:   #34d399;
-    --warn:      #fb923c;
-    --danger:    #f87171;
-    --muted:     #64748b;
-    --text:      #f1f5f9;
-    --text2:     #94a3b8;
-    --day1:      #1e3a5f;
-    --day1-brd:  #38bdf8;
-    --inactive:  #1e293b;
-    --pink-bg:   #3b1a2e;
-    --pink-text: #f9a8d4;
-    --r:         12px;
-    --r-sm:      8px;
-
-    /* Escala de sintomas */
-    --s0: #1e293b;   /* ausente — surface */
-    --s1: #14532d;   /* leve — verde escuro */
-    --s2: #78350f;   /* moderado — âmbar escuro */
-    --s3: #7f1d1d;   /* alto — vermelho escuro */
-    --s0t: #64748b;
-    --s1t: #86efac;
-    --s2t: #fcd34d;
-    --s3t: #fca5a5;
-
-    /* Sono (invertido: bom=verde, ruim=vermelho) */
-    --sl0: #14532d; --sl0t: #86efac;  /* ótimo */
-    --sl1: #1e3a5f; --sl1t: #7dd3fc;  /* bom */
-    --sl2: #78350f; --sl2t: #fcd34d;  /* ruim */
-    --sl3: #7f1d1d; --sl3t: #fca5a5;  /* péssimo */
-
-    /* Apetite (invertido) */
-    --ap0: #14532d; --ap0t: #86efac;  /* alto */
-    --ap1: #1e3a5f; --ap1t: #7dd3fc;  /* normal */
-    --ap2: #78350f; --ap2t: #fcd34d;  /* reduzido */
-    --ap3: #7f1d1d; --ap3t: #fca5a5;  /* não comeu */
+    --bg:       #0f172a;
+    --surface:  #1e293b;
+    --surface2: #273549;
+    --border:   #334155;
+    --border2:  #475569;
+    --accent:   #38bdf8;
+    --accent-d: #0ea5e9;
+    --success:  #34d399;
+    --muted:    #64748b;
+    --text:     #f1f5f9;
+    --text2:    #94a3b8;
+    --day1:     #1e3a5f;
+    --pink-bg:  #3b1a2e;
+    --pink-txt: #f9a8d4;
+    --inactive: #1e293b;
+    --r-sm:     8px;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100dvh;
-    padding-bottom: env(safe-area-inset-bottom);
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg); color:var(--text);
+    min-height:100dvh;
+    padding-bottom:env(safe-area-inset-bottom);
+    /* FIX #11: suporte a swipe */
+    overflow-x: hidden;
   }
 
-  /* ── APP HEADER ── */
+  /* ── HEADER ── */
   .app-header {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 16px 0;
+    position:sticky; top:0; z-index:100;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    padding:14px 16px 0;
   }
-  .app-header-top { display: flex; align-items: baseline; justify-content: space-between; }
-  .app-header h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
-  .app-header p  { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; }
+  .app-header h1 { font-size:15px; font-weight:600; letter-spacing:-0.3px; }
+  .app-header p  { font-size:11px; color:var(--muted); margin-top:2px; font-family:'DM Mono',monospace; }
 
-  /* ── SCREEN TABS (Medicação / Sintomas) ── */
-  .screen-tabs {
-    display: flex; gap: 0;
-    margin-top: 10px;
-  }
+  /* ── SCREEN TABS ── */
+  .screen-tabs { display:flex; margin-top:10px; }
   .screen-tab {
-    flex: 1; padding: 8px 0; text-align: center;
-    font-size: 12px; font-weight: 600;
-    color: var(--muted);
-    border-bottom: 2px solid transparent;
-    background: transparent; border-top: none; border-left: none; border-right: none;
-    cursor: pointer; transition: all 0.18s;
-    font-family: 'DM Sans', sans-serif;
+    flex:1; padding:8px 0; text-align:center;
+    font-size:12px; font-weight:600; color:var(--muted);
+    border-bottom:2px solid transparent;
+    background:transparent; border-top:none; border-left:none; border-right:none;
+    cursor:pointer; transition:all 0.18s; font-family:'DM Sans',sans-serif;
   }
-  .screen-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .screen-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
 
   /* ── CYCLE TABS ── */
   .cycle-tabs {
-    display: flex; gap: 6px; padding: 10px 16px;
-    overflow-x: auto; scrollbar-width: none;
-    background: var(--bg);
-    position: sticky; top: 88px; z-index: 99;
-    border-bottom: 1px solid var(--border);
+    display:flex; gap:6px; padding:10px 16px;
+    overflow-x:auto; scrollbar-width:none;
+    background:var(--bg);
+    position:sticky; top:88px; z-index:99;
+    border-bottom:1px solid var(--border);
   }
-  .cycle-tabs::-webkit-scrollbar { display: none; }
+  .cycle-tabs::-webkit-scrollbar { display:none; }
   .tab-btn {
-    flex-shrink: 0; padding: 6px 14px;
-    border-radius: 20px; border: 1px solid var(--border);
-    background: transparent; color: var(--text2);
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+    flex-shrink:0; padding:6px 14px; border-radius:20px;
+    border:1px solid var(--border); background:transparent; color:var(--text2);
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+    cursor:pointer; transition:all 0.18s; white-space:nowrap;
   }
-  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0f172a; font-weight: 600; }
-  .tab-btn.done   { border-color: var(--success); color: var(--success); }
+  .tab-btn.active { background:var(--accent); border-color:var(--accent); color:#0f172a; font-weight:600; }
+  .tab-btn.done   { border-color:var(--success); color:var(--success); }
 
   /* ── CYCLE HEADER ── */
-  .cycle-header { padding: 14px 16px 10px; }
-  .cycle-title  { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; font-family: 'DM Mono', monospace; }
-  .cycle-dates  { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .progress-bar  { margin-top: 10px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-dim), var(--accent)); border-radius: 2px; transition: width 0.4s ease; }
-  .progress-label { font-size: 11px; color: var(--muted); margin-top: 5px; font-family: 'DM Mono', monospace; }
+  .cycle-header { padding:14px 16px 10px; }
+  .cycle-title  { font-size:13px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.8px; font-family:'DM Mono',monospace; }
+  .cycle-dates  { font-size:12px; color:var(--muted); margin-top:2px; }
+  .progress-bar  { margin-top:10px; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent-d),var(--accent)); border-radius:2px; transition:width 0.4s ease; }
+  .progress-label { font-size:11px; color:var(--muted); margin-top:5px; font-family:'DM Mono',monospace; }
 
-  /* ── TABELA DE DIAS (compartilhada) ── */
-  .days-table { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 3px; }
+  /* ── SAVE INDICATOR ── FIX #14 */
+  .save-indicator {
+    font-size:10px; color:var(--success); font-family:'DM Mono',monospace;
+    text-align:right; padding:0 16px 4px;
+    opacity:0; transition:opacity 0.4s;
+  }
+  .save-indicator.show { opacity:1; }
 
-  /* ── MEDICAÇÃO ── */
+  /* ── TABELA MEDICAÇÃO ── */
+  .days-table { display:flex; flex-direction:column; gap:3px; }
   .col-headers-med {
-    display: grid;
-    grid-template-columns: 90px repeat(4, 1fr);
-    gap: 3px; padding: 0 0 2px;
-    position: sticky; top: 88px; z-index: 98;
-    background: var(--bg);
+    display:grid;
+    grid-template-columns:90px repeat(4,1fr);
+    gap:3px; padding:0 0 2px;
+    position:sticky; z-index:98;
+    background:var(--bg);
   }
   .day-row-med {
-    display: grid;
-    grid-template-columns: 90px repeat(4, 1fr);
-    gap: 3px; align-items: center;
+    display:grid;
+    grid-template-columns:90px repeat(4,1fr);
+    gap:3px; align-items:center;
   }
 
-  /* ── SINTOMAS ── */
-  .col-headers-sint {
-    display: grid;
-    grid-template-columns: 90px repeat(4, 1fr) repeat(2, 1fr) 1fr;
-    gap: 3px; padding: 0 0 2px;
-    position: sticky; top: 136px; z-index: 98;
-    background: var(--bg);
-  }
-  .day-row-sint {
-    display: grid;
-    grid-template-columns: 90px repeat(4, 1fr) repeat(2, 1fr) 1fr;
-    gap: 3px; align-items: center;
-  }
-
+  /* ── COL HEADER ── */
   .col-hdr {
-    background: var(--surface2); border-radius: var(--r-sm);
-    padding: 5px 2px; text-align: center;
-    font-size: 9.5px; font-weight: 600; color: var(--text2);
-    line-height: 1.3;
+    background:var(--surface2); border-radius:var(--r-sm);
+    padding:5px 2px; text-align:center;
+    font-size:9.5px; font-weight:600; color:var(--text2); line-height:1.3;
   }
-  .col-hdr span { display: block; font-size: 8px; font-weight: 400; color: var(--muted); margin-top: 1px; }
-  .col-hdr.date-hdr { color: var(--muted); font-size: 9px; font-weight: 500; }
+  .col-hdr span  { display:block; font-size:8px; font-weight:400; color:var(--muted); margin-top:1px; }
+  .col-hdr.date-hdr { color:var(--muted); font-size:9px; font-weight:500; }
 
   /* ── DESTAQUES DE LINHA ── */
-  .day-row-med.first-day .date-cell,
-  .day-row-sint.first-day .date-cell { background: var(--day1); border-radius: var(--r-sm) 0 0 var(--r-sm); }
-  .first-day .date-main { color: var(--accent); }
-  .first-day .date-sub  { color: #38bdf899; }
+  .first-day .date-cell { background:var(--day1) !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
+  .first-day .date-main { color:var(--accent) !important; }
+  .first-day .date-sub  { color:#38bdf899 !important; }
 
-  .day-row-med.pink-day .date-cell,
-  .day-row-sint.pink-day .date-cell { background: var(--pink-bg); border-radius: var(--r-sm) 0 0 var(--r-sm); }
-  .pink-day .date-main { color: var(--pink-text) !important; }
-  .pink-day .date-sub  { color: #f9a8d499 !important; }
+  .pink-day .date-cell  { background:var(--pink-bg) !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
+  .pink-day .date-main  { color:var(--pink-txt) !important; }
+  .pink-day .date-sub   { color:#f9a8d499 !important; }
 
-  .day-row-med.today,
-  .day-row-sint.today { border-radius: var(--r-sm); outline: 2px solid var(--success); outline-offset: 1px; }
-  .day-row-med.today .date-cell,
-  .day-row-sint.today .date-cell { background: #0c2e1a; border-radius: var(--r-sm) 0 0 var(--r-sm); }
-  .today .date-main { color: var(--success) !important; }
-  .today .date-sub  { color: #34d39999 !important; }
+  /* FIX #borda cortada: margin lateral para outline não ser clipado */
+  .today { border-radius:var(--r-sm); outline:2px solid var(--success); outline-offset:1px; }
+  .today .date-cell  { background:#0c2e1a !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
+  .today .date-main  { color:var(--success) !important; }
+  .today .date-sub   { color:#34d39999 !important; }
 
   /* ── DATE CELL ── */
   .date-cell {
-    background: var(--surface); border-radius: var(--r-sm);
-    padding: 6px 8px; display: flex; flex-direction: column; gap: 1px;
-    cursor: pointer; transition: background 0.15s;
-    min-height: 40px; justify-content: center;
+    background:var(--surface); border-radius:var(--r-sm);
+    padding:6px 8px; display:flex; flex-direction:column; gap:1px;
+    cursor:pointer; transition:background 0.15s;
+    min-height:40px; justify-content:center;
   }
-  .date-cell:active { background: var(--surface2); }
-  .date-main { font-size: 11.5px; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
-  .date-sub  { font-size: 9.5px; color: var(--muted); font-family: 'DM Mono', monospace; display: flex; gap: 4px; }
-  .today-badge { font-size: 8px; font-weight: 700; color: var(--success); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
-  .note-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-left: 3px; vertical-align: middle; }
+  .date-cell:active { background:var(--surface2); }
+  .date-main { font-size:11.5px; font-weight:500; color:var(--text); font-family:'DM Mono',monospace; }
+  .date-sub  { font-size:9.5px; color:var(--muted); font-family:'DM Mono',monospace; display:flex; gap:4px; }
+  .today-badge { font-size:8px; font-weight:700; color:var(--success); text-transform:uppercase; letter-spacing:0.5px; margin-top:1px; }
+  .note-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--accent); margin-left:3px; vertical-align:middle; }
+  /* FIX #13: hint visível de que a data abre nota */
+  .date-cell::after {
+    content:'✎';
+    font-size:7px; color:var(--border2);
+    position:absolute; bottom:3px; right:4px;
+  }
+  .date-cell { position:relative; }
 
   /* ── MED CELL ── */
   .med-cell {
-    background: var(--surface); border-radius: var(--r-sm);
-    display: flex; align-items: center; justify-content: center;
-    height: 40px; cursor: pointer; transition: background 0.15s, transform 0.1s;
-    user-select: none;
+    background:var(--surface); border-radius:var(--r-sm);
+    display:flex; align-items:center; justify-content:center;
+    height:40px; cursor:pointer;
+    transition:background 0.15s, transform 0.1s; user-select:none;
   }
-  .med-cell:active { transform: scale(0.93); }
-  .med-cell.inactive { background: var(--inactive); cursor: default; }
-  .med-cell.checked  { background: #0c2e1a; }
+  /* FIX #12: ripple feedback */
+  .med-cell:active, .sint-cell:active { transform:scale(0.88); transition:transform 0.08s; }
+  .med-cell.inactive { background:var(--inactive); cursor:default; }
+  .med-cell.checked  { background:#0c2e1a; }
   .check-box {
-    width: 22px; height: 22px; border-radius: 6px;
-    border: 2px solid var(--border2);
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s; background: transparent;
+    width:22px; height:22px; border-radius:6px;
+    border:2px solid var(--border2);
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s; background:transparent;
   }
-  .med-cell.checked .check-box { background: var(--success); border-color: var(--success); }
-  .check-icon { display: none; color: #0f172a; font-size: 13px; font-weight: 700; line-height: 1; }
-  .med-cell.checked .check-icon { display: block; }
-  .dash-icon { width: 14px; height: 2px; background: var(--border); border-radius: 1px; }
+  .med-cell.checked .check-box { background:var(--success); border-color:var(--success); }
+  .check-icon { display:none; color:#0f172a; font-size:13px; font-weight:700; line-height:1; }
+  .med-cell.checked .check-icon { display:block; }
+  .dash-icon { width:14px; height:2px; background:var(--border); border-radius:1px; }
 
-  /* ── SINT CELL (escala) ── */
+  /* ── SINT CELL ── */
   .sint-cell {
-    background: var(--surface); border-radius: var(--r-sm);
-    display: flex; align-items: center; justify-content: center;
-    height: 40px; cursor: pointer; transition: background 0.15s, transform 0.1s;
-    user-select: none; flex-direction: column; gap: 1px;
+    background:var(--surface); border-radius:var(--r-sm);
+    display:flex; align-items:center; justify-content:center;
+    height:40px; cursor:pointer;
+    transition:background 0.15s, transform 0.1s; user-select:none;
+    flex-direction:column; gap:1px;
   }
-  .sint-cell:active { transform: scale(0.93); }
-  .sint-icon { font-size: 14px; line-height: 1; }
-  .sint-label { font-size: 7px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.2px; }
+  .sint-icon  { font-size:14px; line-height:1; }
+  .sint-label { font-size:7px; color:var(--muted); font-family:'DM Mono',monospace; letter-spacing:0.2px; }
 
-  /* ── MODAL DE NOTA ── */
+  /* ── MODAL ── */
   .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    z-index: 200; display: flex; align-items: flex-end;
-    padding: 0 0 env(safe-area-inset-bottom);
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:200; display:flex; align-items:flex-end;
+    padding:0 0 env(safe-area-inset-bottom);
+    opacity:0; pointer-events:none; transition:opacity 0.2s;
   }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
   .modal-sheet {
-    width: 100%; background: var(--surface);
-    border-radius: 16px 16px 0 0; padding: 20px 16px 24px;
-    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.34,1.1,0.64,1);
+    width:100%; background:var(--surface);
+    border-radius:16px 16px 0 0; padding:20px 16px 24px;
+    transform:translateY(100%);
+    transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1);
   }
-  .modal-overlay.open .modal-sheet { transform: translateY(0); }
-  .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
-  .modal-title { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 12px; font-family: 'DM Mono', monospace; }
+  .modal-overlay.open .modal-sheet { transform:translateY(0); }
+  .modal-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 16px; }
+  .modal-title  { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:12px; font-family:'DM Mono',monospace; }
   .modal-textarea {
-    width: 100%; min-height: 90px; background: var(--surface2);
-    border: 1px solid var(--border); border-radius: var(--r-sm);
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
-    padding: 10px 12px; resize: none; outline: none;
+    width:100%; min-height:90px; background:var(--surface2);
+    border:1px solid var(--border); border-radius:var(--r-sm);
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
+    padding:10px 12px; resize:none; outline:none;
   }
-  .modal-textarea:focus { border-color: var(--accent); }
-  .modal-buttons { display: flex; gap: 8px; margin-top: 12px; }
+  .modal-textarea:focus { border-color:var(--accent); }
+  .modal-buttons { display:flex; gap:8px; margin-top:12px; }
   .modal-btn {
-    flex: 1; padding: 11px; border-radius: var(--r-sm);
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
-    cursor: pointer; border: none; transition: opacity 0.15s;
+    flex:1; padding:11px; border-radius:var(--r-sm);
+    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; border:none; transition:opacity 0.15s;
   }
-  .modal-btn:active { opacity: 0.75; }
-  .modal-btn.confirm { background: var(--accent); color: #0f172a; }
-  .modal-btn.cancel  { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-
-  /* ── LEGENDA DE ESCALAS ── */
-  .scale-legend {
-    padding: 0 16px 8px;
-    display: flex; flex-direction: column; gap: 4px;
-  }
-  .scale-legend-row {
-    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  }
-  .scale-legend-label {
-    font-size: 9.5px; color: var(--muted); font-weight: 600;
-    min-width: 70px; font-family: 'DM Mono', monospace;
-  }
-  .scale-chip {
-    display: flex; align-items: center; gap: 3px;
-    font-size: 9px; color: var(--text2); padding: 2px 6px;
-    border-radius: 10px; background: var(--surface2);
-  }
+  .modal-btn:active { opacity:0.75; }
+  .modal-btn.confirm { background:var(--accent); color:#0f172a; }
+  .modal-btn.cancel  { background:var(--surface2); color:var(--text2); border:1px solid var(--border); }
 
   /* ── TOAST ── */
   .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--surface2); color: var(--text);
-    padding: 10px 20px; border-radius: 20px; font-size: 13px;
-    border: 1px solid var(--border);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    z-index: 999; white-space: nowrap; pointer-events: none;
+    position:fixed; bottom:24px; left:50%;
+    transform:translateX(-50%) translateY(80px);
+    background:var(--surface2); color:var(--text);
+    padding:10px 20px; border-radius:20px; font-size:13px;
+    border:1px solid var(--border);
+    transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    z-index:999; white-space:nowrap; pointer-events:none;
   }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.show { transform:translateX(-50%) translateY(0); }
 
   /* ── RESET ── */
-  .reset-area { padding: 0 16px 32px; text-align: center; }
+  .reset-area { padding:0 16px 12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
   .reset-btn {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--muted); font-family: 'DM Sans', sans-serif;
-    font-size: 12px; padding: 8px 20px; border-radius: 20px; cursor: pointer;
+    background:transparent; border:1px solid var(--border);
+    color:var(--muted); font-family:'DM Sans',sans-serif;
+    font-size:12px; padding:8px 20px; border-radius:20px; cursor:pointer;
   }
-  .reset-btn:active { background: var(--surface); }
+  .reset-btn:active { background:var(--surface); }
+  .reset-btn.danger { border-color:#7f1d1d; color:#fca5a5; }
 </style>
 </head>
 <body>
 
 <div class="app-header">
-  <div class="app-header-top">
-    <div>
-      <h1>Controle de Medicações</h1>
-      <p>6 ciclos · 04/05/2026 – 06/09/2026</p>
-    </div>
-  </div>
+  <h1>Controle de Medicações</h1>
+  <p>6 ciclos · 04/05/2026 – 06/09/2026</p>
   <div class="screen-tabs">
-    <button class="screen-tab active" id="tabMed" onclick="switchScreen('med')">💊 Medicação</button>
-    <button class="screen-tab" id="tabSint" onclick="switchScreen('sint')">📋 Sintomas</button>
+    <button class="screen-tab active" id="tabMed"  onclick="switchScreen('med')">💊 Medicação</button>
+    <button class="screen-tab"        id="tabSint" onclick="switchScreen('sint')">📋 Sintomas</button>
   </div>
 </div>
 
 <div id="cycleTabs" class="cycle-tabs"></div>
+<div id="saveIndicator" class="save-indicator">✓ salvo</div>
 <div id="app"></div>
 
-<!-- Modal de nota diária -->
 <div class="modal-overlay" id="noteModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -469,9 +414,6 @@ const MEDS_INFO = [
   { code:"MYR", nome:"Myrbetric", sub:"ciclos 1–4" },
 ];
 
-// ── DEFINIÇÃO DAS COLUNAS DE SINTOMAS ─────────────────────
-// type: 'bin' = binário, 'scale' = escala ciclável
-// levels: array de [bg, textColor, icon, label]
 const SINT_COLS = [
   { code:"NAU", nome:"Náusea / Vômito", type:"bin",
     on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🤢", label:"sim" },
@@ -485,10 +427,7 @@ const SINT_COLS = [
   { code:"FEB", nome:"Febre", type:"bin",
     on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🌡", label:"sim" },
     off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"BOC", nome:"Boca", type:"bin",  // agrupa feridas + boca seca
-    // será split em 2 linhas no cabeçalho mas 1 coluna por ora — veja abaixo
-    // na verdade são 2 cols separadas:
-    nome:"Feridas boca", sub:"bin",
+  { code:"BOC", nome:"Feridas boca", type:"bin",
     on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"💊", label:"sim" },
     off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
   { code:"BCS", nome:"Boca seca", type:"bin",
@@ -533,49 +472,82 @@ const SINT_COLS = [
     ]},
 ];
 
-// Colunas que aparecem na grade de sintomas (na ordem)
-// Dividimos em: 4 bins (NAU,DIA,CON,FEB) + 2 bins (BOC,BCS) + 3 scales (FAD,DOR,CAB) + 2 scales (APE,SON)
-// Total: 11 colunas + 1 data = 12 — largo demais p/ mobile
-// Solução: 4 bins + 2 bins + 3 escalas graves + 2 escalas qualidade = 11 cols, usar scroll horizontal na linha
-// OU: fazer 2 grupos de colunas com toggle. Vamos usar scroll horizontal por linha.
+const SINT_ORDERED = ['NAU','DIA','CON','FEB','BOC','BCS','FAD','DOR','CAB','APE','SON']
+  .map(c => SINT_COLS.find(s => s.code === c)).filter(Boolean);
 
-// ── SCREEN STATE ─────────────────────────────────────────
+// ── FIX #4: data local (não UTC) ─────────────────────────
+function hojeLocal() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── STATE ────────────────────────────────────────────────
 let currentScreen = 'med';
 let currentCiclo  = 1;
 
-function switchScreen(screen) {
-  currentScreen = screen;
-  document.getElementById('tabMed').classList.toggle('active', screen === 'med');
-  document.getElementById('tabSint').classList.toggle('active', screen === 'sint');
-  if (screen === 'med')  renderMed(currentCiclo);
-  else                   renderSint(currentCiclo);
-}
+// ── FIX #11: swipe horizontal ────────────────────────────
+let swipeStartX = 0;
+document.addEventListener('touchstart', e => { swipeStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - swipeStartX;
+  if (Math.abs(dx) < 60) return;
+  if (dx < 0 && currentScreen === 'med')  switchScreen('sint');
+  if (dx > 0 && currentScreen === 'sint') switchScreen('med');
+}, {passive:true});
 
 // ── STORAGE ──────────────────────────────────────────────
-function medKey(c,d,m)   { return `med_${c}_${d}_${m}`; }
-function sintKey(c,d,s)  { return `sint_${c}_${d}_${s}`; }
-function noteKey(c,d)    { return `note_${c}_${d}`; }
+const medKey  = (c,d,m) => `med_${c}_${d}_${m}`;
+const sintKey = (c,d,s) => `sint_${c}_${d}_${s}`;
+const noteKey = (c,d)   => `note_${c}_${d}`;
 
-function isChecked(c,d,m) { return localStorage.getItem(medKey(c,d,m)) === "1"; }
+const isChecked    = (c,d,m) => localStorage.getItem(medKey(c,d,m)) === "1";
+const getSintVal   = (c,d,s) => parseInt(localStorage.getItem(sintKey(c,d,s)) || "0");
+const setSintVal   = (c,d,s,v) => { localStorage.setItem(sintKey(c,d,s), String(v)); flashSave(); };
+const getNote      = (c,d)   => localStorage.getItem(noteKey(c,d)) || "";
+const setNote      = (c,d,t) => { localStorage.setItem(noteKey(c,d), t); flashSave(); };
+
 function toggleCheck(c,d,m) {
   const k = medKey(c,d,m);
   const v = localStorage.getItem(k) === "1" ? "0" : "1";
-  localStorage.setItem(k,v); return v === "1";
+  localStorage.setItem(k,v);
+  flashSave();
+  return v === "1";
 }
-function getSintVal(c,d,s)    { return parseInt(localStorage.getItem(sintKey(c,d,s)) || "0"); }
-function setSintVal(c,d,s,v)  { localStorage.setItem(sintKey(c,d,s), String(v)); }
-function getNote(c,d)         { return localStorage.getItem(noteKey(c,d)) || ""; }
-function setNote(c,d,txt)     { localStorage.setItem(noteKey(c,d), txt); }
 
-// ── PROGRESS ────────────────────────────────────────────
-function cycleProgress(ciclo) {
+// ── FIX #14: indicador de salvo ──────────────────────────
+let saveTimer;
+function flashSave() {
+  const el = document.getElementById('saveIndicator');
+  el.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+// ── FIX #8/#9: progress separado por tela ────────────────
+function cycleProgressMed(ciclo) {
   const dias = DATA.filter(d => d.ciclo === ciclo);
   let total=0, done=0;
-  dias.forEach(d => d.meds.forEach(m => { total++; if(isChecked(ciclo,d.dia,m)) done++; }));
+  dias.forEach(d => d.meds.forEach(m => {
+    total++;
+    if(isChecked(ciclo,d.dia,m)) done++;
+  }));
   return { total, done, pct: total ? Math.round(done/total*100) : 0 };
 }
 
-// ── TOAST ───────────────────────────────────────────────
+function cycleProgressSint(ciclo) {
+  const dias = DATA.filter(d => d.ciclo === ciclo);
+  // Conta sintomas registrados (qualquer valor > 0)
+  let total=0, done=0;
+  dias.forEach(d => {
+    SINT_ORDERED.forEach(s => {
+      total++;
+      if(getSintVal(ciclo,d.dia,s.code) > 0) done++;
+    });
+  });
+  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+}
+
+// ── TOAST ────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -584,33 +556,31 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
 }
 
-// ── MODAL DE NOTA ────────────────────────────────────────
+// ── MODAL ────────────────────────────────────────────────
 let _noteCallback = null;
-function openNoteModal(title, current, callback) {
+function openNoteModal(title, current, cb) {
   document.getElementById('noteModalTitle').textContent = title;
   document.getElementById('noteTextarea').value = current;
-  _noteCallback = callback;
+  _noteCallback = cb;
   document.getElementById('noteModal').classList.add('open');
   setTimeout(() => document.getElementById('noteTextarea').focus(), 350);
 }
 function closeNoteModal(save) {
-  const modal = document.getElementById('noteModal');
-  modal.classList.remove('open');
-  if (save && _noteCallback) {
-    _noteCallback(document.getElementById('noteTextarea').value.trim());
-  }
+  document.getElementById('noteModal').classList.remove('open');
+  if (save && _noteCallback) _noteCallback(document.getElementById('noteTextarea').value.trim());
   _noteCallback = null;
 }
 document.getElementById('noteModal').addEventListener('click', e => {
   if (e.target === document.getElementById('noteModal')) closeNoteModal(false);
 });
 
-// ── RENDER CYCLE TABS ────────────────────────────────────
+// ── TABS DE CICLO ─────────────────────────────────────────
 function renderTabs(activeCiclo) {
   const tabs = document.getElementById('cycleTabs');
   tabs.innerHTML = '';
+  const progressFn = currentScreen === 'med' ? cycleProgressMed : cycleProgressSint;
   for (let ci=1; ci<=6; ci++) {
-    const p = cycleProgress(ci);
+    const p = progressFn(ci);
     const btn = document.createElement('button');
     btn.className = 'tab-btn' + (ci===activeCiclo?' active':'') + (p.pct===100?' done':'');
     btn.textContent = `Ciclo ${ci}  ${p.pct}%`;
@@ -619,29 +589,35 @@ function renderTabs(activeCiclo) {
   }
 }
 
-// ── CYCLE HEADER ─────────────────────────────────────────
-function buildCycleHeader(activeCiclo, dias, prog, labelText) {
-  const d0=dias[0], dN=dias[dias.length-1];
-  const h = document.createElement('div');
-  h.className = 'cycle-header';
-  h.innerHTML = `
-    <div class="cycle-title">Ciclo ${activeCiclo} de 6 · ${labelText}</div>
-    <div class="cycle-dates">${d0.data} – ${dN.data}</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:${prog.pct}%"></div></div>
-    <div class="progress-label" id="progLabel">${prog.done} de ${prog.total} doses marcadas · ${prog.pct}%</div>
-  `;
-  return h;
+// ── SWITCH SCREEN ─────────────────────────────────────────
+function switchScreen(screen) {
+  currentScreen = screen;
+  document.getElementById('tabMed').classList.toggle('active',  screen==='med');
+  document.getElementById('tabSint').classList.toggle('active', screen==='sint');
+  if (screen === 'med') renderMed(currentCiclo);
+  else                  renderSint(currentCiclo);
 }
 
-// ── ROW CLASS HELPER ─────────────────────────────────────
-function rowClass(d, base, hoje) {
-  const isPink = d.dia >= 5 && d.dia <= 10;
+// ── HELPERS de layout ────────────────────────────────────
+function getHeaderTop() {
+  const a = document.querySelector('.app-header');
+  const c = document.getElementById('cycleTabs');
+  return a && c ? a.offsetHeight + c.offsetHeight : 88;
+}
+
+function rowClasses(d, hoje) {
+  const isPink  = d.dia >= 5 && d.dia <= 10;
+  const isFirst = d.dia === 1;
   const isToday = d.dt === hoje;
-  return base + (d.dia===1?' first-day':'') + (isPink?' pink-day':'') + (isToday?' today':'');
+  const base = ['day-row'];
+  if (isFirst) base.push('first-day');
+  if (isPink)  base.push('pink-day');
+  if (isToday) base.push('today');
+  return base.join(' ');
 }
 
-// ── DATE CELL ───────────────────────────────────────────
-function buildDateCell(d, hoje, ciclo, onNoteSaved) {
+// ── DATE CELL (compartilhada) ────────────────────────────
+function buildDateCell(d, hoje, ciclo) {
   const isToday = d.dt === hoje;
   const hasNote = getNote(ciclo, d.dia).length > 0;
   const cell = document.createElement('div');
@@ -653,23 +629,35 @@ function buildDateCell(d, hoje, ciclo, onNoteSaved) {
   `;
   cell.onclick = () => {
     const cur = getNote(ciclo, d.dia);
-    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`, cur, (txt) => {
+    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`, cur, txt => {
       setNote(ciclo, d.dia, txt);
-      // Atualiza dot sem re-render
-      const dot = cell.querySelector('.note-dot');
       const main = cell.querySelector('.date-main');
+      const dot  = cell.querySelector('.note-dot');
       if (txt.length > 0 && !dot) {
         const sp = document.createElement('span');
         sp.className = 'note-dot';
         main.appendChild(sp);
-      } else if (txt.length === 0 && dot) {
-        dot.remove();
-      }
+      } else if (txt.length === 0 && dot) dot.remove();
       if (txt.length > 0) showToast('📝 Nota salva');
-      if (onNoteSaved) onNoteSaved();
     });
   };
   return cell;
+}
+
+// ── CYCLE HEADER ─────────────────────────────────────────
+function buildCycleHeader(activeCiclo, dias, prog, labelText, labelSuffix) {
+  const h = document.createElement('div');
+  h.className = 'cycle-header';
+  // FIX #2: id único por render via timestamp
+  const pid = 'pl_' + Date.now();
+  h.innerHTML = `
+    <div class="cycle-title">Ciclo ${activeCiclo} de 6 · ${labelText}</div>
+    <div class="cycle-dates">${dias[0].data} – ${dias[dias.length-1].data}</div>
+    <div class="progress-bar"><div class="progress-fill" id="${pid}" style="width:${prog.pct}%"></div></div>
+    <div class="progress-label" id="${pid}_lbl">${prog.done} de ${prog.total} ${labelSuffix} · ${prog.pct}%</div>
+  `;
+  h._pid = pid;
+  return h;
 }
 
 // ════════════════════════════════════════════════════════
@@ -680,41 +668,49 @@ function renderMed(activeCiclo) {
   renderTabs(activeCiclo);
   const app = document.getElementById('app');
   app.innerHTML = '';
+  const hoje = hojeLocal();
+  const dias  = DATA.filter(d => d.ciclo === activeCiclo);
+  const prog  = cycleProgressMed(activeCiclo);
 
-  const dias = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog = cycleProgress(activeCiclo);
-  const hoje = new Date().toISOString().slice(0,10);
-
-  app.appendChild(buildCycleHeader(activeCiclo, dias, prog, 'Medicação'));
+  const hdr = buildCycleHeader(activeCiclo, dias, prog, 'Medicação', 'doses marcadas');
+  app.appendChild(hdr);
+  const pid = hdr._pid;
 
   const wrap = document.createElement('div');
-  wrap.className = 'days-table'; wrap.style.padding = '0 18px 24px';
+  wrap.className = 'days-table';
+  wrap.style.cssText = 'padding: 0 16px 8px;';
 
-  // Cabeçalho colunas
+  // Cabeçalho colunas — FIX: top calculado após render
   const ch = document.createElement('div');
   ch.className = 'col-headers-med';
-  requestAnimationFrame(() => {
-    const appHdr = document.querySelector('.app-header');
-    const cyTabs = document.getElementById('cycleTabs');
-    if (appHdr && cyTabs) ch.style.top = (appHdr.offsetHeight + cyTabs.offsetHeight) + 'px';
-  });
   ch.innerHTML = `<div class="col-hdr date-hdr">Data</div>` +
-    MEDS_INFO.map(m=>`<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
+    MEDS_INFO.map(m => `<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
   wrap.appendChild(ch);
+  requestAnimationFrame(() => { ch.style.top = getHeaderTop() + 'px'; });
+
+  // FIX #7: indicador quando hoje não está neste ciclo
+  const hasTodayInCiclo = dias.some(d => d.dt === hoje);
+  if (!hasTodayInCiclo) {
+    const info = document.createElement('div');
+    info.style.cssText = 'font-size:11px; color:var(--muted); padding:4px 0 6px; font-family:DM Mono,monospace; text-align:center;';
+    info.textContent = 'hoje não pertence a este ciclo';
+    wrap.appendChild(info);
+  }
 
   dias.forEach(d => {
     const isToday = d.dt === hoje;
     const row = document.createElement('div');
-    row.className = rowClass(d, 'day-row-med ', hoje);
-    if (isToday) setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),120);
+    row.className = rowClasses(d, hoje);
+    row.style.cssText = 'display:grid; grid-template-columns:90px repeat(4,1fr); gap:3px; align-items:center;';
+    if (isToday) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
 
-    row.appendChild(buildDateCell(d, hoje, activeCiclo, null));
+    row.appendChild(buildDateCell(d, hoje, activeCiclo));
 
     MEDS_INFO.forEach(m => {
       const cell = document.createElement('div');
-      const ativo = d.meds.includes(m.code);
+      const ativo   = d.meds.includes(m.code);
       const checked = ativo && isChecked(activeCiclo, d.dia, m.code);
-      cell.className = 'med-cell' + (!ativo?' inactive': checked?' checked':'');
+      cell.className = 'med-cell' + (!ativo ? ' inactive' : checked ? ' checked' : '');
       if (!ativo) {
         cell.innerHTML = `<div class="dash-icon"></div>`;
       } else {
@@ -722,10 +718,14 @@ function renderMed(activeCiclo) {
         cell.onclick = () => {
           const now = toggleCheck(activeCiclo, d.dia, m.code);
           cell.classList.toggle('checked', now);
+          // FIX #12: vibração tátil
+          if (navigator.vibrate) navigator.vibrate(30);
           showToast(now ? `✓ ${m.nome} · ${d.data}` : `${m.nome} · ${d.data} desmarcado`);
-          const p2 = cycleProgress(activeCiclo);
-          document.querySelector('.progress-fill').style.width = p2.pct+'%';
-          document.getElementById('progLabel').textContent = `${p2.done} de ${p2.total} doses marcadas · ${p2.pct}%`;
+          const p2 = cycleProgressMed(activeCiclo);
+          const pf = document.getElementById(pid);
+          const pl = document.getElementById(pid+'_lbl');
+          if (pf) pf.style.width = p2.pct+'%';
+          if (pl) pl.textContent = `${p2.done} de ${p2.total} doses marcadas · ${p2.pct}%`;
           renderTabs(activeCiclo);
         };
       }
@@ -736,15 +736,17 @@ function renderMed(activeCiclo) {
 
   app.appendChild(wrap);
 
-  const ra = document.createElement('div'); ra.className='reset-area';
-  const rb = document.createElement('button'); rb.className='reset-btn';
-  rb.textContent='Resetar ciclo '+activeCiclo;
-  rb.onclick=()=>{
-    if(!confirm(`Apagar todas as marcações do Ciclo ${activeCiclo}?`)) return;
-    dias.forEach(d=>d.meds.forEach(m=>localStorage.removeItem(medKey(activeCiclo,d.dia,m))));
-    renderMed(activeCiclo); showToast('Ciclo '+activeCiclo+' resetado');
+  // Reset
+  const ra = document.createElement('div'); ra.className = 'reset-area';
+  const rb = document.createElement('button'); rb.className = 'reset-btn';
+  rb.textContent = 'Resetar medicações — ciclo ' + activeCiclo;
+  rb.onclick = () => {
+    if (!confirm(`Apagar todas as marcações de medicação do Ciclo ${activeCiclo}?`)) return;
+    dias.forEach(d => d.meds.forEach(m => localStorage.removeItem(medKey(activeCiclo,d.dia,m))));
+    renderMed(activeCiclo); showToast('Ciclo ' + activeCiclo + ' resetado');
   };
-  ra.appendChild(rb); app.appendChild(ra);
+  ra.appendChild(rb);
+  app.appendChild(ra);
 }
 
 // ════════════════════════════════════════════════════════
@@ -755,93 +757,62 @@ function renderSint(activeCiclo) {
   renderTabs(activeCiclo);
   const app = document.getElementById('app');
   app.innerHTML = '';
+  const hoje = hojeLocal();
+  const dias  = DATA.filter(d => d.ciclo === activeCiclo);
+  const prog  = cycleProgressSint(activeCiclo);
 
-  const dias = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog = cycleProgress(activeCiclo);
-  const hoje = new Date().toISOString().slice(0,10);
+  const hdr = buildCycleHeader(activeCiclo, dias, prog, 'Sintomas', 'dias registrados');
+  app.appendChild(hdr);
 
-  app.appendChild(buildCycleHeader(activeCiclo, dias, prog, 'Sintomas'));
+  // FIX #7: indicador quando hoje não está neste ciclo
+  const hasTodayInCiclo = dias.some(d => d.dt === hoje);
 
-  // Legenda removida
-
-  // Grupos de colunas — vamos fazer 2 faixas scrolláveis por linha
-  // Faixa A: 4 binários (NAU, DIA, CON, FEB)
-  // Faixa B: 2 binários (BOC, BCS) + 3 escalas (FAD, DOR, CAB) + 2 (APE, SON)
-  // Para mobile: dividir a linha em 2 sub-linhas ou usar scroll horizontal
-  // Decisão: grade de 11 colunas com overflow-x scroll na tabela inteira
-
-  // Wrapper externo sem overflow para o cabeçalho fixo
-  const outerWrap = document.createElement('div');
-  outerWrap.style.cssText = 'padding: 0 16px;';
-
-  // Div do cabeçalho — overflow hidden, sincronizado com scroll do conteúdo
-  const headerScrollWrap = document.createElement('div');
-  headerScrollWrap.style.cssText = 'overflow: hidden; position: sticky; top: 88px; z-index: 98; background: var(--bg); padding-bottom: 3px; box-shadow: 0 2px 0 var(--bg);';
-  // Ajustar top dinamicamente após render
-  requestAnimationFrame(() => {
-    const appHdr = document.querySelector('.app-header');
-    const cycleTabs = document.getElementById('cycleTabs');
-    if (appHdr && cycleTabs) {
-      const t = appHdr.offsetHeight + cycleTabs.offsetHeight;
-      headerScrollWrap.style.top = t + 'px';
-    }
-  });
-
-  const tableWrap = document.createElement('div');
-  tableWrap.style.cssText = 'overflow-x: auto; padding: 0 2px 24px; -webkit-overflow-scrolling: touch;';
-  tableWrap.addEventListener('scroll', () => {
-    headerScrollWrap.scrollLeft = tableWrap.scrollLeft;
-  });
-
-  const SINT_ORDERED = [
-    SINT_COLS.find(s=>s.code==='NAU'),
-    SINT_COLS.find(s=>s.code==='DIA'),
-    SINT_COLS.find(s=>s.code==='CON'),
-    SINT_COLS.find(s=>s.code==='FEB'),
-    SINT_COLS.find(s=>s.code==='BOC'),
-    SINT_COLS.find(s=>s.code==='BCS'),
-    SINT_COLS.find(s=>s.code==='FAD'),
-    SINT_COLS.find(s=>s.code==='DOR'),
-    SINT_COLS.find(s=>s.code==='CAB'),
-    SINT_COLS.find(s=>s.code==='APE'),
-    SINT_COLS.find(s=>s.code==='SON'),
-  ].filter(Boolean);
-
-  const N = SINT_ORDERED.length; // 11
+  // Layout da grade
+  const N      = SINT_ORDERED.length;
   const DATE_W = 82;
   const COL_W  = 46;
   const GAP    = 3;
-  const totalW = DATE_W + N*COL_W + N*GAP;
+  const totalW = DATE_W + N * COL_W + N * GAP;
+
+  // Wrapper externo
+  const outerWrap = document.createElement('div');
+  outerWrap.style.cssText = 'padding: 0 16px;';
+
+  // FIX #3: cabeçalho fixo com min-width igual ao inner
+  const hdrWrap = document.createElement('div');
+  hdrWrap.style.cssText = `overflow:hidden; position:sticky; top:88px; z-index:98; background:var(--bg); padding-bottom:3px; box-shadow:0 2px 0 var(--bg);`;
+  requestAnimationFrame(() => { hdrWrap.style.top = getHeaderTop() + 'px'; });
+
+  const chGrid = document.createElement('div');
+  chGrid.style.cssText = `display:grid; grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px); gap:${GAP}px; min-width:${totalW}px;`;
+  chGrid.innerHTML = `<div class="col-hdr date-hdr" style="font-size:8px">Data</div>` +
+    SINT_ORDERED.map(s => `<div class="col-hdr" style="font-size:7.5px; padding:4px 1px">${s.nome}</div>`).join('');
+  hdrWrap.appendChild(chGrid);
+
+  // Tabela scrollável
+  const tableWrap = document.createElement('div');
+  tableWrap.style.cssText = `overflow-x:auto; padding:0 2px 8px; -webkit-overflow-scrolling:touch;`;
+  // FIX #3: sincronizar scroll do cabeçalho com o conteúdo
+  tableWrap.addEventListener('scroll', () => { hdrWrap.scrollLeft = tableWrap.scrollLeft; });
 
   const inner = document.createElement('div');
   inner.style.cssText = `min-width:${totalW}px; display:flex; flex-direction:column; gap:3px;`;
 
-  // Cabeçalho das colunas
-  const ch = document.createElement('div');
-  ch.style.cssText = `display:grid; grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px); gap:${GAP}px; padding-bottom:2px; position:sticky; top:136px; z-index:98; background:var(--bg);`;
-
-  ch.innerHTML = `<div class="col-hdr date-hdr" style="font-size:8.5px">Data</div>` +
-    SINT_ORDERED.map(s => {
-      return `<div class="col-hdr" style="font-size:8px; padding:4px 1px">${s.nome}</div>`;
-    }).join('');
-  headerScrollWrap.appendChild(ch);
+  if (!hasTodayInCiclo) {
+    const info = document.createElement('div');
+    info.style.cssText = 'font-size:11px; color:var(--muted); padding:4px 0 6px; font-family:DM Mono,monospace; text-align:center;';
+    info.textContent = 'hoje não pertence a este ciclo';
+    inner.appendChild(info);
+  }
 
   dias.forEach(d => {
     const isToday = d.dt === hoje;
     const row = document.createElement('div');
+    row.className = rowClasses(d, hoje);
     row.style.cssText = `display:grid; grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px); gap:${GAP}px; align-items:center;`;
+    if (isToday) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
 
-    // Classes de destaque na linha
-    const isPink = d.dia>=5 && d.dia<=10;
-    if (d.dia===1)   row.classList.add('day-row-sint','first-day');
-    else if (isPink) row.classList.add('day-row-sint','pink-day');
-    else             row.classList.add('day-row-sint');
-    if (isToday) {
-      row.classList.add('today');
-      setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),120);
-    }
-
-    row.appendChild(buildDateCell(d, hoje, activeCiclo, null));
+    row.appendChild(buildDateCell(d, hoje, activeCiclo));
 
     SINT_ORDERED.forEach(s => {
       const cell = document.createElement('div');
@@ -852,9 +823,10 @@ function renderSint(activeCiclo) {
         const v = getSintVal(activeCiclo, d.dia, s.code);
         let bg, tc, icon, label;
         if (s.type === 'bin') {
-          const state = v === 1 ? s.on : s.off;
-          bg=state.bg; tc=state.tc; icon=state.icon; label=state.label;
+          const st = v === 1 ? s.on : s.off;
+          bg=st.bg; tc=st.tc; icon=st.icon; label=st.label;
         } else {
+          // FIX #1: usar levels.length-1 como maxVal
           const lvl = s.levels[v] || s.levels[0];
           bg=lvl.bg; tc=lvl.tc; icon=lvl.icon; label=lvl.label;
         }
@@ -865,43 +837,57 @@ function renderSint(activeCiclo) {
       updateCell();
 
       cell.onclick = () => {
-        const cur = getSintVal(activeCiclo, d.dia, s.code);
-        const maxVal = s.type==='bin' ? 1 : 3;
-        const next = cur >= maxVal ? 0 : cur+1;
+        const cur    = getSintVal(activeCiclo, d.dia, s.code);
+        // FIX #1: maxVal correto por tipo
+        const maxVal = s.type === 'bin' ? 1 : s.levels.length - 1;
+        const next   = cur >= maxVal ? 0 : cur + 1;
         setSintVal(activeCiclo, d.dia, s.code, next);
         updateCell();
-        const labels = s.type==='bin'
-          ? ['não','sim']
-          : s.levels.map(l=>l.label);
-        showToast(`${s.nome.replace('\n',' ')} · ${labels[next]}`);
+        // FIX #12: vibração tátil
+        if (navigator.vibrate) navigator.vibrate(20);
+        const labels = s.type==='bin' ? ['não','sim'] : s.levels.map(l=>l.label);
+        showToast(`${s.nome} · ${labels[next]}`);
       };
 
       row.appendChild(cell);
     });
-
     inner.appendChild(row);
   });
 
   tableWrap.appendChild(inner);
-  outerWrap.appendChild(headerScrollWrap);
+  outerWrap.appendChild(hdrWrap);
   outerWrap.appendChild(tableWrap);
   app.appendChild(outerWrap);
 
-  const ra = document.createElement('div'); ra.className='reset-area';
-  const rb = document.createElement('button'); rb.className='reset-btn';
-  rb.textContent='Resetar sintomas ciclo '+activeCiclo;
-  rb.onclick=()=>{
-    if(!confirm(`Apagar todos os sintomas do Ciclo ${activeCiclo}?`)) return;
-    dias.forEach(d=>SINT_ORDERED.forEach(s=>localStorage.removeItem(sintKey(activeCiclo,d.dia,s.code))));
-    dias.forEach(d=>localStorage.removeItem(noteKey(activeCiclo,d.dia)));
-    renderSint(activeCiclo); showToast('Sintomas ciclo '+activeCiclo+' resetados');
+  // FIX #6: reset separado para sintomas e para notas
+  const ra = document.createElement('div'); ra.className = 'reset-area';
+
+  const rbSint = document.createElement('button');
+  rbSint.className = 'reset-btn';
+  rbSint.textContent = 'Resetar sintomas — ciclo ' + activeCiclo;
+  rbSint.onclick = () => {
+    if (!confirm(`Apagar sintomas do Ciclo ${activeCiclo}? As notas serão mantidas.`)) return;
+    dias.forEach(d => SINT_ORDERED.forEach(s => localStorage.removeItem(sintKey(activeCiclo,d.dia,s.code))));
+    renderSint(activeCiclo); showToast('Sintomas resetados');
   };
-  ra.appendChild(rb); app.appendChild(ra);
+
+  const rbNotes = document.createElement('button');
+  rbNotes.className = 'reset-btn danger';
+  rbNotes.textContent = 'Apagar notas — ciclo ' + activeCiclo;
+  rbNotes.onclick = () => {
+    if (!confirm(`Apagar TODAS as notas do Ciclo ${activeCiclo}? Esta ação não pode ser desfeita.`)) return;
+    dias.forEach(d => localStorage.removeItem(noteKey(activeCiclo,d.dia)));
+    renderSint(activeCiclo); showToast('Notas apagadas');
+  };
+
+  ra.appendChild(rbSint);
+  ra.appendChild(rbNotes);
+  app.appendChild(ra);
 }
 
-// ── INIT ────────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────
 function detectCicloAtual() {
-  const hoje = new Date().toISOString().slice(0,10);
+  const hoje = hojeLocal();
   const found = DATA.find(d => d.dt === hoje);
   return found ? found.ciclo : 1;
 }
