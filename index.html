@@ -13,7 +13,6 @@
 <meta name="apple-mobile-web-app-title" content="Medicações">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
-
   :root {
     --bg:#0f172a; --surface:#1e293b; --surface2:#273549;
     --border:#334155; --border2:#475569;
@@ -23,54 +22,24 @@
     --day1:#1e3a5f; --pink-bg:#3b1a2e; --pink-txt:#f9a8d4;
     --inactive:#1e293b; --r-sm:8px;
   }
-
   * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; padding-bottom:env(safe-area-inset-bottom); overflow-x:hidden; }
 
-  body {
-    font-family:'DM Sans',sans-serif;
-    background:var(--bg); color:var(--text);
-    min-height:100dvh; padding-bottom:env(safe-area-inset-bottom);
-    overflow-x:hidden;
-  }
-
-  /* ── HEADER ── */
-  .app-header {
-    position:sticky; top:0; z-index:100;
-    background:var(--bg); border-bottom:1px solid var(--border);
-    padding:14px 16px 0;
-  }
+  .app-header { position:sticky; top:0; z-index:100; background:var(--bg); border-bottom:1px solid var(--border); padding:14px 16px 0; }
   .app-header h1 { font-size:15px; font-weight:600; letter-spacing:-0.3px; }
   .app-header p  { font-size:11px; color:var(--muted); margin-top:2px; font-family:'DM Mono',monospace; }
-
-  /* ── SCREEN TABS ── */
   .screen-tabs { display:flex; margin-top:10px; }
-  .screen-tab {
-    flex:1; padding:8px 0; text-align:center;
-    font-size:12px; font-weight:600; color:var(--muted);
-    border-bottom:2px solid transparent;
-    background:transparent; border-top:none; border-left:none; border-right:none;
-    cursor:pointer; transition:all 0.18s; font-family:'DM Sans',sans-serif;
-  }
+  .screen-tab { flex:1; padding:8px 0; text-align:center; font-size:12px; font-weight:600; color:var(--muted); border-bottom:2px solid transparent; background:transparent; border-top:none; border-left:none; border-right:none; cursor:pointer; transition:all 0.18s; font-family:'DM Sans',sans-serif; }
   .screen-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
 
-  /* ── CYCLE TABS ── */
-  .cycle-tabs {
-    display:flex; gap:6px; padding:10px 16px;
-    overflow-x:auto; scrollbar-width:none;
-    background:var(--bg); position:sticky; top:88px; z-index:99;
-    border-bottom:1px solid var(--border);
-  }
+  .cycle-tabs { display:flex; gap:6px; padding:10px 16px; overflow-x:auto; scrollbar-width:none; background:var(--bg); position:sticky; top:88px; z-index:99; border-bottom:1px solid var(--border); }
   .cycle-tabs::-webkit-scrollbar { display:none; }
-  .tab-btn {
-    flex-shrink:0; padding:6px 14px; border-radius:20px;
-    border:1px solid var(--border); background:transparent; color:var(--text2);
-    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
-    cursor:pointer; transition:all 0.18s; white-space:nowrap;
-  }
+  .tab-btn { flex-shrink:0; padding:6px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text2); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition:all 0.18s; white-space:nowrap; display:flex; align-items:center; gap:6px; }
   .tab-btn.active { background:var(--accent); border-color:var(--accent); color:#0f172a; font-weight:600; }
   .tab-btn.done   { border-color:var(--success); color:var(--success); }
+  .tab-sep { width:1px; height:10px; background:currentColor; opacity:0.35; border-radius:1px; }
+  .tab-pct { font-size:11px; opacity:0.85; }
 
-  /* ── CYCLE HEADER ── */
   .cycle-header { padding:14px 16px 10px; }
   .cycle-title  { font-size:13px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.8px; font-family:'DM Mono',monospace; }
   .cycle-dates  { font-size:12px; color:var(--muted); margin-top:2px; }
@@ -78,29 +47,15 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent-d),var(--accent)); border-radius:2px; transition:width 0.4s ease; }
   .progress-label { font-size:11px; color:var(--muted); margin-top:5px; font-family:'DM Mono',monospace; }
 
-  /* ── SAVE INDICATOR ── */
-  .save-indicator {
-    font-size:10px; color:var(--success); font-family:'DM Mono',monospace;
-    text-align:right; padding:0 16px 4px; opacity:0; transition:opacity 0.4s;
-  }
+  .save-indicator { font-size:10px; color:var(--success); font-family:'DM Mono',monospace; text-align:right; padding:0 16px 4px; opacity:0; transition:opacity 0.4s; }
   .save-indicator.show { opacity:1; }
 
-  /* ── TABELA ── */
   .days-table { display:flex; flex-direction:column; gap:3px; }
-  .col-headers-med {
-    display:grid; grid-template-columns:90px repeat(4,1fr);
-    gap:3px; padding:0 0 2px; position:sticky; z-index:98; background:var(--bg);
-  }
-
-  .col-hdr {
-    background:var(--surface2); border-radius:var(--r-sm);
-    padding:5px 2px; text-align:center;
-    font-size:9.5px; font-weight:600; color:var(--text2); line-height:1.3;
-  }
-  .col-hdr span  { display:block; font-size:8px; font-weight:400; color:var(--muted); margin-top:1px; }
+  .col-headers-med { display:grid; gap:3px; padding:0 0 2px; position:sticky; z-index:98; background:var(--bg); }
+  .col-hdr { background:var(--surface2); border-radius:var(--r-sm); padding:5px 2px; text-align:center; font-size:9.5px; font-weight:600; color:var(--text2); line-height:1.3; }
+  .col-hdr span { display:block; font-size:8px; font-weight:400; color:var(--muted); margin-top:1px; }
   .col-hdr.date-hdr { color:var(--muted); font-size:9px; font-weight:500; }
 
-  /* ── DESTAQUES ── */
   .first-day .date-cell { background:var(--day1) !important; border-radius:var(--r-sm) 0 0 var(--r-sm); }
   .first-day .date-main { color:var(--accent) !important; }
   .first-day .date-sub  { color:#38bdf899 !important; }
@@ -112,12 +67,7 @@
   .today .date-main  { color:var(--success) !important; }
   .today .date-sub   { color:#34d39999 !important; }
 
-  /* ── DATE CELL ── */
-  .date-cell {
-    position:relative; background:var(--surface); border-radius:var(--r-sm);
-    padding:6px 8px; display:flex; flex-direction:column; gap:1px;
-    cursor:pointer; transition:background 0.15s; min-height:40px; justify-content:center;
-  }
+  .date-cell { position:relative; background:var(--surface); border-radius:var(--r-sm); padding:6px 8px; display:flex; flex-direction:column; gap:1px; cursor:pointer; transition:background 0.15s; min-height:40px; justify-content:center; }
   .date-cell:active { background:var(--surface2); }
   .date-cell::after { content:'✎'; font-size:7px; color:var(--border2); position:absolute; bottom:3px; right:4px; }
   .date-main { font-size:11.5px; font-weight:500; color:var(--text); font-family:'DM Mono',monospace; }
@@ -125,137 +75,96 @@
   .today-badge { font-size:8px; font-weight:700; color:var(--success); text-transform:uppercase; letter-spacing:0.5px; margin-top:1px; }
   .note-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--accent); margin-left:3px; vertical-align:middle; }
 
-  /* ── MED CELL ── */
-  .med-cell {
-    background:var(--surface); border-radius:var(--r-sm);
-    display:flex; align-items:center; justify-content:center;
-    height:40px; cursor:pointer; user-select:none;
-    transition:background 0.15s, transform 0.1s;
-  }
+  .med-cell { background:var(--surface); border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; height:40px; cursor:pointer; user-select:none; transition:background 0.15s, transform 0.1s; }
   .med-cell:active, .sint-cell:active { transform:scale(0.88); transition:transform 0.08s; }
   .med-cell.inactive { background:var(--inactive); cursor:default; }
   .med-cell.checked  { background:#0c2e1a; }
-  .check-box {
-    width:22px; height:22px; border-radius:6px; border:2px solid var(--border2);
-    display:flex; align-items:center; justify-content:center;
-    transition:all 0.15s; background:transparent;
-  }
+  .check-box { width:22px; height:22px; border-radius:6px; border:2px solid var(--border2); display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
   .med-cell.checked .check-box { background:var(--success); border-color:var(--success); }
   .check-icon { display:none; color:#0f172a; font-size:13px; font-weight:700; line-height:1; }
   .med-cell.checked .check-icon { display:block; }
   .dash-icon { width:14px; height:2px; background:var(--border); border-radius:1px; }
-
-  /* ── SINT CELL ── */
-  .sint-cell {
-    background:var(--surface); border-radius:var(--r-sm);
-    display:flex; align-items:center; justify-content:center;
-    height:40px; cursor:pointer; user-select:none;
-    transition:background 0.15s, transform 0.1s;
-    flex-direction:column; gap:1px;
-  }
+  .sint-cell { background:var(--surface); border-radius:var(--r-sm); display:flex; align-items:center; justify-content:center; height:40px; cursor:pointer; user-select:none; transition:background 0.15s, transform 0.1s; flex-direction:column; gap:1px; }
   .sint-icon  { font-size:14px; line-height:1; }
   .sint-label { font-size:7px; color:var(--muted); font-family:'DM Mono',monospace; }
 
-  /* ── CONFIGS ── */
-  .config-section {
-    padding:16px; display:flex; flex-direction:column; gap:12px;
-  }
-  .config-card {
-    background:var(--surface); border-radius:12px; padding:16px;
-    border:1px solid var(--border);
-  }
-  .config-card h3 {
-    font-size:13px; font-weight:600; color:var(--text);
-    margin-bottom:4px;
-  }
-  .config-card p {
-    font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.5;
-  }
-  .config-btn {
-    width:100%; padding:12px; border-radius:var(--r-sm);
-    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
-    cursor:pointer; border:none; transition:opacity 0.15s; margin-bottom:8px;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-  }
+  /* ── CONFIG ── */
+  .config-section { padding:16px; display:flex; flex-direction:column; gap:12px; }
+  .config-card { background:var(--surface); border-radius:12px; padding:16px; border:1px solid var(--border); }
+  .config-card h3 { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+  .config-card p  { font-size:11px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+  .config-card p:last-child { margin-bottom:0; }
+  .config-btn { width:100%; padding:12px; border-radius:var(--r-sm); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:opacity 0.15s; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:8px; }
   .config-btn:last-child { margin-bottom:0; }
   .config-btn:active { opacity:0.75; }
-  .config-btn.primary { background:var(--accent); color:#0f172a; }
+  .config-btn.primary   { background:var(--accent); color:#0f172a; }
   .config-btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
   .config-btn.danger    { background:#7f1d1d; color:#fca5a5; border:1px solid #991b1b; }
 
-  .excecoes-table {
-    width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;
-  }
-  .excecoes-table th {
-    text-align:left; padding:4px 6px; color:var(--muted);
-    border-bottom:1px solid var(--border); font-weight:600;
-    font-family:'DM Mono',monospace; font-size:10px;
-  }
-  .excecoes-table td {
-    padding:5px 6px; color:var(--text2); border-bottom:1px solid var(--border);
-    font-family:'DM Mono',monospace;
-  }
-  .excecoes-table tr:last-child td { border-bottom:none; }
-  .excecoes-empty {
-    font-size:11px; color:var(--muted); font-family:'DM Mono',monospace;
-    padding:8px 0; text-align:center;
-  }
+  .med-editor { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+  .med-row { background:var(--surface2); border-radius:var(--r-sm); padding:10px 12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:4px; cursor:pointer; transition:border-color 0.15s; }
+  .med-row:active { border-color:var(--accent); }
+  .med-row-header { display:flex; align-items:center; justify-content:space-between; }
+  .med-row-name { font-size:13px; font-weight:600; color:var(--text); }
+  .med-row-code { font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; margin-top:2px; line-height:1.4; }
+  .med-row-del  { background:transparent; border:1px solid #7f1d1d; color:#fca5a5; border-radius:6px; padding:4px 10px; font-size:11px; cursor:pointer; font-family:'DM Sans',sans-serif; flex-shrink:0; }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.7);
-    z-index:200; display:flex; align-items:flex-end;
-    padding:0 0 env(safe-area-inset-bottom);
-    opacity:0; pointer-events:none; transition:opacity 0.2s;
-  }
+  .field-row { display:flex; flex-direction:column; gap:3px; }
+  .field-label { font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .field-input, .field-select { background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:8px 10px; outline:none; width:100%; }
+  .field-input:focus, .field-select:focus { border-color:var(--accent); }
+
+  .chip-group { display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; }
+  .chip { padding:5px 10px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text2); font-size:11px; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s; user-select:none; }
+  .chip.on { background:var(--accent); border-color:var(--accent); color:#0f172a; font-weight:600; }
+
+  /* ── INTERVALOS ── */
+  .intervalos-list { display:flex; flex-direction:column; gap:6px; margin-top:4px; }
+  .intervalo-row { display:flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+  .intervalo-row span { font-size:11px; color:var(--text2); font-family:'DM Mono',monospace; flex:1; }
+  .intervalo-del { background:transparent; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:0 4px; }
+  .intervalo-add { display:flex; align-items:center; gap:8px; margin-top:6px; }
+  .intervalo-add input { background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:'DM Mono',monospace; font-size:13px; padding:7px 10px; outline:none; width:60px; text-align:center; }
+  .intervalo-add input:focus { border-color:var(--accent); }
+  .intervalo-add span { font-size:11px; color:var(--muted); }
+  .intervalo-add button { background:var(--surface2); border:1px solid var(--border); color:var(--text2); border-radius:6px; padding:7px 12px; font-size:12px; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
+  .intervalo-add button:active { background:var(--border); }
+
+  .excecoes-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .exc-row { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .exc-info { font-size:11px; color:var(--text2); font-family:'DM Mono',monospace; line-height:1.4; }
+  .exc-del  { background:transparent; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:0 4px; flex-shrink:0; }
+  .exc-empty { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; text-align:center; padding:8px 0; }
+
+  .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .stat-box { background:var(--surface2); border-radius:var(--r-sm); padding:10px; border:1px solid var(--border); text-align:center; }
+  .stat-val   { font-size:22px; font-weight:700; color:var(--accent); font-family:'DM Mono',monospace; }
+  .stat-label { font-size:10px; color:var(--muted); margin-top:2px; }
+
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:200; display:flex; align-items:flex-end; padding:0 0 env(safe-area-inset-bottom); opacity:0; pointer-events:none; transition:opacity 0.2s; }
   .modal-overlay.open { opacity:1; pointer-events:all; }
-  .modal-sheet {
-    width:100%; background:var(--surface); border-radius:16px 16px 0 0; padding:20px 16px 24px;
-    transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1);
-  }
+  .modal-sheet { width:100%; background:var(--surface); border-radius:16px 16px 0 0; padding:20px 16px 24px; transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1); max-height:90dvh; overflow-y:auto; }
   .modal-overlay.open .modal-sheet { transform:translateY(0); }
   .modal-handle { width:36px; height:4px; background:var(--border2); border-radius:2px; margin:0 auto 16px; }
-  .modal-title  { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:12px; font-family:'DM Mono',monospace; }
-  .modal-textarea {
-    width:100%; min-height:90px; background:var(--surface2);
-    border:1px solid var(--border); border-radius:var(--r-sm);
-    color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
-    padding:10px 12px; resize:none; outline:none;
-  }
+  .modal-title  { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:16px; font-family:'DM Mono',monospace; }
+  .modal-form   { display:flex; flex-direction:column; gap:12px; }
+  .modal-textarea { width:100%; min-height:90px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--r-sm); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; padding:10px 12px; resize:none; outline:none; }
   .modal-textarea:focus { border-color:var(--accent); }
-  .modal-buttons { display:flex; gap:8px; margin-top:12px; }
-  .modal-btn {
-    flex:1; padding:11px; border-radius:var(--r-sm);
-    font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
-    cursor:pointer; border:none; transition:opacity 0.15s;
-  }
+  .modal-buttons { display:flex; gap:8px; margin-top:16px; }
+  .modal-btn { flex:1; padding:11px; border-radius:var(--r-sm); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:opacity 0.15s; }
   .modal-btn:active { opacity:0.75; }
   .modal-btn.confirm { background:var(--accent); color:#0f172a; }
   .modal-btn.cancel  { background:var(--surface2); color:var(--text2); border:1px solid var(--border); }
+  .modal-section { background:var(--surface2); border-radius:var(--r-sm); padding:10px 12px; border:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+  .modal-section-title { font-size:11px; font-weight:600; color:var(--text2); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:0.4px; }
+  .modal-hint { font-size:10px; color:var(--muted); line-height:1.5; }
 
-  /* ── TOAST ── */
-  .toast {
-    position:fixed; bottom:24px; left:50%;
-    transform:translateX(-50%) translateY(80px);
-    background:var(--surface2); color:var(--text);
-    padding:10px 20px; border-radius:20px; font-size:13px;
-    border:1px solid var(--border);
-    transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    z-index:999; white-space:nowrap; pointer-events:none;
-  }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--surface2); color:var(--text); padding:10px 20px; border-radius:20px; font-size:13px; border:1px solid var(--border); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index:999; white-space:nowrap; pointer-events:none; }
   .toast.show { transform:translateX(-50%) translateY(0); }
-
-  /* ── RESET / ACTIONS ── */
   .reset-area { padding:0 16px 12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .reset-btn {
-    background:transparent; border:1px solid var(--border); color:var(--muted);
-    font-family:'DM Sans',sans-serif; font-size:12px; padding:8px 20px;
-    border-radius:20px; cursor:pointer;
-  }
+  .reset-btn { background:transparent; border:1px solid var(--border); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:12px; padding:8px 20px; border-radius:20px; cursor:pointer; }
   .reset-btn:active { background:var(--surface); }
   .reset-btn.danger { border-color:#7f1d1d; color:#fca5a5; }
-
-  /* ── INPUT FILE OCULTO ── */
   #importInput { display:none; }
 </style>
 </head>
@@ -263,7 +172,7 @@
 
 <div class="app-header">
   <h1>Controle de Medicações</h1>
-  <p id="headerSub">6 ciclos · 04/05/2026 – 06/09/2026</p>
+  <p id="headerSub">carregando...</p>
   <div class="screen-tabs">
     <button class="screen-tab active" id="tabMed"  onclick="switchScreen('med')">💊 Medicação</button>
     <button class="screen-tab"        id="tabSint" onclick="switchScreen('sint')">📋 Sintomas</button>
@@ -275,6 +184,7 @@
 <div id="saveIndicator" class="save-indicator">✓ salvo</div>
 <div id="app"></div>
 
+<!-- Modal: nota -->
 <div class="modal-overlay" id="noteModal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -287,427 +197,705 @@
   </div>
 </div>
 
+<!-- Modal: medicação -->
+<div class="modal-overlay" id="medModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="medModalTitle">Medicação</div>
+    <div class="modal-form">
+      <div class="modal-section">
+        <div class="modal-section-title">Identificação</div>
+        <div class="field-row">
+          <div class="field-label">Código interno (não altere depois)</div>
+          <input class="field-input" id="mfCode" placeholder="ex: PRE" maxlength="6" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div class="field-row">
+          <div class="field-label">Nome</div>
+          <input class="field-input" id="mfNome" placeholder="ex: Prednisona">
+        </div>
+        <div class="field-row">
+          <div class="field-label">Subtítulo</div>
+          <input class="field-input" id="mfSub" placeholder="ex: 08h">
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Ciclos ativos</div>
+        <div class="chip-group" id="mfCiclos"></div>
+        <div class="modal-hint">Ciclos em que esta medicação é utilizada.</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Dias da semana</div>
+        <div class="chip-group" id="mfDsem">
+          <button class="chip on" data-d="0">Seg</button>
+          <button class="chip on" data-d="1">Ter</button>
+          <button class="chip on" data-d="2">Qua</button>
+          <button class="chip on" data-d="3">Qui</button>
+          <button class="chip on" data-d="4">Sex</button>
+          <button class="chip on" data-d="5">Sáb</button>
+          <button class="chip on" data-d="6">Dom</button>
+        </div>
+        <div class="modal-hint">Desmarque os dias em que não deve ser tomada.</div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Janelas de dias do ciclo</div>
+        <div class="modal-hint">Defina uma ou mais janelas de dias em que a medicação é ativa dentro do ciclo. Ex: dias 1–5 e dias 11–15.</div>
+        <div class="intervalos-list" id="mfIntervalosList"></div>
+        <div class="intervalo-add">
+          <input id="mfAddIni" type="number" min="1" max="21" value="1" placeholder="de">
+          <span>até</span>
+          <input id="mfAddFim" type="number" min="1" max="21" value="21" placeholder="até">
+          <button onclick="adicionarIntervalo()">＋ Adicionar janela</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="modal-btn cancel"  onclick="closeMedModal(false)">Cancelar</button>
+      <button class="modal-btn confirm" onclick="closeMedModal(true)">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: exceção -->
+<div class="modal-overlay" id="excModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Exceção por ciclo</div>
+    <div class="modal-form">
+      <div class="field-row">
+        <div class="field-label">Medicação</div>
+        <select class="field-select" id="excMedCode"></select>
+      </div>
+      <div class="field-row">
+        <div class="field-label">A partir do ciclo</div>
+        <select class="field-select" id="excCiclo"></select>
+      </div>
+      <div class="modal-section" style="flex-direction:row;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="modal-section-title">Suspender medicação</div>
+          <div class="modal-hint" style="margin-top:2px;">Inativa a partir deste ciclo</div>
+        </div>
+        <button class="chip" id="excSuspendChip" onclick="toggleExcSuspend()">Não</button>
+      </div>
+      <div id="excRulesBlock">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="modal-section">
+            <div class="modal-section-title">Dias da semana</div>
+            <div class="chip-group" id="excDsem">
+              <button class="chip on" data-d="0">Seg</button>
+              <button class="chip on" data-d="1">Ter</button>
+              <button class="chip on" data-d="2">Qua</button>
+              <button class="chip on" data-d="3">Qui</button>
+              <button class="chip on" data-d="4">Sex</button>
+              <button class="chip on" data-d="5">Sáb</button>
+              <button class="chip on" data-d="6">Dom</button>
+            </div>
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">Janelas de dias do ciclo</div>
+            <div class="intervalos-list" id="excIntervalosList"></div>
+            <div class="intervalo-add">
+              <input id="excAddIni" type="number" min="1" max="21" value="1">
+              <span>até</span>
+              <input id="excAddFim" type="number" min="1" max="21" value="21">
+              <button onclick="adicionarIntervaloExc()">＋ Adicionar janela</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="modal-btn cancel"  onclick="closeExcModal(false)">Cancelar</button>
+      <button class="modal-btn confirm" onclick="closeExcModal(true)">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="importInput" accept=".json">
 <div class="toast" id="toast"></div>
 
 <script>
 // ════════════════════════════════════════════════════════
-// ── CONFIGURAÇÃO — edite aqui se as medicações mudarem ──
+// ── MODELO
+// Medicação:
+//   code, nome, sub
+//   ciclosAtivos: number[]       quais ciclos
+//   diasSemana:   number[]       0=Seg … 6=Dom
+//   intervalos:   {diaIni,diaFim}[]   janelas de dias do ciclo
+//
+// Exceção (override a partir de ciclo N):
+//   ciclo, code
+//   inativo?: true               suspensa
+//   diasSemana?: number[]        nova regra de dsem
+//   intervalos?: {diaIni,diaFim}[]  novas janelas
 // ════════════════════════════════════════════════════════
-const CONFIG = {
-  inicio: "2026-05-04",   // data do primeiro dia do ciclo 1
-  totalCiclos: 6,
-  diasPorCiclo: 21,
+const TODOS_DSEM = [0,1,2,3,4,5,6];
+const SEG_QUA_SEX = [0,2,4];
 
-  // Medicações e suas regras padrão
-  medicacoes: [
-    { code:"PRE", nome:"Prednisona", sub:"5 primeiros dias", regra:"dias_1_5" },
-    { code:"VAL", nome:"Valtrex",    sub:"todo o ciclo",     regra:"sempre"   },
-    { code:"BAC", nome:"Bactrim",    sub:"2ª · 4ª · 6ª",    regra:"seg_qua_sex" },
-    { code:"MYR", nome:"Myrbetric", sub:"ciclos 1–4",       regra:"ciclos_1_4"  },
+const CONFIG_DEFAULT = {
+  inicio:"2026-05-04", totalCiclos:6, diasPorCiclo:21,
+  medicacoes:[
+    { code:"PRE", nome:"Prednisona", sub:"08h",
+       ciclosAtivos:[1,2,3,4,5,6], diasSemana:TODOS_DSEM,
+       intervalos:[{diaIni:1,diaFim:5}] },
+    { code:"VAL", nome:"Valtrex", sub:"08h",
+       ciclosAtivos:[1,2,3,4,5,6], diasSemana:TODOS_DSEM,
+       intervalos:[{diaIni:1,diaFim:21}] },
+    { code:"BAC", nome:"Bactrim", sub:"08h",
+       ciclosAtivos:[1,2,3,4,5,6], diasSemana:SEG_QUA_SEX,
+       intervalos:[{diaIni:1,diaFim:21}] },
+    { code:"MYR", nome:"Myrbetric", sub:"08h",
+       ciclosAtivos:[1,2,3,4], diasSemana:TODOS_DSEM,
+       intervalos:[{diaIni:1,diaFim:21}] },
   ],
-
-  // Exceções por ciclo — adicione aqui se algo mudar no futuro
-  // Exemplos:
-  //   { ciclo:4, code:"BAC", regra:"sempre" }      → Bactrim diário a partir do ciclo 4
-  //   { ciclo:5, code:"MYR", regra:"inativo" }     → Myrbetric suspensa no ciclo 5
-  //   { ciclo:3, code:"PRE", regra:"dias_1_7" }    → Prednisona por 7 dias no ciclo 3
-  excecoes: []
+  excecoes:[]
 };
 
-// ════════════════════════════════════════════════════════
-// ── GERAÇÃO DINÂMICA DOS DIAS ────────────────────────────
-// ════════════════════════════════════════════════════════
-const MESES_PT = {1:"jan",2:"fev",3:"mar",4:"abr",5:"mai",6:"jun",
-                   7:"jul",8:"ago",9:"set",10:"out",11:"nov",12:"dez"};
-const DSEM_PT  = {0:"Seg",1:"Ter",2:"Qua",3:"Qui",4:"Sex",5:"Sáb",6:"Dom"};
-
-function addDays(dateStr, n) {
-  const d = new Date(dateStr + 'T12:00:00');
-  d.setDate(d.getDate() + n);
-  return d.toISOString().slice(0,10);
+function migrarConfig(cfg) {
+  // Migra medicações do formato antigo (diaIni/diaFim) para intervalos[]
+  // e garante que todos os campos obrigatórios existam
+  const totalCiclos = cfg.totalCiclos || 6;
+  const diasPorCiclo = cfg.diasPorCiclo || 21;
+  (cfg.medicacoes || []).forEach(m => {
+    // ciclosAtivos: se não existir, todos os ciclos
+    if (!Array.isArray(m.ciclosAtivos)) {
+      // Tenta inferir de regra antiga "ciclos_1_4"
+      if (typeof m.regra === 'string' && m.regra.startsWith('ciclos_1_')) {
+        const n = parseInt(m.regra.split('_')[2]);
+        m.ciclosAtivos = Array.from({length: n}, (_, i) => i + 1);
+      } else {
+        m.ciclosAtivos = Array.from({length: totalCiclos}, (_, i) => i + 1);
+      }
+    }
+    // diasSemana: se não existir, inferir de regra antiga
+    if (!Array.isArray(m.diasSemana)) {
+      if (typeof m.regra === 'string' && m.regra === 'seg_qua_sex') {
+        m.diasSemana = [0, 2, 4];
+      } else {
+        m.diasSemana = [0, 1, 2, 3, 4, 5, 6];
+      }
+    }
+    // intervalos: se não existir, inferir de diaIni/diaFim ou regra antiga
+    if (!Array.isArray(m.intervalos)) {
+      const ini = m.diaIni || 1;
+      const fim = m.diaFim || diasPorCiclo;
+      m.intervalos = [{diaIni: ini, diaFim: fim}];
+    }
+    // Limpar campos obsoletos
+    delete m.regra; delete m.diaIni; delete m.diaFim;
+  });
+  // Migrar exceções antigas (com regra string) para novo formato
+  (cfg.excecoes || []).forEach(e => {
+    if (e.inativo) return; // já no formato certo
+    if (typeof e.regra === 'string') {
+      if (e.regra === 'inativo') { e.inativo = true; delete e.regra; return; }
+      if (!Array.isArray(e.diasSemana)) {
+        e.diasSemana = e.regra === 'seg_qua_sex' ? [0,2,4] : [0,1,2,3,4,5,6];
+      }
+      if (!Array.isArray(e.intervalos)) {
+        e.intervalos = [{diaIni: e.diaIni||1, diaFim: e.diaFim||diasPorCiclo}];
+      }
+      delete e.regra; delete e.diaIni; delete e.diaFim;
+    }
+  });
+  return cfg;
 }
 
-function dateLabel(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
+function loadConfig() {
+  try {
+    const s = localStorage.getItem('app_config');
+    if (s) return migrarConfig(JSON.parse(s));
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(CONFIG_DEFAULT));
+}
+function saveConfig(cfg) { localStorage.setItem('app_config',JSON.stringify(cfg)); flashSave(); }
+let CONFIG = loadConfig();
+
+// ════════════════════════════════════════════════════════
+// ── GERAÇÃO ──────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+const MESES_PT={1:"jan",2:"fev",3:"mar",4:"abr",5:"mai",6:"jun",7:"jul",8:"ago",9:"set",10:"out",11:"nov",12:"dez"};
+const DSEM_PT={0:"Seg",1:"Ter",2:"Qua",3:"Qui",4:"Sex",5:"Sáb",6:"Dom"};
+
+function addDays(dateStr,n) {
+  const d=new Date(dateStr+'T12:00:00'); d.setDate(d.getDate()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function dateLabel(s) {
+  const d=new Date(s+'T12:00:00');
   return `${String(d.getDate()).padStart(2,'0')} ${MESES_PT[d.getMonth()+1]}`;
 }
+function dsemIdx(s) {
+  const d=new Date(s+'T12:00:00'), js=d.getDay();
+  return js===0?6:js-1; // 0=Seg … 6=Dom
+}
+function dsemLabel(s) { return DSEM_PT[dsemIdx(s)]; }
 
-function dsem(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  return DSEM_PT[d.getDay() === 0 ? 6 : d.getDay() - 1];
+// Verifica se um dia (diaN) está dentro de alguma janela do array intervalos
+function dentroDeAlgumaJanela(intervalos, diaN) {
+  return intervalos.some(iv => diaN >= iv.diaIni && diaN <= iv.diaFim);
 }
 
-function isSeg(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  // 0=Dom,1=Seg,2=Ter,3=Qua,4=Qui,5=Sex,6=Sáb
-  return [1,3,5].includes(d.getDay()); // Seg, Qua, Sex
+function getOverride(medCode, cicloN) {
+  const matches=CONFIG.excecoes
+    .filter(e=>e.code===medCode&&e.ciclo<=cicloN)
+    .sort((a,b)=>b.ciclo-a.ciclo);
+  return matches.length>0?matches[0]:null;
 }
 
-function regraAtiva(regra, diaCiclo, cicloNum, dateStr) {
-  switch(regra) {
-    case "sempre":      return true;
-    case "inativo":     return false;
-    case "dias_1_5":    return diaCiclo <= 5;
-    case "dias_1_7":    return diaCiclo <= 7;
-    case "seg_qua_sex": return isSeg(dateStr);
-    case "ciclos_1_4":  return cicloNum <= 4;
-    case "ciclos_1_2":  return cicloNum <= 2;
-    default:
-      // Suporte a "dias_1_N"
-      const m = regra.match(/^dias_1_(\d+)$/);
-      if (m) return diaCiclo <= parseInt(m[1]);
-      // Suporte a "ciclos_1_N"
-      const mc = regra.match(/^ciclos_1_(\d+)$/);
-      if (mc) return cicloNum <= parseInt(mc[1]);
-      return false;
-  }
+function medAtivaNodia(med, ov, cicloN, diaN, dateStr) {
+  if(ov && ov.inativo) return false;
+  const ciclosAtivos = (ov&&ov.ciclosAtivos) ? ov.ciclosAtivos : med.ciclosAtivos;
+  const diasSemana   = (ov&&ov.diasSemana)   ? ov.diasSemana   : med.diasSemana;
+  const intervalos   = (ov&&ov.intervalos)   ? ov.intervalos   : med.intervalos;
+  if(!ciclosAtivos.includes(cicloN)) return false;
+  if(!diasSemana.includes(dsemIdx(dateStr))) return false;
+  if(!dentroDeAlgumaJanela(intervalos, diaN)) return false;
+  return true;
 }
 
-function getRegraMed(medCode, cicloNum) {
-  // Verifica se há exceção para este ciclo
-  const exc = CONFIG.excecoes.find(e => e.ciclo === cicloNum && e.code === medCode);
-  if (exc) return exc.regra;
-  // Usa a regra padrão
-  return CONFIG.medicacoes.find(m => m.code === medCode)?.regra || "inativo";
-}
-
-// Gera o DATA[] dinamicamente
 function gerarData() {
-  const data = [];
-  for (let ci = 0; ci < CONFIG.totalCiclos; ci++) {
-    for (let di = 0; di < CONFIG.diasPorCiclo; di++) {
-      const offset = ci * CONFIG.diasPorCiclo + di;
-      const dt     = addDays(CONFIG.inicio, offset);
-      const diaN   = di + 1;
-      const cicloN = ci + 1;
-      const meds   = CONFIG.medicacoes
-        .filter(m => regraAtiva(getRegraMed(m.code, cicloN), diaN, cicloN, dt))
-        .map(m => m.code);
-      data.push({
-        ciclo: cicloN,
-        dia:   diaN,
-        dt,
-        data:  dateLabel(dt),
-        dsem:  dsem(dt),
-        meds
-      });
+  const data=[];
+  for(let ci=0;ci<CONFIG.totalCiclos;ci++) {
+    for(let di=0;di<CONFIG.diasPorCiclo;di++) {
+      const dt=addDays(CONFIG.inicio,ci*CONFIG.diasPorCiclo+di);
+      const diaN=di+1,cicloN=ci+1;
+      const meds=CONFIG.medicacoes
+        .filter(m=>medAtivaNodia(m,getOverride(m.code,cicloN),cicloN,diaN,dt))
+        .map(m=>m.code);
+      data.push({ciclo:cicloN,dia:diaN,dt,data:dateLabel(dt),dsem:dsemLabel(dt),meds});
     }
   }
   return data;
 }
 
-const DATA = gerarData();
+function medsAtivasNoCiclo(cicloN) {
+  return CONFIG.medicacoes.filter(m=>{
+    const ov=getOverride(m.code,cicloN);
+    if(ov&&ov.inativo) return false;
+    for(let di=1;di<=CONFIG.diasPorCiclo;di++) {
+      const dt=addDays(CONFIG.inicio,(cicloN-1)*CONFIG.diasPorCiclo+(di-1));
+      if(medAtivaNodia(m,ov,cicloN,di,dt)) return true;
+    }
+    return false;
+  });
+}
 
-// Atualizar subtítulo do header com datas reais
-const d0 = DATA[0], dN = DATA[DATA.length-1];
-document.getElementById('headerSub').textContent =
-  `${CONFIG.totalCiclos} ciclos · ${d0.data} – ${dN.data}`;
+let DATA=gerarData();
+
+function refreshData() {
+  DATA=gerarData();
+  const d0=DATA[0],dN=DATA[DATA.length-1];
+  document.getElementById('headerSub').textContent=
+    `${CONFIG.totalCiclos} ciclos · ${d0.data} – ${dN.data}`;
+}
+refreshData();
 
 // ════════════════════════════════════════════════════════
-// ── DEFINIÇÃO DE SINTOMAS ────────────────────────────────
+// ── SINTOMAS ─────────────────────────────────────────────
 // ════════════════════════════════════════════════════════
-const SINT_COLS = [
-  { code:"NAU", nome:"Náusea / Vômito", type:"bin",
-    on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🤢", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"DIA", nome:"Diarreia", type:"bin",
-    on:  { bg:"#78350f", tc:"#fcd34d", icon:"⚠", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"CON", nome:"Constip.", type:"bin",
-    on:  { bg:"#78350f", tc:"#fcd34d", icon:"⚠", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"FEB", nome:"Febre", type:"bin",
-    on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"🌡", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"BOC", nome:"Feridas boca", type:"bin",
-    on:  { bg:"#7f1d1d", tc:"#fca5a5", icon:"💊", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"BCS", nome:"Boca seca", type:"bin",
-    on:  { bg:"#78350f", tc:"#fcd34d", icon:"💧", label:"sim" },
-    off: { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"não" } },
-  { code:"FAD", nome:"Fadiga", type:"scale",
-    levels:[
-      { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
-      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
-      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
-    ]},
-  { code:"DOR", nome:"Dor", type:"scale",
-    levels:[
-      { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
-      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
-      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
-    ]},
-  { code:"CAB", nome:"Cabeça", type:"scale",
-    levels:[
-      { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d", tc:"#86efac", icon:"◐", label:"leve" },
-      { bg:"#78350f", tc:"#fcd34d", icon:"◕", label:"mod." },
-      { bg:"#7f1d1d", tc:"#fca5a5", icon:"●", label:"alta" },
-    ]},
-  { code:"APE", nome:"Apetite", type:"scale",
-    levels:[
-      { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d", tc:"#86efac", icon:"★", label:"alto" },
-      { bg:"#1e3a5f", tc:"#7dd3fc", icon:"◉", label:"norm." },
-      { bg:"#78350f", tc:"#fcd34d", icon:"◑", label:"red." },
-      { bg:"#7f1d1d", tc:"#fca5a5", icon:"✕", label:"não" },
-    ]},
-  { code:"SON", nome:"Sono", type:"scale",
-    levels:[
-      { bg:"var(--surface)", tc:"var(--muted)", icon:"○", label:"—" },
-      { bg:"#14532d", tc:"#86efac", icon:"✦", label:"ótimo" },
-      { bg:"#1e3a5f", tc:"#7dd3fc", icon:"✧", label:"bom" },
-      { bg:"#78350f", tc:"#fcd34d", icon:"◑", label:"ruim" },
-      { bg:"#7f1d1d", tc:"#fca5a5", icon:"✕", label:"pés." },
-    ]},
+const SINT_COLS=[
+  {code:"NAU",nome:"Náusea / Vômito",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🤢",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"DIA",nome:"Diarreia",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"CON",nome:"Constip.",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"⚠",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"FEB",nome:"Febre",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"🌡",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"BOC",nome:"Feridas boca",type:"bin",on:{bg:"#7f1d1d",tc:"#fca5a5",icon:"💊",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"BCS",nome:"Boca seca",type:"bin",on:{bg:"#78350f",tc:"#fcd34d",icon:"💧",label:"sim"},off:{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"não"}},
+  {code:"FAD",nome:"Fadiga",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"DOR",nome:"Dor",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"CAB",nome:"Cabeça",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"◐",label:"leve"},{bg:"#78350f",tc:"#fcd34d",icon:"◕",label:"mod."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"●",label:"alta"}]},
+  {code:"APE",nome:"Apetite",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"★",label:"alto"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"◉",label:"norm."},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"red."},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"não"}]},
+  {code:"SON",nome:"Sono",type:"scale",levels:[{bg:"var(--surface)",tc:"var(--muted)",icon:"○",label:"—"},{bg:"#14532d",tc:"#86efac",icon:"✦",label:"ótimo"},{bg:"#1e3a5f",tc:"#7dd3fc",icon:"✧",label:"bom"},{bg:"#78350f",tc:"#fcd34d",icon:"◑",label:"ruim"},{bg:"#7f1d1d",tc:"#fca5a5",icon:"✕",label:"pés."}]},
 ];
-
-const SINT_ORDERED = ['NAU','DIA','CON','FEB','BOC','BCS','FAD','DOR','CAB','APE','SON']
-  .map(c => SINT_COLS.find(s => s.code === c)).filter(Boolean);
+const SINT_ORDERED=['NAU','DIA','CON','FEB','BOC','BCS','FAD','DOR','CAB','APE','SON']
+  .map(c=>SINT_COLS.find(s=>s.code===c)).filter(Boolean);
 
 // ════════════════════════════════════════════════════════
 // ── STATE & UTILS ────────────────────────────────────────
 // ════════════════════════════════════════════════════════
-let currentScreen = 'med';
-let currentCiclo  = 1;
+let currentScreen='med', currentCiclo=1;
 
 function hojeLocal() {
-  const d = new Date();
+  const d=new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
-// Swipe
-let swipeX = 0;
-document.addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, {passive:true});
-document.addEventListener('touchend',   e => {
-  const dx = e.changedTouches[0].clientX - swipeX;
-  if (Math.abs(dx) < 60) return;
-  const screens = ['med','sint','cfg'];
-  const idx = screens.indexOf(currentScreen);
-  if (dx < 0 && idx < screens.length-1) switchScreen(screens[idx+1]);
-  if (dx > 0 && idx > 0)                switchScreen(screens[idx-1]);
-}, {passive:true});
+let swipeX=0;
+document.addEventListener('touchstart',e=>{swipeX=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-swipeX;
+  if(Math.abs(dx)<60) return;
+  const screens=['med','sint','cfg'],idx=screens.indexOf(currentScreen);
+  if(dx<0&&idx<screens.length-1) switchScreen(screens[idx+1]);
+  if(dx>0&&idx>0)                  switchScreen(screens[idx-1]);
+},{passive:true});
 
-// Storage
-const medKey  = (c,d,m) => `med_${c}_${d}_${m}`;
-const sintKey = (c,d,s) => `sint_${c}_${d}_${s}`;
-const noteKey = (c,d)   => `note_${c}_${d}`;
-
-const isChecked  = (c,d,m)   => localStorage.getItem(medKey(c,d,m)) === "1";
-const getSintVal = (c,d,s)   => parseInt(localStorage.getItem(sintKey(c,d,s)) || "0");
-const setSintVal = (c,d,s,v) => { localStorage.setItem(sintKey(c,d,s), String(v)); flashSave(); };
-const getNote    = (c,d)     => localStorage.getItem(noteKey(c,d)) || "";
-const setNote    = (c,d,t)   => { localStorage.setItem(noteKey(c,d), t); flashSave(); };
-
+const medKey =(c,d,m)=>`med_${c}_${d}_${m}`;
+const sintKey=(c,d,s)=>`sint_${c}_${d}_${s}`;
+const noteKey=(c,d)  =>`note_${c}_${d}`;
+const isChecked =(c,d,m)  =>localStorage.getItem(medKey(c,d,m))==="1";
+const getSintVal=(c,d,s)  =>parseInt(localStorage.getItem(sintKey(c,d,s))||"0");
+const setSintVal=(c,d,s,v)=>{localStorage.setItem(sintKey(c,d,s),String(v));flashSave();};
+const getNote   =(c,d)    =>localStorage.getItem(noteKey(c,d))||"";
+const setNote   =(c,d,t)  =>{localStorage.setItem(noteKey(c,d),t);flashSave();};
 function toggleCheck(c,d,m) {
-  const k = medKey(c,d,m);
-  const v = localStorage.getItem(k) === "1" ? "0" : "1";
-  localStorage.setItem(k, v); flashSave();
-  return v === "1";
+  const k=medKey(c,d,m),v=localStorage.getItem(k)==="1"?"0":"1";
+  localStorage.setItem(k,v);flashSave();return v==="1";
 }
 
-// Save indicator
 let saveTimer;
 function flashSave() {
-  const el = document.getElementById('saveIndicator');
-  el.classList.add('show');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => el.classList.remove('show'), 1500);
+  const el=document.getElementById('saveIndicator');
+  el.classList.add('show');clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>el.classList.remove('show'),1500);
 }
-
-// Toast
 let toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-// Progress
 function cycleProgressMed(ciclo) {
-  const dias = DATA.filter(d => d.ciclo === ciclo);
-  let total=0, done=0;
-  dias.forEach(d => d.meds.forEach(m => {
-    total++;
-    if (isChecked(ciclo, d.dia, m)) done++;
-  }));
-  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+  const dias=DATA.filter(d=>d.ciclo===ciclo);
+  let total=0,done=0;
+  dias.forEach(d=>d.meds.forEach(m=>{total++;if(isChecked(ciclo,d.dia,m))done++;}));
+  return {total,done,pct:total?Math.round(done/total*100):0};
 }
 function cycleProgressSint(ciclo) {
-  const dias = DATA.filter(d => d.ciclo === ciclo);
-  let total=0, done=0;
-  dias.forEach(d => SINT_ORDERED.forEach(s => {
-    total++;
-    if (getSintVal(ciclo, d.dia, s.code) > 0) done++;
-  }));
-  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+  const dias=DATA.filter(d=>d.ciclo===ciclo);
+  let total=0,done=0;
+  dias.forEach(d=>SINT_ORDERED.forEach(s=>{total++;if(getSintVal(ciclo,d.dia,s.code)>0)done++;}));
+  return {total,done,pct:total?Math.round(done/total*100):0};
 }
-
-// Header top
 function getHeaderTop() {
-  const a = document.querySelector('.app-header');
-  const c = document.getElementById('cycleTabs');
-  return a && c ? a.offsetHeight + c.offsetHeight : 88;
+  const a=document.querySelector('.app-header'),c=document.getElementById('cycleTabs');
+  return a&&c?a.offsetHeight+c.offsetHeight:88;
 }
-
-// Row classes
-function rowClasses(d, hoje) {
-  const base = ['day-row'];
-  if (d.dia === 1)                      base.push('first-day');
-  if (d.dia >= 5 && d.dia <= 10)        base.push('pink-day');
-  if (d.dt === hoje)                    base.push('today');
+function rowClasses(d,hoje) {
+  const base=['day-row'];
+  if(d.dia===1)            base.push('first-day');
+  if(d.dia>=5&&d.dia<=10) base.push('pink-day');
+  if(d.dt===hoje)          base.push('today');
   return base.join(' ');
 }
 
-// ── MODAL ────────────────────────────────────────────────
-let _noteCallback = null;
-function openNoteModal(title, current, cb) {
-  document.getElementById('noteModalTitle').textContent = title;
-  document.getElementById('noteTextarea').value = current;
-  _noteCallback = cb;
+// ── MODAIS ───────────────────────────────────────────────
+let _noteCallback=null;
+function openNoteModal(title,current,cb) {
+  document.getElementById('noteModalTitle').textContent=title;
+  document.getElementById('noteTextarea').value=current;
+  _noteCallback=cb;
   document.getElementById('noteModal').classList.add('open');
-  setTimeout(() => document.getElementById('noteTextarea').focus(), 350);
+  setTimeout(()=>document.getElementById('noteTextarea').focus(),350);
 }
 function closeNoteModal(save) {
   document.getElementById('noteModal').classList.remove('open');
-  if (save && _noteCallback) _noteCallback(document.getElementById('noteTextarea').value.trim());
-  _noteCallback = null;
+  if(save&&_noteCallback) _noteCallback(document.getElementById('noteTextarea').value.trim());
+  _noteCallback=null;
 }
-document.getElementById('noteModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('noteModal')) closeNoteModal(false);
+['noteModal','medModal','excModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    if(e.target===document.getElementById(id)) {
+      if(id==='noteModal') closeNoteModal(false);
+      else if(id==='medModal') closeMedModal(false);
+      else closeExcModal(false);
+    }
+  });
 });
 
+// ── MODAL MEDICAÇÃO ──────────────────────────────────────
+let _medEditCode=null;
+let _mfIntervalos=[];
+
+function renderIntervalosList(listId, intervalos, onDelete) {
+  const list=document.getElementById(listId);
+  list.innerHTML='';
+  if(intervalos.length===0) {
+    list.innerHTML='<div style="font-size:11px;color:var(--muted);font-family:DM Mono,monospace;">Nenhuma janela adicionada</div>';
+    return;
+  }
+  intervalos.forEach((iv,idx)=>{
+    const row=document.createElement('div'); row.className='intervalo-row';
+    row.innerHTML=`<span>Dias ${iv.diaIni} a ${iv.diaFim}</span>
+      <button class="intervalo-del" onclick="(${onDelete})(${idx})">✕</button>`;
+    list.appendChild(row);
+  });
+}
+
+function adicionarIntervalo() {
+  const ini=parseInt(document.getElementById('mfAddIni').value)||1;
+  const fim=parseInt(document.getElementById('mfAddFim').value)||21;
+  if(ini>fim){showToast('❌ Dia inicial maior que o final');return;}
+  // Verificar sobreposição
+  const overlap=_mfIntervalos.some(iv=>!(fim<iv.diaIni||ini>iv.diaFim));
+  if(overlap){showToast('❌ Janela sobreposta com outra existente');return;}
+  _mfIntervalos.push({diaIni:ini,diaFim:fim});
+  _mfIntervalos.sort((a,b)=>a.diaIni-b.diaIni);
+  renderIntervalosList('mfIntervalosList',_mfIntervalos,
+    'function(i){_mfIntervalos.splice(i,1);renderIntervalosList("mfIntervalosList",_mfIntervalos,arguments.callee);}');
+  // Re-render simples
+  renderMfIntervalos();
+}
+function renderMfIntervalos() {
+  const list=document.getElementById('mfIntervalosList'); list.innerHTML='';
+  if(_mfIntervalos.length===0) {
+    list.innerHTML='<div style="font-size:11px;color:var(--muted);font-family:DM Mono,monospace;">Nenhuma janela adicionada</div>';
+    return;
+  }
+  _mfIntervalos.forEach((iv,idx)=>{
+    const row=document.createElement('div'); row.className='intervalo-row';
+    row.innerHTML=`<span>Dias ${iv.diaIni} a ${iv.diaFim}</span>`;
+    const btn=document.createElement('button'); btn.className='intervalo-del'; btn.textContent='✕';
+    btn.onclick=()=>{_mfIntervalos.splice(idx,1);renderMfIntervalos();};
+    row.appendChild(btn); list.appendChild(row);
+  });
+}
+
+function openMedModal(editCode=null) {
+  _medEditCode=editCode;
+  const isEdit=editCode!==null;
+  document.getElementById('medModalTitle').textContent=isEdit?'Editar medicação':'Nova medicação';
+  document.getElementById('mfCode').disabled=isEdit;
+  document.getElementById('mfCode').style.opacity=isEdit?'0.5':'1';
+  const med=isEdit?CONFIG.medicacoes.find(m=>m.code===editCode):null;
+  document.getElementById('mfCode').value=med?.code||'';
+  document.getElementById('mfNome').value=med?.nome||'';
+  document.getElementById('mfSub').value=med?.sub||'';
+  _mfIntervalos=med?JSON.parse(JSON.stringify(med.intervalos||[{diaIni:1,diaFim:21}])):[{diaIni:1,diaFim:21}];
+  renderMfIntervalos();
+  // Ciclos
+  const ciclosAtivos=med?.ciclosAtivos||Array.from({length:CONFIG.totalCiclos},(_,i)=>i+1);
+  const cg=document.getElementById('mfCiclos'); cg.innerHTML='';
+  for(let ci=1;ci<=CONFIG.totalCiclos;ci++) {
+    const btn=document.createElement('button');
+    btn.className='chip'+(ciclosAtivos.includes(ci)?' on':'');
+    btn.dataset.d=ci; btn.textContent='C'+ci;
+    btn.onclick=()=>btn.classList.toggle('on');
+    cg.appendChild(btn);
+  }
+  // Dsem
+  const dsemAtivos=med?.diasSemana??TODOS_DSEM;
+  document.getElementById('mfDsem').querySelectorAll('.chip').forEach(chip=>{
+    chip.classList.toggle('on',dsemAtivos.includes(parseInt(chip.dataset.d)));
+    chip.onclick=()=>chip.classList.toggle('on');
+  });
+  document.getElementById('medModal').classList.add('open');
+}
+
+function closeMedModal(save) {
+  document.getElementById('medModal').classList.remove('open');
+  if(!save) return;
+  const code=document.getElementById('mfCode').value.trim().toUpperCase();
+  const nome=document.getElementById('mfNome').value.trim();
+  const sub =document.getElementById('mfSub').value.trim();
+  const ciclosAtivos=[...document.getElementById('mfCiclos').querySelectorAll('.chip.on')].map(c=>parseInt(c.dataset.d));
+  const diasSemana=[...document.getElementById('mfDsem').querySelectorAll('.chip.on')].map(c=>parseInt(c.dataset.d));
+  const intervalos=[..._mfIntervalos];
+  if(!code||!nome){showToast('❌ Preencha código e nome');return;}
+  if(ciclosAtivos.length===0){showToast('❌ Selecione ao menos 1 ciclo');return;}
+  if(diasSemana.length===0){showToast('❌ Selecione ao menos 1 dia da semana');return;}
+  if(intervalos.length===0){showToast('❌ Adicione ao menos uma janela de dias');return;}
+  if(_medEditCode===null) {
+    if(CONFIG.medicacoes.find(m=>m.code===code)){showToast('❌ Código já existe');return;}
+    CONFIG.medicacoes.push({code,nome,sub,ciclosAtivos,diasSemana,intervalos});
+    showToast(`✅ ${nome} adicionada`);
+  } else {
+    const idx=CONFIG.medicacoes.findIndex(m=>m.code===_medEditCode);
+    if(idx>=0) CONFIG.medicacoes[idx]={code:_medEditCode,nome,sub,ciclosAtivos,diasSemana,intervalos};
+    showToast(`✅ ${nome} atualizada`);
+  }
+  saveConfig(CONFIG);refreshData();renderCfg();
+}
+
+// ── MODAL EXCEÇÃO ────────────────────────────────────────
+let _excSuspend=false;
+let _excIntervalos=[];
+
+function renderExcIntervalos() {
+  const list=document.getElementById('excIntervalosList'); list.innerHTML='';
+  if(_excIntervalos.length===0) {
+    list.innerHTML='<div style="font-size:11px;color:var(--muted);font-family:DM Mono,monospace;">Nenhuma janela</div>';
+    return;
+  }
+  _excIntervalos.forEach((iv,idx)=>{
+    const row=document.createElement('div'); row.className='intervalo-row';
+    row.innerHTML=`<span>Dias ${iv.diaIni} a ${iv.diaFim}</span>`;
+    const btn=document.createElement('button'); btn.className='intervalo-del'; btn.textContent='✕';
+    btn.onclick=()=>{_excIntervalos.splice(idx,1);renderExcIntervalos();};
+    row.appendChild(btn); list.appendChild(row);
+  });
+}
+
+function adicionarIntervaloExc() {
+  const ini=parseInt(document.getElementById('excAddIni').value)||1;
+  const fim=parseInt(document.getElementById('excAddFim').value)||21;
+  if(ini>fim){showToast('❌ Dia inicial maior que o final');return;}
+  const overlap=_excIntervalos.some(iv=>!(fim<iv.diaIni||ini>iv.diaFim));
+  if(overlap){showToast('❌ Janela sobreposta');return;}
+  _excIntervalos.push({diaIni:ini,diaFim:fim});
+  _excIntervalos.sort((a,b)=>a.diaIni-b.diaIni);
+  renderExcIntervalos();
+}
+
+function toggleExcSuspend() {
+  _excSuspend=!_excSuspend;
+  const chip=document.getElementById('excSuspendChip');
+  chip.classList.toggle('on',_excSuspend);
+  chip.textContent=_excSuspend?'Sim':'Não';
+  document.getElementById('excRulesBlock').style.opacity=_excSuspend?'0.3':'1';
+  document.getElementById('excRulesBlock').style.pointerEvents=_excSuspend?'none':'all';
+}
+
+function openExcModal() {
+  _excSuspend=false;
+  const chip=document.getElementById('excSuspendChip');
+  chip.classList.remove('on');chip.textContent='Não';
+  document.getElementById('excRulesBlock').style.opacity='1';
+  document.getElementById('excRulesBlock').style.pointerEvents='all';
+  const selMed=document.getElementById('excMedCode');
+  selMed.innerHTML=CONFIG.medicacoes.map(m=>`<option value="${m.code}">${m.nome}</option>`).join('');
+  const selCiclo=document.getElementById('excCiclo');
+  selCiclo.innerHTML=Array.from({length:CONFIG.totalCiclos},(_,i)=>
+    `<option value="${i+1}">Ciclo ${i+1}</option>`).join('');
+  // Pré-preencher com med selecionada
+  function preencherComMed(code) {
+    const m=CONFIG.medicacoes.find(x=>x.code===code);
+    if(!m) return;
+    _excIntervalos=JSON.parse(JSON.stringify(m.intervalos||[{diaIni:1,diaFim:21}]));
+    renderExcIntervalos();
+    document.getElementById('excDsem').querySelectorAll('.chip').forEach(chip=>{
+      chip.classList.toggle('on',m.diasSemana.includes(parseInt(chip.dataset.d)));
+      chip.onclick=()=>chip.classList.toggle('on');
+    });
+  }
+  preencherComMed(selMed.value);
+  selMed.onchange=()=>preencherComMed(selMed.value);
+  document.getElementById('excModal').classList.add('open');
+}
+
+function closeExcModal(save) {
+  document.getElementById('excModal').classList.remove('open');
+  if(!save) return;
+  const code=document.getElementById('excMedCode').value;
+  const ciclo=parseInt(document.getElementById('excCiclo').value);
+  CONFIG.excecoes=CONFIG.excecoes.filter(e=>!(e.code===code&&e.ciclo===ciclo));
+  if(_excSuspend) {
+    CONFIG.excecoes.push({ciclo,code,inativo:true});
+  } else {
+    const diasSemana=[...document.getElementById('excDsem').querySelectorAll('.chip.on')]
+      .map(c=>parseInt(c.dataset.d));
+    if(_excIntervalos.length===0){showToast('❌ Adicione ao menos uma janela');return;}
+    CONFIG.excecoes.push({ciclo,code,diasSemana,intervalos:[..._excIntervalos]});
+  }
+  CONFIG.excecoes.sort((a,b)=>a.ciclo-b.ciclo||a.code.localeCompare(b.code));
+  saveConfig(CONFIG);refreshData();renderCfg();
+  showToast('✅ Exceção salva');
+}
+
 // ── DATE CELL ────────────────────────────────────────────
-function buildDateCell(d, hoje, ciclo) {
-  const isToday = d.dt === hoje;
-  const hasNote = getNote(ciclo, d.dia).length > 0;
-  const cell = document.createElement('div');
-  cell.className = 'date-cell';
-  cell.innerHTML = `
-    <div class="date-main">${d.data}${hasNote ? '<span class="note-dot"></span>' : ''}</div>
+function buildDateCell(d,hoje,ciclo) {
+  const isToday=d.dt===hoje,hasNote=getNote(ciclo,d.dia).length>0;
+  const cell=document.createElement('div');cell.className='date-cell';
+  cell.innerHTML=`
+    <div class="date-main">${d.data}${hasNote?'<span class="note-dot"></span>':''}</div>
     <div class="date-sub"><span>${d.dsem}</span><span>D${String(d.dia).padStart(2,'0')}</span></div>
-    ${isToday ? '<div class="today-badge">● hoje</div>' : ''}
+    ${isToday?'<div class="today-badge">● hoje</div>':''}
   `;
-  cell.onclick = () => {
-    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`, getNote(ciclo, d.dia), txt => {
-      setNote(ciclo, d.dia, txt);
-      const main = cell.querySelector('.date-main');
-      const dot  = cell.querySelector('.note-dot');
-      if (txt.length > 0 && !dot) {
-        const sp = document.createElement('span'); sp.className='note-dot'; main.appendChild(sp);
-      } else if (txt.length === 0 && dot) dot.remove();
-      if (txt.length > 0) showToast('📝 Nota salva');
+  cell.onclick=()=>{
+    openNoteModal(`${d.data} · D${String(d.dia).padStart(2,'0')}`,getNote(ciclo,d.dia),txt=>{
+      setNote(ciclo,d.dia,txt);
+      const main=cell.querySelector('.date-main'),dot=cell.querySelector('.note-dot');
+      if(txt.length>0&&!dot){const sp=document.createElement('span');sp.className='note-dot';main.appendChild(sp);}
+      else if(txt.length===0&&dot) dot.remove();
+      if(txt.length>0) showToast('📝 Nota salva');
     });
   };
   return cell;
 }
 
 // ── CYCLE HEADER ─────────────────────────────────────────
-function buildCycleHeader(activeCiclo, dias, prog, label, suffix) {
-  const pid = 'pl_' + Date.now();
-  const h = document.createElement('div');
-  h.className = 'cycle-header';
-  h.innerHTML = `
+function buildCycleHeader(activeCiclo,dias,prog,label,suffix) {
+  const pid='pl_'+Date.now(),h=document.createElement('div');h.className='cycle-header';
+  h.innerHTML=`
     <div class="cycle-title">Ciclo ${activeCiclo} de ${CONFIG.totalCiclos} · ${label}</div>
     <div class="cycle-dates">${dias[0].data} – ${dias[dias.length-1].data}</div>
     <div class="progress-bar"><div class="progress-fill" id="${pid}" style="width:${prog.pct}%"></div></div>
     <div class="progress-label" id="${pid}_lbl">${prog.done} de ${prog.total} ${suffix} · ${prog.pct}%</div>
   `;
-  h._pid = pid;
-  return h;
+  h._pid=pid;return h;
 }
 
 // ── TABS ─────────────────────────────────────────────────
 function renderTabs(activeCiclo) {
-  const tabs = document.getElementById('cycleTabs');
-  tabs.innerHTML = '';
-  const fn = currentScreen === 'sint' ? cycleProgressSint : cycleProgressMed;
-  for (let ci=1; ci<=CONFIG.totalCiclos; ci++) {
-    const p = fn(ci);
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (ci===activeCiclo?' active':'') + (p.pct===100?' done':'');
-    btn.textContent = `Ciclo ${ci}  ${p.pct}%`;
-    btn.onclick = () => { currentCiclo=ci; switchScreen(currentScreen); };
+  const tabs=document.getElementById('cycleTabs');tabs.innerHTML='';
+  const fn=currentScreen==='sint'?cycleProgressSint:cycleProgressMed;
+  for(let ci=1;ci<=CONFIG.totalCiclos;ci++) {
+    const p=fn(ci),btn=document.createElement('button');
+    btn.className='tab-btn'+(ci===activeCiclo?' active':'')+(p.pct===100?' done':'');
+    btn.innerHTML=`<span>Ciclo ${ci}</span><span class="tab-sep"></span><span class="tab-pct">${p.pct}%</span>`;
+    btn.onclick=()=>{currentCiclo=ci;switchScreen(currentScreen);};
     tabs.appendChild(btn);
   }
 }
-
 function switchScreen(screen) {
-  currentScreen = screen;
-  ['med','sint','cfg'].forEach(s => {
-    document.getElementById('tab'+s.charAt(0).toUpperCase()+s.slice(1))
-      .classList.toggle('active', s===screen);
+  currentScreen=screen;
+  ['med','sint','cfg'].forEach(s=>{
+    document.getElementById('tab'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active',s===screen);
   });
-  // Cycle tabs: só nas abas med e sint
-  document.getElementById('cycleTabs').style.display = screen === 'cfg' ? 'none' : 'flex';
-  document.getElementById('saveIndicator').style.display = screen === 'cfg' ? 'none' : 'block';
-  if      (screen==='med')  renderMed(currentCiclo);
-  else if (screen==='sint') renderSint(currentCiclo);
-  else                      renderCfg();
+  document.getElementById('cycleTabs').style.display    =screen==='cfg'?'none':'flex';
+  document.getElementById('saveIndicator').style.display=screen==='cfg'?'none':'block';
+  if(screen==='med')       renderMed(currentCiclo);
+  else if(screen==='sint') renderSint(currentCiclo);
+  else                     renderCfg();
 }
 
 // ════════════════════════════════════════════════════════
 // ── RENDER MEDICAÇÃO ────────────────────────────────────
 // ════════════════════════════════════════════════════════
 function renderMed(activeCiclo) {
-  currentCiclo = activeCiclo;
-  renderTabs(activeCiclo);
-  const app  = document.getElementById('app');
-  app.innerHTML = '';
-  const hoje = hojeLocal();
-  const dias = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog = cycleProgressMed(activeCiclo);
-  const hdr  = buildCycleHeader(activeCiclo, dias, prog, 'Medicação', 'doses marcadas');
-  app.appendChild(hdr);
-  const pid = hdr._pid;
-
-  const wrap = document.createElement('div');
-  wrap.className = 'days-table';
-  wrap.style.cssText = 'padding:0 16px 8px;';
-
-  const ch = document.createElement('div');
-  ch.className = 'col-headers-med';
-  ch.innerHTML = `<div class="col-hdr date-hdr">Data</div>` +
-    CONFIG.medicacoes.map(m => `<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
+  currentCiclo=activeCiclo;renderTabs(activeCiclo);
+  const app=document.getElementById('app');app.innerHTML='';
+  const hoje=hojeLocal(),dias=DATA.filter(d=>d.ciclo===activeCiclo);
+  const prog=cycleProgressMed(activeCiclo);
+  const hdr=buildCycleHeader(activeCiclo,dias,prog,'Medicação','doses marcadas');
+  app.appendChild(hdr);const pid=hdr._pid;
+  const medsAtivas=medsAtivasNoCiclo(activeCiclo);
+  const gridCols=`90px repeat(${medsAtivas.length},1fr)`;
+  const wrap=document.createElement('div');
+  wrap.className='days-table';wrap.style.cssText='padding:0 16px 8px;';
+  const ch=document.createElement('div');
+  ch.className='col-headers-med';ch.style.gridTemplateColumns=gridCols;
+  ch.innerHTML=`<div class="col-hdr date-hdr">Data</div>`+
+    medsAtivas.map(m=>`<div class="col-hdr">${m.nome}<span>${m.sub}</span></div>`).join('');
   wrap.appendChild(ch);
-  requestAnimationFrame(() => { ch.style.top = getHeaderTop() + 'px'; });
-
-  if (!dias.some(d => d.dt === hoje)) {
-    const info = document.createElement('div');
-    info.style.cssText = 'font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
-    info.textContent = 'hoje não pertence a este ciclo';
-    wrap.appendChild(info);
+  requestAnimationFrame(()=>{ch.style.top=getHeaderTop()+'px';});
+  if(!dias.some(d=>d.dt===hoje)) {
+    const info=document.createElement('div');
+    info.style.cssText='font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
+    info.textContent='hoje não pertence a este ciclo';wrap.appendChild(info);
   }
-
-  dias.forEach(d => {
-    const row = document.createElement('div');
-    row.className = rowClasses(d, hoje);
-    row.style.cssText = 'display:grid;grid-template-columns:90px repeat(4,1fr);gap:3px;align-items:center;';
-    if (d.dt === hoje) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
-    row.appendChild(buildDateCell(d, hoje, activeCiclo));
-    CONFIG.medicacoes.forEach(m => {
-      const cell    = document.createElement('div');
-      const ativo   = d.meds.includes(m.code);
-      const checked = ativo && isChecked(activeCiclo, d.dia, m.code);
-      cell.className = 'med-cell' + (!ativo?' inactive': checked?' checked':'');
-      if (!ativo) {
-        cell.innerHTML = `<div class="dash-icon"></div>`;
-      } else {
-        cell.innerHTML = `<div class="check-box"><span class="check-icon">✓</span></div>`;
-        cell.onclick = () => {
-          const now = toggleCheck(activeCiclo, d.dia, m.code);
-          cell.classList.toggle('checked', now);
-          if (navigator.vibrate) navigator.vibrate(30);
-          showToast(now ? `✓ ${m.nome} · ${d.data}` : `${m.nome} · ${d.data} desmarcado`);
-          const p2 = cycleProgressMed(activeCiclo);
-          const pf = document.getElementById(pid);
-          const pl = document.getElementById(pid+'_lbl');
-          if (pf) pf.style.width = p2.pct+'%';
-          if (pl) pl.textContent = `${p2.done} de ${p2.total} doses marcadas · ${p2.pct}%`;
+  dias.forEach(d=>{
+    const row=document.createElement('div');
+    row.className=rowClasses(d,hoje);
+    row.style.cssText=`display:grid;grid-template-columns:${gridCols};gap:3px;align-items:center;`;
+    if(d.dt===hoje) setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),120);
+    row.appendChild(buildDateCell(d,hoje,activeCiclo));
+    medsAtivas.forEach(m=>{
+      const cell=document.createElement('div');
+      const ativo=d.meds.includes(m.code),checked=ativo&&isChecked(activeCiclo,d.dia,m.code);
+      cell.className='med-cell'+((!ativo)?' inactive':checked?' checked':'');
+      if(!ativo){cell.innerHTML=`<div class="dash-icon"></div>`;}
+      else {
+        cell.innerHTML=`<div class="check-box"><span class="check-icon">✓</span></div>`;
+        cell.onclick=()=>{
+          const now=toggleCheck(activeCiclo,d.dia,m.code);
+          cell.classList.toggle('checked',now);
+          if(navigator.vibrate) navigator.vibrate(30);
+          showToast(now?`✓ ${m.nome} · ${d.data}`:`${m.nome} · ${d.data} desmarcado`);
+          const p2=cycleProgressMed(activeCiclo);
+          const pf=document.getElementById(pid),pl=document.getElementById(pid+'_lbl');
+          if(pf) pf.style.width=p2.pct+'%';
+          if(pl) pl.textContent=`${p2.done} de ${p2.total} doses marcadas · ${p2.pct}%`;
           renderTabs(activeCiclo);
         };
       }
@@ -716,300 +904,245 @@ function renderMed(activeCiclo) {
     wrap.appendChild(row);
   });
   app.appendChild(wrap);
-
-  const ra = document.createElement('div'); ra.className='reset-area';
-  const rb = document.createElement('button'); rb.className='reset-btn';
-  rb.textContent = 'Resetar medicações — ciclo ' + activeCiclo;
-  rb.onclick = () => {
-    if (!confirm(`Apagar marcações de medicação do Ciclo ${activeCiclo}?`)) return;
-    dias.forEach(d => d.meds.forEach(m => localStorage.removeItem(medKey(activeCiclo,d.dia,m))));
-    renderMed(activeCiclo); showToast('Ciclo ' + activeCiclo + ' resetado');
+  const ra=document.createElement('div');ra.className='reset-area';
+  const rb=document.createElement('button');rb.className='reset-btn';
+  rb.textContent='Resetar medicações — ciclo '+activeCiclo;
+  rb.onclick=()=>{
+    if(!confirm(`Apagar marcações de medicação do Ciclo ${activeCiclo}?`)) return;
+    dias.forEach(d=>d.meds.forEach(m=>localStorage.removeItem(medKey(activeCiclo,d.dia,m))));
+    renderMed(activeCiclo);showToast('Ciclo '+activeCiclo+' resetado');
   };
-  ra.appendChild(rb); app.appendChild(ra);
+  ra.appendChild(rb);app.appendChild(ra);
 }
 
 // ════════════════════════════════════════════════════════
 // ── RENDER SINTOMAS ─────────────────────────────────────
 // ════════════════════════════════════════════════════════
 function renderSint(activeCiclo) {
-  currentCiclo = activeCiclo;
-  renderTabs(activeCiclo);
-  const app  = document.getElementById('app');
-  app.innerHTML = '';
-  const hoje = hojeLocal();
-  const dias = DATA.filter(d => d.ciclo === activeCiclo);
-  const prog = cycleProgressSint(activeCiclo);
-  app.appendChild(buildCycleHeader(activeCiclo, dias, prog, 'Sintomas', 'dias registrados'));
-
-  const N=SINT_ORDERED.length, DATE_W=82, COL_W=46, GAP=3;
-  const totalW = DATE_W + N*COL_W + N*GAP;
-
-  const outerWrap = document.createElement('div');
-  outerWrap.style.cssText = 'padding:0 16px;';
-
-  const hdrWrap = document.createElement('div');
-  hdrWrap.style.cssText = `overflow:hidden;position:sticky;top:88px;z-index:98;background:var(--bg);padding-bottom:3px;box-shadow:0 2px 0 var(--bg);`;
-  requestAnimationFrame(() => { hdrWrap.style.top = getHeaderTop()+'px'; });
-
-  const chGrid = document.createElement('div');
-  chGrid.style.cssText = `display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;min-width:${totalW}px;`;
-  chGrid.innerHTML = `<div class="col-hdr date-hdr" style="font-size:8px">Data</div>` +
+  currentCiclo=activeCiclo;renderTabs(activeCiclo);
+  const app=document.getElementById('app');app.innerHTML='';
+  const hoje=hojeLocal(),dias=DATA.filter(d=>d.ciclo===activeCiclo);
+  app.appendChild(buildCycleHeader(activeCiclo,dias,cycleProgressSint(activeCiclo),'Sintomas','dias registrados'));
+  const N=SINT_ORDERED.length,DATE_W=82,COL_W=46,GAP=3,totalW=DATE_W+N*COL_W+N*GAP;
+  const outerWrap=document.createElement('div');outerWrap.style.cssText='padding:0 16px;';
+  const hdrWrap=document.createElement('div');
+  hdrWrap.style.cssText=`overflow:hidden;position:sticky;top:88px;z-index:98;background:var(--bg);padding-bottom:3px;box-shadow:0 2px 0 var(--bg);`;
+  requestAnimationFrame(()=>{hdrWrap.style.top=getHeaderTop()+'px';});
+  const chGrid=document.createElement('div');
+  chGrid.style.cssText=`display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;min-width:${totalW}px;`;
+  chGrid.innerHTML=`<div class="col-hdr date-hdr" style="font-size:8px">Data</div>`+
     SINT_ORDERED.map(s=>`<div class="col-hdr" style="font-size:7.5px;padding:4px 1px">${s.nome}</div>`).join('');
   hdrWrap.appendChild(chGrid);
-
-  const tableWrap = document.createElement('div');
-  tableWrap.style.cssText = 'overflow-x:auto;padding:0 2px 8px;-webkit-overflow-scrolling:touch;';
-  tableWrap.addEventListener('scroll', () => { hdrWrap.scrollLeft = tableWrap.scrollLeft; });
-
-  const inner = document.createElement('div');
-  inner.style.cssText = `min-width:${totalW}px;display:flex;flex-direction:column;gap:3px;`;
-
-  if (!dias.some(d => d.dt === hoje)) {
-    const info = document.createElement('div');
-    info.style.cssText = 'font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
-    info.textContent = 'hoje não pertence a este ciclo';
-    inner.appendChild(info);
+  const tableWrap=document.createElement('div');
+  tableWrap.style.cssText='overflow-x:auto;padding:0 2px 8px;-webkit-overflow-scrolling:touch;';
+  tableWrap.addEventListener('scroll',()=>{hdrWrap.scrollLeft=tableWrap.scrollLeft;});
+  const inner=document.createElement('div');
+  inner.style.cssText=`min-width:${totalW}px;display:flex;flex-direction:column;gap:3px;`;
+  if(!dias.some(d=>d.dt===hoje)) {
+    const info=document.createElement('div');
+    info.style.cssText='font-size:11px;color:var(--muted);padding:4px 0 6px;font-family:DM Mono,monospace;text-align:center;';
+    info.textContent='hoje não pertence a este ciclo';inner.appendChild(info);
   }
-
-  dias.forEach(d => {
-    const row = document.createElement('div');
-    row.className = rowClasses(d, hoje);
-    row.style.cssText = `display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;align-items:center;`;
-    if (d.dt === hoje) setTimeout(() => row.scrollIntoView({behavior:'smooth',block:'center'}), 120);
-    row.appendChild(buildDateCell(d, hoje, activeCiclo));
-    SINT_ORDERED.forEach(s => {
-      const cell = document.createElement('div');
-      cell.className = 'sint-cell'; cell.style.height='40px';
-      const updateCell = () => {
-        const v = getSintVal(activeCiclo, d.dia, s.code);
-        const state = s.type==='bin' ? (v===1?s.on:s.off) : (s.levels[v]||s.levels[0]);
-        cell.style.background = state.bg;
-        cell.innerHTML = `<span class="sint-icon" style="color:${state.tc}">${state.icon}</span><span class="sint-label" style="color:${state.tc}">${state.label}</span>`;
+  dias.forEach(d=>{
+    const row=document.createElement('div');
+    row.className=rowClasses(d,hoje);
+    row.style.cssText=`display:grid;grid-template-columns:${DATE_W}px repeat(${N},${COL_W}px);gap:${GAP}px;align-items:center;`;
+    if(d.dt===hoje) setTimeout(()=>row.scrollIntoView({behavior:'smooth',block:'center'}),120);
+    row.appendChild(buildDateCell(d,hoje,activeCiclo));
+    SINT_ORDERED.forEach(s=>{
+      const cell=document.createElement('div');cell.className='sint-cell';cell.style.height='40px';
+      const updateCell=()=>{
+        const v=getSintVal(activeCiclo,d.dia,s.code);
+        const state=s.type==='bin'?(v===1?s.on:s.off):(s.levels[v]||s.levels[0]);
+        cell.style.background=state.bg;
+        cell.innerHTML=`<span class="sint-icon" style="color:${state.tc}">${state.icon}</span><span class="sint-label" style="color:${state.tc}">${state.label}</span>`;
       };
       updateCell();
-      cell.onclick = () => {
-        const cur    = getSintVal(activeCiclo, d.dia, s.code);
-        const maxVal = s.type==='bin' ? 1 : s.levels.length-1;
-        const next   = cur >= maxVal ? 0 : cur+1;
-        setSintVal(activeCiclo, d.dia, s.code, next);
+      cell.onclick=()=>{
+        const cur=getSintVal(activeCiclo,d.dia,s.code);
+        const maxVal=s.type==='bin'?1:s.levels.length-1;
+        setSintVal(activeCiclo,d.dia,s.code,cur>=maxVal?0:cur+1);
         updateCell();
-        if (navigator.vibrate) navigator.vibrate(20);
-        const labels = s.type==='bin' ? ['não','sim'] : s.levels.map(l=>l.label);
-        showToast(`${s.nome} · ${labels[next]}`);
+        if(navigator.vibrate) navigator.vibrate(20);
+        showToast(`${s.nome} · ${(s.type==='bin'?['não','sim']:s.levels.map(l=>l.label))[getSintVal(activeCiclo,d.dia,s.code)]}`);
       };
       row.appendChild(cell);
     });
     inner.appendChild(row);
   });
-
-  tableWrap.appendChild(inner);
-  outerWrap.appendChild(hdrWrap);
-  outerWrap.appendChild(tableWrap);
-  app.appendChild(outerWrap);
-
-  const ra = document.createElement('div'); ra.className='reset-area';
-  const rbS = document.createElement('button'); rbS.className='reset-btn';
-  rbS.textContent='Resetar sintomas — ciclo '+activeCiclo;
+  tableWrap.appendChild(inner);outerWrap.appendChild(hdrWrap);outerWrap.appendChild(tableWrap);app.appendChild(outerWrap);
+  const ra=document.createElement('div');ra.className='reset-area';
+  const rbS=document.createElement('button');rbS.className='reset-btn';rbS.textContent='Resetar sintomas — ciclo '+activeCiclo;
   rbS.onclick=()=>{
     if(!confirm(`Apagar sintomas do Ciclo ${activeCiclo}? As notas serão mantidas.`)) return;
     dias.forEach(d=>SINT_ORDERED.forEach(s=>localStorage.removeItem(sintKey(activeCiclo,d.dia,s.code))));
-    renderSint(activeCiclo); showToast('Sintomas resetados');
+    renderSint(activeCiclo);showToast('Sintomas resetados');
   };
-  const rbN = document.createElement('button'); rbN.className='reset-btn danger';
-  rbN.textContent='Apagar notas — ciclo '+activeCiclo;
+  const rbN=document.createElement('button');rbN.className='reset-btn danger';rbN.textContent='Apagar notas — ciclo '+activeCiclo;
   rbN.onclick=()=>{
     if(!confirm(`Apagar TODAS as notas do Ciclo ${activeCiclo}?`)) return;
     dias.forEach(d=>localStorage.removeItem(noteKey(activeCiclo,d.dia)));
-    renderSint(activeCiclo); showToast('Notas apagadas');
+    renderSint(activeCiclo);showToast('Notas apagadas');
   };
-  ra.appendChild(rbS); ra.appendChild(rbN); app.appendChild(ra);
+  ra.appendChild(rbS);ra.appendChild(rbN);app.appendChild(ra);
 }
 
 // ════════════════════════════════════════════════════════
-// ── BACKUP & RESTORE ────────────────────────────────════
+// ── BACKUP ───────────────────────────────────────────────
 // ════════════════════════════════════════════════════════
 function exportarBackup() {
-  const dados = {};
-  for (let i=0; i<localStorage.length; i++) {
-    const k = localStorage.key(i);
-    dados[k] = localStorage.getItem(k);
-  }
-  const agora = new Date();
-  const ts = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
-  const payload = {
-    versao: "1.0",
-    app: "controle-medicacoes",
-    exportado_em: agora.toISOString(),
-    total_registros: Object.keys(dados).length,
-    dados
-  };
-  const json = JSON.stringify(payload, null, 2);
-  const blob = new Blob([json], {type:'application/json'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = `backup_medicacoes_${ts}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const dados={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);dados[k]=localStorage.getItem(k);}
+  const agora=new Date();
+  const ts=`${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
+  const blob=new Blob([JSON.stringify({versao:"1.0",app:"controle-medicacoes",exportado_em:agora.toISOString(),total_registros:Object.keys(dados).length,dados},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=`backup_medicacoes_${ts}.json`;a.click();URL.revokeObjectURL(url);
   showToast(`✅ Backup exportado (${Object.keys(dados).length} registros)`);
 }
-
 function importarBackup(file) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
     try {
-      const payload = JSON.parse(e.target.result);
-      // Validação básica
-      if (!payload.dados || typeof payload.dados !== 'object') {
-        showToast('❌ Arquivo inválido'); return;
+      const payload=JSON.parse(e.target.result);
+      if(!payload.dados||typeof payload.dados!=='object'){showToast('❌ Arquivo inválido');return;}
+      if(!confirm(`Restaurar backup de ${payload.exportado_em?.slice(0,10)||'?'} com ${Object.keys(payload.dados).length} registros?\n\nDados atuais serão substituídos.`)) return;
+      const toRemove=[];
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k.startsWith('med_')||k.startsWith('sint_')||k.startsWith('note_')||k==='app_config') toRemove.push(k);
       }
-      if (!confirm(`Restaurar backup de ${payload.exportado_em?.slice(0,10) || '?'} com ${Object.keys(payload.dados).length} registros?\n\nOs dados atuais serão substituídos.`)) return;
-
-      // Limpar apenas as chaves do app (med_, sint_, note_)
-      const keysToRemove = [];
-      for (let i=0; i<localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) {
-          keysToRemove.push(k);
-        }
-      }
-      keysToRemove.forEach(k => localStorage.removeItem(k));
-
-      // Restaurar
-      let count = 0;
-      Object.entries(payload.dados).forEach(([k,v]) => {
-        if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) {
-          localStorage.setItem(k, v); count++;
-        }
+      toRemove.forEach(k=>localStorage.removeItem(k));
+      let count=0;
+      Object.entries(payload.dados).forEach(([k,v])=>{
+        if(k.startsWith('med_')||k.startsWith('sint_')||k.startsWith('note_')||k==='app_config'){localStorage.setItem(k,v);count++;}
       });
-      showToast(`✅ ${count} registros restaurados`);
-      // Re-renderizar tela atual
-      switchScreen(currentScreen === 'cfg' ? 'med' : currentScreen);
-    } catch(err) {
-      showToast('❌ Erro ao ler o arquivo');
-    }
+      CONFIG=loadConfig();refreshData();
+      showToast(`✅ ${count} registros restaurados`);switchScreen('med');
+    } catch(err){showToast('❌ Erro ao ler o arquivo');}
   };
   reader.readAsText(file);
 }
-
-// Conectar input de arquivo
-document.getElementById('importInput').addEventListener('change', e => {
-  importarBackup(e.target.files[0]);
-  e.target.value = ''; // reset para permitir importar o mesmo arquivo
-});
+document.getElementById('importInput').addEventListener('change',e=>{importarBackup(e.target.files[0]);e.target.value='';});
 
 // ════════════════════════════════════════════════════════
 // ── RENDER CONFIG ────────────────────────────────────────
 // ════════════════════════════════════════════════════════
+function descreverRegra(m) {
+  const ciclos=m.ciclosAtivos.length===CONFIG.totalCiclos?'todos os ciclos':m.ciclosAtivos.map(c=>'C'+c).join(', ');
+  const dsem=m.diasSemana.length===7?'todos os dias':m.diasSemana.map(d=>DSEM_PT[d]).join(', ');
+  const janelas=(m.intervalos||[]).map(iv=>`D${iv.diaIni}–D${iv.diaFim}`).join(' e ');
+  return `${ciclos} · ${dsem} · ${janelas}`;
+}
+
 function renderCfg() {
-  const app = document.getElementById('app');
-  app.innerHTML = '';
+  const app=document.getElementById('app');app.innerHTML='';
+  const sec=document.createElement('div');sec.className='config-section';
 
-  const sec = document.createElement('div');
-  sec.className = 'config-section';
-
-  // ── Card: Backup ──
-  const cardBkp = document.createElement('div');
-  cardBkp.className = 'config-card';
-  cardBkp.innerHTML = `
-    <h3>💾 Backup de dados</h3>
-    <p>Exporte todos os seus registros para um arquivo JSON. Salve em <strong>Arquivos</strong> ou <strong>iCloud Drive</strong> para não perder os dados se remover o app da tela inicial.</p>
-  `;
-  const btnExp = document.createElement('button');
-  btnExp.className = 'config-btn primary';
-  btnExp.innerHTML = '⬆️ Exportar backup';
-  btnExp.onclick = exportarBackup;
-
-  const btnImp = document.createElement('button');
-  btnImp.className = 'config-btn secondary';
-  btnImp.innerHTML = '⬇️ Importar backup';
-  btnImp.onclick = () => document.getElementById('importInput').click();
-
-  cardBkp.appendChild(btnExp);
-  cardBkp.appendChild(btnImp);
-  sec.appendChild(cardBkp);
-
-  // ── Card: Medicações ativas ──
-  const cardMeds = document.createElement('div');
-  cardMeds.className = 'config-card';
-  cardMeds.innerHTML = `<h3>💊 Medicações configuradas</h3><p>Configuração atual do tratamento. Para alterar medicações ou frequências em ciclos futuros, edite o array <code>CONFIG.excecoes</code> no código-fonte.</p>`;
-
-  const tbl = document.createElement('table');
-  tbl.className = 'excecoes-table';
-  tbl.innerHTML = `
-    <thead><tr><th>Medicação</th><th>Regra padrão</th><th>Exceções</th></tr></thead>
-  `;
-  const tb = document.createElement('tbody');
-  CONFIG.medicacoes.forEach(m => {
-    const excs = CONFIG.excecoes.filter(e => e.code === m.code);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${m.nome}</td>
-      <td>${m.regra}</td>
-      <td>${excs.length > 0 ? excs.map(e=>`C${e.ciclo}:${e.regra}`).join(', ') : '—'}</td>
+  // Medicações
+  const cardMeds=document.createElement('div');cardMeds.className='config-card';
+  cardMeds.innerHTML='<h3>💊 Medicações</h3><p>Toque para editar. O código não pode ser alterado depois que houver dados registrados.</p>';
+  const editor=document.createElement('div');editor.className='med-editor';
+  CONFIG.medicacoes.forEach(m=>{
+    const row=document.createElement('div');row.className='med-row';
+    row.innerHTML=`
+      <div class="med-row-header">
+        <div style="flex:1;min-width:0;">
+          <div class="med-row-name">${m.nome}</div>
+          <div class="med-row-code">${descreverRegra(m)}</div>
+        </div>
+        <button class="med-row-del" onclick="event.stopPropagation();deletarMed('${m.code}')">remover</button>
+      </div>
     `;
-    tb.appendChild(tr);
+    row.onclick=()=>openMedModal(m.code);
+    editor.appendChild(row);
   });
-  tbl.appendChild(tb);
-  cardMeds.appendChild(tbl);
-  sec.appendChild(cardMeds);
+  cardMeds.appendChild(editor);
+  const btnAddMed=document.createElement('button');btnAddMed.className='config-btn secondary';btnAddMed.style.marginTop='12px';
+  btnAddMed.innerHTML='＋ Adicionar medicação';btnAddMed.onclick=()=>openMedModal(null);
+  cardMeds.appendChild(btnAddMed);sec.appendChild(cardMeds);
 
-  // ── Card: Estatísticas ──
-  const cardStats = document.createElement('div');
-  cardStats.className = 'config-card';
-  let totalMed=0, doneMed=0, totalSint=0, doneSint=0, totalNotas=0;
-  for (let ci=1; ci<=CONFIG.totalCiclos; ci++) {
-    const pm = cycleProgressMed(ci);
-    const ps = cycleProgressSint(ci);
-    totalMed  += pm.total; doneMed  += pm.done;
-    totalSint += ps.total; doneSint += ps.done;
-    DATA.filter(d=>d.ciclo===ci).forEach(d=>{ if(getNote(ci,d.dia).length>0) totalNotas++; });
+  // Exceções
+  const cardExc=document.createElement('div');cardExc.className='config-card';
+  cardExc.innerHTML='<h3>⚡ Exceções por ciclo</h3><p>Altere regras de uma medicação a partir de um ciclo específico.</p>';
+  const excList=document.createElement('div');excList.className='excecoes-list';
+  if(CONFIG.excecoes.length===0) {
+    excList.innerHTML='<div class="exc-empty">Nenhuma exceção configurada</div>';
+  } else {
+    CONFIG.excecoes.forEach((e,idx)=>{
+      const med=CONFIG.medicacoes.find(m=>m.code===e.code);
+      const row=document.createElement('div');row.className='exc-row';
+      const descr=e.inativo?'suspensa':`dsem:[${(e.diasSemana||[]).map(d=>DSEM_PT[d]).join(',')}] · ${(e.intervalos||[]).map(iv=>`D${iv.diaIni}–D${iv.diaFim}`).join(' e ')}`;
+      row.innerHTML=`<div class="exc-info">C${e.ciclo}+ · ${med?.nome||e.code}<br>${descr}</div>`;
+      const btn=document.createElement('button');btn.className='exc-del';btn.textContent='✕';
+      btn.onclick=()=>deletarExc(idx);
+      row.appendChild(btn);excList.appendChild(row);
+    });
   }
-  const cicloAtual = DATA.find(d=>d.dt===hojeLocal())?.ciclo || '—';
-  cardStats.innerHTML = `
-    <h3>📊 Estatísticas gerais</h3>
-    <p style="margin-bottom:0">
-      Ciclo atual: <strong>${cicloAtual}</strong><br>
-      Medicações: <strong>${doneMed}/${totalMed}</strong> doses marcadas (${totalMed?Math.round(doneMed/totalMed*100):0}%)<br>
-      Sintomas: <strong>${doneSint}/${totalSint}</strong> dias registrados (${totalSint?Math.round(doneSint/totalSint*100):0}%)<br>
-      Notas: <strong>${totalNotas}</strong> dias com anotação
-    </p>
-  `;
-  sec.appendChild(cardStats);
+  cardExc.appendChild(excList);
+  const btnAddExc=document.createElement('button');btnAddExc.className='config-btn secondary';btnAddExc.style.marginTop='12px';
+  btnAddExc.innerHTML='＋ Adicionar exceção';btnAddExc.onclick=openExcModal;
+  cardExc.appendChild(btnAddExc);sec.appendChild(cardExc);
 
-  // ── Card: Reset total ──
-  const cardReset = document.createElement('div');
-  cardReset.className = 'config-card';
-  cardReset.innerHTML = `<h3>🗑️ Apagar tudo</h3><p>Remove todos os registros de medicação, sintomas e notas. Faça um backup antes!</p>`;
-  const btnReset = document.createElement('button');
-  btnReset.className = 'config-btn danger';
-  btnReset.innerHTML = '⚠️ Apagar todos os dados';
-  btnReset.onclick = () => {
-    if (!confirm('Apagar TODOS os dados? Esta ação não pode ser desfeita.\n\nFaça um backup antes!')) return;
-    const keysToRemove = [];
-    for (let i=0; i<localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k.startsWith('med_') || k.startsWith('sint_') || k.startsWith('note_')) keysToRemove.push(k);
-    }
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-    showToast('Todos os dados apagados');
-    renderCfg();
+  // Backup
+  const cardBkp=document.createElement('div');cardBkp.className='config-card';
+  cardBkp.innerHTML='<h3>💾 Backup de dados</h3><p>Exporte todos os registros para um JSON. Salve no iCloud Drive ou Arquivos.</p>';
+  const btnExp=document.createElement('button');btnExp.className='config-btn primary';btnExp.innerHTML='⬆️ Exportar backup';btnExp.onclick=exportarBackup;
+  const btnImp=document.createElement('button');btnImp.className='config-btn secondary';btnImp.innerHTML='⬇️ Importar backup';btnImp.onclick=()=>document.getElementById('importInput').click();
+  cardBkp.appendChild(btnExp);cardBkp.appendChild(btnImp);sec.appendChild(cardBkp);
+
+  // Stats
+  const cardStats=document.createElement('div');cardStats.className='config-card';
+  cardStats.innerHTML='<h3>📊 Estatísticas</h3>';
+  let totalMed=0,doneMed=0,totalSint=0,doneSint=0,totalNotas=0;
+  for(let ci=1;ci<=CONFIG.totalCiclos;ci++) {
+    const pm=cycleProgressMed(ci),ps=cycleProgressSint(ci);
+    totalMed+=pm.total;doneMed+=pm.done;totalSint+=ps.total;doneSint+=ps.done;
+    DATA.filter(d=>d.ciclo===ci).forEach(d=>{if(getNote(ci,d.dia).length>0)totalNotas++;});
+  }
+  const cicloAtual=DATA.find(d=>d.dt===hojeLocal())?.ciclo||'—';
+  const grid=document.createElement('div');grid.className='stats-grid';
+  [[cicloAtual,'ciclo atual'],[totalMed?Math.round(doneMed/totalMed*100)+'%':'—','medicação'],[totalSint?Math.round(doneSint/totalSint*100)+'%':'—','sintomas'],[totalNotas,'notas']].forEach(([val,lbl])=>{
+    const box=document.createElement('div');box.className='stat-box';
+    box.innerHTML=`<div class="stat-val">${val}</div><div class="stat-label">${lbl}</div>`;
+    grid.appendChild(box);
+  });
+  cardStats.appendChild(grid);sec.appendChild(cardStats);
+
+  // Reset
+  const cardReset=document.createElement('div');cardReset.className='config-card';
+  cardReset.innerHTML='<h3>🗑️ Apagar tudo</h3><p>Remove todos os registros. Faça um backup antes!</p>';
+  const btnReset=document.createElement('button');btnReset.className='config-btn danger';btnReset.innerHTML='⚠️ Apagar todos os dados';
+  btnReset.onclick=()=>{
+    if(!confirm('Apagar TODOS os dados?\n\nFaça um backup antes!')) return;
+    const toRemove=[];
+    for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('med_')||k.startsWith('sint_')||k.startsWith('note_'))toRemove.push(k);}
+    toRemove.forEach(k=>localStorage.removeItem(k));
+    showToast('Todos os dados apagados');renderCfg();
   };
-  cardReset.appendChild(btnReset);
-  sec.appendChild(cardReset);
-
+  cardReset.appendChild(btnReset);sec.appendChild(cardReset);
   app.appendChild(sec);
+}
+
+function deletarMed(code) {
+  const m=CONFIG.medicacoes.find(x=>x.code===code);
+  if(!confirm(`Remover ${m?.nome||code}?\nOs dados registrados serão mantidos.`)) return;
+  CONFIG.medicacoes=CONFIG.medicacoes.filter(x=>x.code!==code);
+  CONFIG.excecoes=CONFIG.excecoes.filter(e=>e.code!==code);
+  saveConfig(CONFIG);refreshData();renderCfg();showToast('Medicação removida');
+}
+function deletarExc(idx) {
+  CONFIG.excecoes.splice(idx,1);
+  saveConfig(CONFIG);refreshData();renderCfg();showToast('Exceção removida');
 }
 
 // ── INIT ─────────────────────────────────────────────────
 function detectCicloAtual() {
-  const hoje = hojeLocal();
-  const found = DATA.find(d => d.dt === hoje);
-  return found ? found.ciclo : 1;
+  const hoje=hojeLocal(),found=DATA.find(d=>d.dt===hoje);
+  return found?found.ciclo:1;
 }
-
-currentCiclo = detectCicloAtual();
+currentCiclo=detectCicloAtual();
 renderMed(currentCiclo);
 </script>
 </body>
